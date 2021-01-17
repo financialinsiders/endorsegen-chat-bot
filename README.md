@@ -1,27 +1,31 @@
-# FiChatBot
+# Chat Widget built with Angular Elements
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.0-rc.0.
+Angular Elements allows you to create Custom Elements (from the WebComponents spec) from Angular Components.
 
-## Development server
+This means that those components can be used outside of an Angular app!
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Project Structure
 
-## Code scaffolding
+The project is a standard Angular 10 project with a few additions:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+src/app/element.module.ts   Module with the component to be used as Angular Element. Imported by App Module
+src/main.element.ts         bootstrap the Element Module
+src/polyfills.element.ts    polyfills for the Element Module
+build-elements.js           script to generate the exported file and demo project
+```
+
+### Development
+
+The component can be developed as any other Angular component: run `ng serve` and navigate to `http://localhost:4200/`.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+The build configuration of the Angular Elements is defined in a separate project in `angular.json`. 
 
-## Running unit tests
+You can run this configuration with `npm run build:elements`. It creates a build in `dist/elements-build` that only contains `ElementModule`. 
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+After this build the `./build-elements.js` script creates the final js file and
+demo project in `dist/elements`.
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+To change the target of the compiled js file to either `es5` or `es2015`, update the `"postbuild:elements"` script in `package.json`. Default it creates an `es2015` file.

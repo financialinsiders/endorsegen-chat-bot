@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+    <chat-config [(theme)]="theme"></chat-config>
+    <chat-widget [theme]="theme"></chat-widget>
+  `,
 })
 export class AppComponent {
-  title = 'fi-chat-bot';
+  public theme = 'blue'
 }
