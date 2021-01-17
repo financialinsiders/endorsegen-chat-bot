@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, 
     </button>
   `,
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./chat-input.component.css'],
+  styleUrls: ['./chat-input.component.scss'],
 })
 export class ChatInputComponent implements OnInit {
   @Input() public buttonText = '↩︎'

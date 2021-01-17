@@ -26,7 +26,7 @@ const getRandomMessage = () => randomMessages[rand(randomMessages.length)]
 @Component({
   selector: 'chat-widget',
   templateUrl: './chat-widget.component.html',
-  styleUrls: ['./chat-widget.component.css'],
+  styleUrls: ['./chat-widget.component.scss'],
   animations: [fadeInOut, fadeIn],
 })
 export class ChatWidgetComponent implements OnInit {
