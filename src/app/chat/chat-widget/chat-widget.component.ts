@@ -99,7 +99,7 @@ export class ChatWidgetComponent implements OnInit {
         this.chatElements = data['data']['elements'];
         console.log(this.chatElements);
         this.angularFireDatabase.database.ref('sessions/' + this.firebaseId).push(sessionInfo).then((data) => {
-          
+
           this.cSessionId = data.key;
           this.angularFireDatabase.object('sessions/' + this.firebaseId + '/' + this.cSessionId).valueChanges().subscribe(data => {
             console.log(data);
@@ -120,7 +120,7 @@ export class ChatWidgetComponent implements OnInit {
               type: 'BOT'
             }
             this.angularFireDatabase.database.ref('messages/' + this.firebaseId + '/' + this.cSessionId).push(firstMessage);
-            
+
             this.angularFireDatabase.object('messages/' + this.firebaseId + '/' + this.cSessionId).valueChanges().subscribe(data => {
               console.log(data);
             });
@@ -145,7 +145,7 @@ export class ChatWidgetComponent implements OnInit {
     if (message.trim() === '') {
       return
     }
-    this.addMessage(this.client, message, 'sent');
+    this.addMessage(this.client, { clabel: message }, 'sent');
     var firstMessage = {
       chatId: this.clientFirebaseId,
       metadata: this.chatElements[0],
