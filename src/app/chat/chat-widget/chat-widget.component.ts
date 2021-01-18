@@ -107,24 +107,28 @@ export class ChatWidgetComponent implements OnInit {
           var userInfo = {
             connectedAgentId: this.instanceId,
           }
-          this.angularFireDatabase.database.ref('sessions/' + this.firebaseId).push(userInfo).then((userData) => {
+          this.angularFireDatabase.database.ref('users/').push(userInfo).then((userData) => {
             this.clientFirebaseId = userData.key;
-          });
-         /*  var firstMessage = {
-            chatId: 
-          } */
-          this.angularFireDatabase.database.ref('messages/' + this.firebaseId + '/' + this.cSessionId).push(sessionInfo).then((data) => {
-            this.cSessionId = data.key;
-            this.angularFireDatabase.object('sessions/' + this.firebaseId + '/' + this.cSessionId).valueChanges().subscribe(data => {
+            var firstMessage = {
+              chatId: this.clientFirebaseId,
+              metadata: this.chatElements[0],
+              message: this.chatElements[0].clabel,
+              conversationId: this.firebaseId,
+              senderId: this.firebaseId,
+              status: 'CONV_OPEN',
+              timestamp: 1610987426109,
+              type: 'BOT'
+            }
+            this.angularFireDatabase.database.ref('messages/' + this.firebaseId + '/' + this.cSessionId).push(firstMessage);
+            
+            this.angularFireDatabase.object('messages/' + this.firebaseId + '/' + this.cSessionId).valueChanges().subscribe(data => {
               console.log(data);
             });
-            
           });
         });
         setTimeout(() => {
           this.addMessage(this.operator, this.chatElements[0].clabel, 'received');
           this.currentIndex += 1;
-          
         }, 1500);
       });
 
