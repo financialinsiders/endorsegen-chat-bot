@@ -29,13 +29,15 @@
     "fs-extra": "^5.0.0",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "crypto-js": "^4.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.7",
     "@angular/cli": "11.0.7",
     "@angular/compiler-cli": "11.0.9",
     "@angular/language-service": "11.0.9",
+    "@types/crypto-js": "^4.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
