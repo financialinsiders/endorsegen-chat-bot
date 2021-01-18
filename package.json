@@ -19,6 +19,7 @@
     "@angular/compiler": "11.0.9",
     "@angular/core": "11.0.9",
     "@angular/elements": "11.0.9",
+    "@angular/fire": "^6.1.4",
     "@angular/forms": "11.0.9",
     "@angular/platform-browser": "11.0.9",
     "@angular/platform-browser-dynamic": "11.0.9",
@@ -26,11 +27,12 @@
     "@webcomponents/custom-elements": "^1.4.1",
     "concat": "^1.0.3",
     "core-js": "^2.5.4",
+    "crypto-js": "^4.0.0",
+    "firebase": "^8.0.0",
     "fs-extra": "^5.0.0",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2",
-    "crypto-js": "^4.0.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.7",
@@ -54,6 +56,12 @@
     "ts-node": "~5.0.1",
     "tslint": "~6.1.0",
     "typescript": "~4.0.5",
-    "webpack-bundle-analyzer": "^4.3.0"
+    "webpack-bundle-analyzer": "^4.3.0",
+    "@angular-devkit/architect": ">= 0.900 < 0.1200",
+    "firebase-tools": "^8.0.0",
+    "fuzzy": "^0.1.3",
+    "inquirer": "^6.2.2",
+    "inquirer-autocomplete-prompt": "^1.0.1",
+    "open": "^7.0.3"
   }
 }
