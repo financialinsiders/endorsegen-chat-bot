@@ -54,10 +54,10 @@ export class ChatWidgetComponent implements OnInit {
   public messages = []
 
   constructor(private adminService: AdminService, private angularFireDatabase: AngularFireDatabase) { }
-  public addMessage(from, text, type: 'received' | 'sent') {
+  public addMessage(from, element, type: 'received' | 'sent') {
     this.messages.unshift({
       from,
-      text,
+      element,
       type,
       date: new Date().getTime(),
     })
@@ -127,7 +127,7 @@ export class ChatWidgetComponent implements OnInit {
           });
         });
         setTimeout(() => {
-          this.addMessage(this.operator, this.chatElements[0].clabel, 'received');
+          this.addMessage(this.operator, this.chatElements[0], 'received');
           this.currentIndex += 1;
         }, 1500);
       });
@@ -145,11 +145,22 @@ export class ChatWidgetComponent implements OnInit {
     if (message.trim() === '') {
       return
     }
-    this.addMessage(this.client, message, 'sent')
+    this.addMessage(this.client, message, 'sent');
+    var firstMessage = {
+      chatId: this.clientFirebaseId,
+      metadata: this.chatElements[0],
+      message: this.chatElements[0].clabel,
+      conversationId: this.firebaseId,
+      senderId: this.firebaseId,
+      status: 'CONV_OPEN',
+      timestamp: 1610987426109,
+      type: 'BOT'
+    }
+    this.angularFireDatabase.database.ref('messages/' + this.firebaseId + '/' + this.cSessionId).push(firstMessage);
     setTimeout(() => this.proceedNext(), 1000)
   }
   public proceedNext() {
-    this.addMessage(this.operator, this.chatElements[this.currentIndex].clabel, 'received');
+    this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
     this.currentIndex += 1;
   }
   @HostListener('document:keypress', ['$event'])

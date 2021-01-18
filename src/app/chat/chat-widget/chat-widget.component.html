@@ -22,7 +22,7 @@
           <div >
             <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"></chat-avatar>
             <div class="chat-message-text">
-              {{this.removeHTML(message.text)}}
+              {{this.removeHTML(message.element.clabel)}}
             </div>
           </div>
           <div class="chat-message-date">
