@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { CryptoStorageService } from '../services/crypto-storage.service';
 
 enum APIEndPointUrls {
@@ -10,7 +9,7 @@ enum APIEndPointUrls {
 }
 @Injectable()
 export class AdminService {
-  constructor(private http: HttpClient, private router: Router, private cryptoService: CryptoStorageService) { }
+  constructor(private http: HttpClient, private cryptoService: CryptoStorageService) { }
 
   getFbId(userId) {
     let params = new HttpParams();

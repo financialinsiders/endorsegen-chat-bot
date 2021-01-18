@@ -6,9 +6,8 @@ import { ElementModule } from './element.module'
 import { AppComponent } from './app.component'
 import { HttpClientModule } from '@angular/common/http';
 import { AdminService } from './services/admin-service';
-import { RouterModule, Routes } from '@angular/router';
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule, RouterModule.forRoot([])],
+  imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [AdminService]
