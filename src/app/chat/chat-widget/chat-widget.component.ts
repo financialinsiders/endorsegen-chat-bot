@@ -114,7 +114,11 @@ export class ChatWidgetComponent implements OnInit {
 
             this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[0], this.chatElements[0].clabel, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
             this.angularFireDatabase.object('messages/' + this.firebaseId + '/' + this.cSessionId).valueChanges().subscribe(data => {
-              
+              var messageHistory = Object.values(data);
+              var lastMessage = messageHistory[messageHistory.length -1];
+              if(lastMessage.status === 'AGENT_LIVE') {
+                this.addMessage(this.operator, { clabel: lastMessage.message, live: true }, 'received');
+              }
             });
           });
         });
