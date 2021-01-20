@@ -27,6 +27,7 @@ export class ChatWidgetComponent implements OnInit {
   clientFirebaseId: string;
   existUserSession: any;
   agentLive: boolean;
+  agentName: any;
   public get visible() {
     return this._visible
   }
@@ -80,6 +81,9 @@ export class ChatWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.existUserSession = this.userService.getUserSession();
+    this.adminService.getAgentProfile(this.instanceId).subscribe(data => {
+      this.operator.name = data['first_name'] + ' ' +data['last_name'];
+    })
     if (this.existUserSession) {
       this.clientFirebaseId = this.existUserSession.clientFirebaseId;
       this.cSessionId = this.existUserSession.cSessionId
@@ -87,12 +91,17 @@ export class ChatWidgetComponent implements OnInit {
         type: 'lead-user',
         newNotification: true
       });
+      
+      
       this.adminService.getFbId(this.instanceId).subscribe(data => {
         this.firebaseId = data['firebase_id'];
+        this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
+          this.operator.status = data['onlineStatus'] ? 'online' : '';
+        });
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
-          this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.cSessionId}`).query.once("value").then(data => {
+          this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).query.once("value").then(data => {
             var chatBackUp = JSON.parse(data.val());
             this.messages = chatBackUp.message;
             this.currentIndex = chatBackUp.position;
@@ -122,6 +131,9 @@ export class ChatWidgetComponent implements OnInit {
       });
       this.adminService.getFbId(this.instanceId).subscribe(data => {
         this.firebaseId = data['firebase_id'];
+        this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
+          this.operator.status = data['onlineStatus'] ? 'online' : '';
+        });
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
@@ -207,7 +219,7 @@ export class ChatWidgetComponent implements OnInit {
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
     }
-    this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.cSessionId}`).set(JSON.stringify({ position: this.agentLive ? 999  : this.currentIndex, message: this.messages }));
+    this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ position: this.agentLive ? 999  : this.currentIndex, message: this.messages }));
 
   }
   @HostListener('document:keypress', ['$event'])

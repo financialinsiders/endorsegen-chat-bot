@@ -3,8 +3,11 @@
     <div class="chat-box-header">
       <div class="">
         <div class="operator-status">
-          {{operator.status}}
-          <span class="operator-status-online">●</span>
+          <div *ngIf="operator.status === 'online'">
+            {{operator.status}}
+            <span class="operator-status-online">●</span>
+          </div>
+          
           <button class="chat-button-header" (click)="toggleChat()">✕</button>
         </div>
         <chat-avatar [image]="operator.avatar"></chat-avatar>
