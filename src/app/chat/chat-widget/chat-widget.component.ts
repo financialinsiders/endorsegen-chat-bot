@@ -28,6 +28,7 @@ export class ChatWidgetComponent implements OnInit {
   existUserSession: any;
   agentLive: boolean;
   agentName: any;
+  historyMode: boolean;
   public get visible() {
     return this._visible
   }
@@ -192,6 +193,9 @@ export class ChatWidgetComponent implements OnInit {
   }
   public toggleChat() {
     this.visible = !this.visible
+  }
+  public historyChat() {
+    this.historyMode = !this.historyMode;
   }
   public removeHTML(text) {
     return text.replace(/<\/?[^>]+(>|$)/g, "");

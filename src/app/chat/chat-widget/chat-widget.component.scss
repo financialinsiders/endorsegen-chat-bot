@@ -31,10 +31,9 @@
   z-index: 1;
   font-weight: bold;
   color: #fff;
-  border: 1px solid #fff;
+  border: none;
   background-color: inherit;
   padding: 5px 9px;
-  margin-left: 5px;
 }
 
 .chat-button:focus {
@@ -79,11 +78,15 @@
 .operator-name {
   margin: 0;
   padding: 1px;
+  display: inline-block;
 }
 
 .operator-status {
   float: right;
-  padding: 4px;
+  .history-icon {
+    filter: invert(100%);
+    cursor: pointer;
+  }
 }
 .operator-status span {
   margin-left: 4px;

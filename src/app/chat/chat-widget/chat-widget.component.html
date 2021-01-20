@@ -3,26 +3,28 @@
     <div class="chat-box-header">
       <div class="">
         <div class="operator-status">
-          <div *ngIf="operator.status === 'online'">
+          <span *ngIf="operator.status === 'online'">
             {{operator.status}}
             <span class="operator-status-online">●</span>
-          </div>
-          
+
+          </span>
+          <a (click)="historyChat()" *ngIf="existUserSession"><img src="../../../assets/history-icon.png" class="history-icon ml-1" width="20px" height="20px"/></a>
           <button class="chat-button-header" (click)="toggleChat()">✕</button>
+
         </div>
+
         <chat-avatar [image]="operator.avatar"></chat-avatar>
-        <h3 class="operator-name">
+        <p class="operator-name">
           {{operator.name}}
-        </h3>
+        </p>
       </div>
     </div>
-    <div class="chat-box-main">
+    <div class="chat-box-main" *ngIf="!this.historyMode">
       <div class="chat-message-bottom" #bottom></div>
       <ng-container *ngFor="let message of messages">
-        <div class="chat-message" [class.chat-message-received]="message.type === 'received'"
-             [@fadeIn]
-             [class.chat-message-sent]="message.type === 'sent'">
-          <div >
+        <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
+          [class.chat-message-sent]="message.type === 'sent'">
+          <div>
             <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"></chat-avatar>
             <div class="chat-message-text">
               {{this.removeHTML(message.element.clabel)}}
@@ -34,7 +36,7 @@
         </div>
       </ng-container>
     </div>
-    <div class="chat-box-footer">
+    <div class="chat-box-footer" *ngIf="!this.historyMode">
       <chat-input (send)="sendMessage($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
     </div>
   </div>

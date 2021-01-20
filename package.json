@@ -25,11 +25,13 @@
     "@angular/platform-browser-dynamic": "11.0.9",
     "@angular/router": "11.0.9",
     "@webcomponents/custom-elements": "^1.4.1",
+    "bootstrap": "^4.6.0",
     "concat": "^1.0.3",
     "core-js": "^2.5.4",
     "crypto-js": "^4.0.0",
     "firebase": "^8.0.0",
     "fs-extra": "^5.0.0",
+    "jquery": "^3.5.1",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
