@@ -5,11 +5,12 @@ import { AdminService } from './services/admin-service';
 import { HttpClientModule } from '@angular/common/http';
 import { createCustomElement } from '@angular/elements'
 import { ChatModule, ChatWidgetComponent, ChatConfigComponent } from './chat/'
+import { UserService } from './services/user.service';
 
 @NgModule({
   imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule],
   exports: [ChatModule],
-  providers: [AdminService]
+  providers: [AdminService, UserService]
 })
 export class ElementModule {
   constructor(private injector: Injector) {

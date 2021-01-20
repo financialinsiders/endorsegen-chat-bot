@@ -8,10 +8,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { AdminService } from './services/admin-service';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'environments/environment.prod'
+import { UserService } from './services/user.service'
 @NgModule({
   imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig),],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [AdminService]
+  providers: [AdminService, UserService]
 })
 export class AppModule {}
