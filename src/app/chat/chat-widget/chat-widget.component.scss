@@ -2,7 +2,7 @@
   box-sizing: border-box;
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif,
-  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 .wrapper {
@@ -27,6 +27,7 @@
   color: #fff;
   font-size: 32px;
 }
+
 .chat-button-header {
   z-index: 1;
   font-weight: bold;
@@ -53,9 +54,11 @@
   box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
   background: #1976d2;
 }
+
 .chat-box-hidden {
   display: none;
 }
+
 .chat-box-header {
   padding: 10px;
   color: #fff;
@@ -83,17 +86,21 @@
 
 .operator-status {
   float: right;
+
   .history-icon {
     filter: invert(100%);
     cursor: pointer;
   }
 }
+
 .operator-status span {
   margin-left: 4px;
 }
+
 .operator-status-online {
   color: lawngreen;
 }
+
 .operator-status-offline {
   color: red;
 }
@@ -209,6 +216,7 @@ Sent message style
 .blue .chat-button {
   background: #1976d2;
 }
+
 .blue .chat-box {
   background: #1976d2;
 }
@@ -216,6 +224,7 @@ Sent message style
 .grey .chat-button {
   background: #454549;
 }
+
 .grey .chat-box {
   background: #454549;
 }
@@ -223,6 +232,7 @@ Sent message style
 .red .chat-button {
   background: #DD0031;
 }
+
 .red .chat-box {
   background: #DD0031;
 }
@@ -234,12 +244,15 @@ Sent message style
     right: 0;
     width: 300px;
   }
+
   .chat-button {
     display: block;
   }
+
   .chat-button-header {
     display: none;
   }
+
   .chat-box {
     top: auto;
     left: auto;
@@ -270,4 +283,17 @@ Sent message style
   .chat-box {
     /*height: 80vh;*/
   }
+}
+
+.history-message {
+  background: white;
+  margin: 5px;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.previous-chat-text {
+  color: white;
+  text-align: center;
 }

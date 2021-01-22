@@ -36,6 +36,17 @@
         </div>
       </ng-container>
     </div>
+    <div *ngIf="this.historyMode">
+      <p class="previous-chat-text">Previous Chats</p>
+      <div *ngFor="let message of sessionHistoryChatList">
+        <div class="history-message" (click)="selectMessage(message)">
+            <span>{{this.removeHTML(message.message[0].element.clabel)}}</span>
+            <div class="chat-message-date">
+              {{message.message[0].date | date: 'short'}}
+            </div>
+        </div>
+      </div>
+    </div>
     <div class="chat-box-footer" *ngIf="!this.historyMode">
       <chat-input (send)="sendMessage($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
     </div>

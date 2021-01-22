@@ -29,6 +29,7 @@ export class ChatWidgetComponent implements OnInit {
   agentLive: boolean;
   agentName: any;
   historyMode: boolean;
+  sessionHistoryChatList: any = [];
   public get visible() {
     return this._visible
   }
@@ -83,7 +84,7 @@ export class ChatWidgetComponent implements OnInit {
   ngOnInit() {
     this.existUserSession = this.userService.getUserSession();
     this.adminService.getAgentProfile(this.instanceId).subscribe(data => {
-      this.operator.name = data['first_name'] + ' ' +data['last_name'];
+      this.operator.name = data['first_name'] + ' ' + data['last_name'];
     })
     if (this.existUserSession) {
       this.clientFirebaseId = this.existUserSession.clientFirebaseId;
@@ -92,8 +93,8 @@ export class ChatWidgetComponent implements OnInit {
         type: 'lead-user',
         newNotification: true
       });
-      
-      
+
+
       this.adminService.getFbId(this.instanceId).subscribe(data => {
         this.firebaseId = data['firebase_id'];
         this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
@@ -102,11 +103,17 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
-          this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).query.once("value").then(data => {
-            var chatBackUp = JSON.parse(data.val());
-            this.messages = chatBackUp.message;
-            this.currentIndex = chatBackUp.position;
-            console.log(this.currentIndex);
+          this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}`).query.once("value").then(data => {
+            var sessionMessage = data.val();
+              var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
+              this.messages = chatBackUp['message'];
+              this.currentIndex = chatBackUp['position'];
+              for (let [key, value] of Object.entries(sessionMessage)) {
+                var eachMessage = JSON.parse(value.toString());
+                eachMessage['key'] = key;
+                console.log(eachMessage);
+                this.sessionHistoryChatList.push(eachMessage);
+            };
           });
 
           this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
@@ -183,6 +190,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
+            this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
 
@@ -218,13 +226,24 @@ export class ChatWidgetComponent implements OnInit {
   }
   public proceedNext() {
     console.log(this.currentIndex);
-    if(this.currentIndex !== 999) {
+    if (this.currentIndex !== 999) {
       this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.currentIndex], this.chatElements[this.currentIndex].clabel, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
     }
-    this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ position: this.agentLive ? 999  : this.currentIndex, message: this.messages }));
+    this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
 
+  }
+  public selectMessage(message) {
+    console.log(message);
+    this.cSessionId = message['key'];
+    this.messages = message['message'];
+    this.currentIndex = message['position'];
+    this.historyMode = !this.historyMode;
+    this.userService.setUserSession({
+      clientFirebaseId: this.clientFirebaseId,
+      cSessionId: this.cSessionId
+    });
   }
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
