@@ -49,13 +49,13 @@ export class ChatWidgetComponent implements OnInit {
   public operator = {
     name: 'Operator',
     status: 'online',
-    avatar: `https://randomuser.me/api/portraits/women/${rand(100)}.jpg`,
+    avatar: `../../../assets/bot.png`,
   }
 
   public client = {
     name: 'Guest User',
     status: 'online',
-    avatar: `https://randomuser.me/api/portraits/men/${rand(100)}.jpg`,
+    avatar: `../../../assets/client.png`,
   }
 
   public messages = []
@@ -110,6 +110,7 @@ export class ChatWidgetComponent implements OnInit {
             var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
             this.messages = chatBackUp['message'];
             this.currentIndex = chatBackUp['position'];
+            this.addMessage(this.operator, { clabel: 'Welcome back !!!', live: true }, 'received');
             for (let [key, value] of Object.entries(sessionMessage)) {
               var eachMessage = JSON.parse(value.toString());
               eachMessage['key'] = key;
