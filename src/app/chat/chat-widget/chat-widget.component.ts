@@ -49,13 +49,13 @@ export class ChatWidgetComponent implements OnInit {
   public operator = {
     name: 'Operator',
     status: 'online',
-    avatar: `../../../assets/bot.png`,
+    avatar: `https://fiapps.s3.ca-central-1.amazonaws.com/assets/bot.png`,
   }
 
   public client = {
     name: 'Guest User',
     status: 'online',
-    avatar: `../../../assets/client.png`,
+    avatar: `https://fiapps.s3.ca-central-1.amazonaws.com/assets/client.png`,
   }
 
   public messages = []

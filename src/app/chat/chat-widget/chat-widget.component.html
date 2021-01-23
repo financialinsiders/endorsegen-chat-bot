@@ -8,7 +8,7 @@
             <span class="operator-status-online">●</span>
 
           </span>
-          <a (click)="historyChat()" *ngIf="existUserSession"><img src="../../../assets/history-icon.png"
+          <a (click)="historyChat()" *ngIf="existUserSession"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png"
               class="history-icon ml-1" width="20px" height="20px" /></a>
           <button class="chat-button-header" (click)="toggleChat()">✕</button>
 
@@ -62,7 +62,7 @@
   </div>
   <button class="chat-button" (click)="toggleChat()">
     <span [@fadeIn] *ngIf="visible">✕</span>
-    <span [@fadeIn] *ngIf="!visible"><img src="../../../assets/widget-start.png" class="widget-start" width="45px"
+    <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png" class="widget-start" width="45px"
         height="50px" /></span>
   </button>
 </div>

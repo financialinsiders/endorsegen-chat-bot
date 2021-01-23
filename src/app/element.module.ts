@@ -6,9 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { createCustomElement } from '@angular/elements'
 import { ChatModule, ChatWidgetComponent, ChatConfigComponent } from './chat/'
 import { UserService } from './services/user.service';
-
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'environments/environment.prod'
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule],
+  imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig),],
   exports: [ChatModule],
   providers: [AdminService, UserService]
 })
