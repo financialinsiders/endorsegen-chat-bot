@@ -110,7 +110,7 @@ export class ChatWidgetComponent implements OnInit {
             var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
             this.messages = chatBackUp['message'];
             this.currentIndex = chatBackUp['position'];
-            this.addMessage(this.operator, { clabel: 'Welcome back !!!', live: true }, 'received');
+            //this.addMessage(this.operator, { clabel: 'Welcome back !!!', live: true }, 'received');
             for (let [key, value] of Object.entries(sessionMessage)) {
               var eachMessage = JSON.parse(value.toString());
               eachMessage['key'] = key;
@@ -277,6 +277,20 @@ export class ChatWidgetComponent implements OnInit {
     if (message.trim() === '') {
       return
     }
+    var elementType = this.messages[0].element.type;
+    if (elementType === 'name') {
+      this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
+        username: message,
+      });
+    } else if (elementType === 'email') {
+      this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
+        email: message,
+      });
+    } else if (elementType === 'phone') {
+      this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
+        phone: message,
+      });
+    };
     var senderMessage = {
       chatId: this.clientFirebaseId,
       message: message,
