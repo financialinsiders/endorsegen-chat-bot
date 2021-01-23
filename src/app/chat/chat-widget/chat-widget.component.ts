@@ -142,7 +142,6 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
-
           this.clientFirebaseId = this.existUserSession.clientFirebaseId;
 
           var sessionInfo = {
@@ -300,7 +299,7 @@ export class ChatWidgetComponent implements OnInit {
       conversationId: this.firebaseId,
       senderId: this.clientFirebaseId,
       status: 'CONV_OPEN',
-      timestamp: 1610987426109
+      timestamp: new Date().getTime()
     }
     this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
     this.addMessage(this.client, { clabel: message }, 'sent');
@@ -331,6 +330,22 @@ export class ChatWidgetComponent implements OnInit {
         this.chatElements = data['data']['elements'];
       });
     }
+  }
+  public multiChoiceSelect(choice) {
+    var senderMessage = {
+      chatId: this.clientFirebaseId,
+      message: choice.option,
+      conversationId: this.firebaseId,
+      senderId: this.clientFirebaseId,
+      status: 'CONV_OPEN',
+      timestamp: new Date().getTime()
+    }
+    this.messages[0].hide = true;
+    this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
+    this.addMessage(this.client, { clabel: choice.option }, 'sent');
+    let tempIndex = this.currentIndex
+    this.chatElements.splice.apply(this.chatElements, [this.currentIndex, 0].concat(choice.logic_jump));
+    setTimeout(() => this.proceedNext(), 1000)
   }
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {

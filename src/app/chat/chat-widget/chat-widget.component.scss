@@ -124,6 +124,17 @@
   flex-direction: row;
   max-width: 80%;
   word-wrap: break-word;
+  .multi-choice-container {
+    margin-left: 50px;
+    .option-entry {
+      background: #ffa5006b;
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
 }
 
 .chat-message-date {
