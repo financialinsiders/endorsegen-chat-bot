@@ -92,7 +92,10 @@
     cursor: pointer;
   }
 }
-
+.widget-start {
+  filter: invert(100%);
+  cursor: pointer;
+}
 .operator-status span {
   margin-left: 4px;
 }
