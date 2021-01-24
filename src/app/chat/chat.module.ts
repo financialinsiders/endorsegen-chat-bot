@@ -6,11 +6,13 @@ import { ChatInputComponent } from './chat-input/chat-input.component'
 import { ChatConfigComponent } from './chat-config/chat-config.component'
 import { AdminService } from 'app/services/admin-service'
 import { HttpClientModule } from '@angular/common/http';
-import { UserService } from 'app/services/user.service'
+import { UserService } from 'app/services/user.service';
+import { SubscriberComponent } from './subscriber/subscriber.component';
+import { PublisherComponent } from './publisher/publisher.component';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule],
-  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent],
+  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
   providers: [AdminService, UserService]

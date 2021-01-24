@@ -34,7 +34,8 @@
     "jquery": "^3.5.1",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "@opentok/client": "^2.16.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.7",

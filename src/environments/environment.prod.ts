@@ -7,5 +7,6 @@ export const environment = {
     projectId: "lobby-fi",
     storageBucket: "lobby-fi.appspot.com",
     messagingSenderId: "19890574249"
-}
+  },
+  openTokApiKey: '45426652'
 }

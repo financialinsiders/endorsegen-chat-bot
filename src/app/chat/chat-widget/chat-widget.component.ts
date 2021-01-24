@@ -1,10 +1,11 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core'
 import { AdminService } from '../../services/admin-service'
 import { Subject } from 'rxjs'
 import { fadeIn, fadeInOut } from '../animations'
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
 import { FirebaseService } from 'app/services/firebase.service';
 import { UserService } from 'app/services/user.service';
+import { OpentokService } from 'app/services/opentok.service';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -30,6 +31,11 @@ export class ChatWidgetComponent implements OnInit {
   agentName: any;
   historyMode: boolean;
   sessionHistoryChatList: any = [];
+  sessionId: any;
+  token: any;
+  session: OT.Session;
+  streams: Array<OT.Stream> = [];
+  isPublished: boolean;
   public get visible() {
     return this._visible
   }
@@ -60,7 +66,7 @@ export class ChatWidgetComponent implements OnInit {
 
   public messages = []
 
-  constructor(private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     this.messages.unshift({
       from,
@@ -91,11 +97,12 @@ export class ChatWidgetComponent implements OnInit {
       this.visible = this.existUserSession.chatStatus;
       this.clientFirebaseId = this.existUserSession.clientFirebaseId;
       this.cSessionId = this.existUserSession.cSessionId
+      this.initializeSession(this.clientFirebaseId);
       this.angularFireDatabase.object(`notify-users/${this.instanceId}`).update({
         type: 'lead-user',
         newNotification: true
       });
-
+      
 
       this.adminService.getFbId(this.instanceId).subscribe(data => {
         this.firebaseId = data['firebase_id'];
@@ -143,7 +150,7 @@ export class ChatWidgetComponent implements OnInit {
 
           this.chatElements = data['data']['elements'];
           this.clientFirebaseId = this.existUserSession.clientFirebaseId;
-
+          this.initializeSession(this.clientFirebaseId);
           var sessionInfo = {
             username: 'Anonymous',
             user_attempt: false,
@@ -207,7 +214,7 @@ export class ChatWidgetComponent implements OnInit {
           }
           this.angularFireDatabase.database.ref('users/').push(userInfo).then((userData) => {
             this.clientFirebaseId = userData.key;
-
+            this.initializeSession(this.clientFirebaseId);
             var sessionInfo = {
               username: 'Anonymous',
               user_attempt: false,
@@ -346,6 +353,34 @@ export class ChatWidgetComponent implements OnInit {
     let tempIndex = this.currentIndex
     this.chatElements.splice.apply(this.chatElements, [this.currentIndex, 0].concat(choice.logic_jump));
     setTimeout(() => this.proceedNext(), 1000)
+  }
+  public initializeSession(clientFirebaseId) {
+    this.angularFireDatabase.object(`users/${clientFirebaseId}`).valueChanges().subscribe(data => {
+      this.sessionId = data['otSessionId'];
+      this.token = data['token'];
+      if (this.sessionId && this.token) {
+        this.opentokService.initSession(this.sessionId).then((session: OT.Session) => {
+          this.session = session;
+          this.session.on('streamCreated', (event) => {
+            this.streams.push(event.stream);
+            this.changeDetectorRef.detectChanges();
+          });
+          this.session.on('streamDestroyed', (event) => {
+            const idx = this.streams.indexOf(event.stream);
+            if (idx > -1) {
+              this.streams.splice(idx, 1);
+              this.changeDetectorRef.detectChanges();
+            }
+          });
+        })
+        .then(() => this.opentokService.connect(this.token))
+        .catch((err) => {
+          console.error(err);
+          alert('Unable to connect. Make sure you have updated the config.ts file with your OpenTok details.');
+        });
+      }
+    });
+    
   }
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
