@@ -1,11 +1,6 @@
 import { Component, ElementRef, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { OpentokService } from 'app/services/opentok.service';
 
-
-const publish = () => {
-
-};
-
 @Component({
   selector: 'app-publisher',
   templateUrl: './publisher.component.html',
@@ -29,7 +24,7 @@ export class PublisherComponent implements AfterViewInit {
       if (this.session['isConnected']()) {
         this.session.unpublish(this.publisher)
       }
-      this.session.on('sessionConnected', () => this.publish());
+      //this.session.on('sessionConnected', () => this.publish());
       this.session.on("signal:USRVID", (event) => {
         console.info("Signal sent from connection " + event);
         console.log(event['data']);

@@ -20,6 +20,10 @@
         </p>
       </div>
     </div>
+    <div *ngIf="session">
+      <app-publisher [session]="session"></app-publisher>
+      <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
+    </div>
     <div class="chat-box-main" *ngIf="!this.historyMode">
       <div class="chat-message-bottom" #bottom></div>
       <ng-container *ngFor="let message of messages">
@@ -65,8 +69,4 @@
     <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png" class="widget-start" width="45px"
         height="50px" /></span>
   </button>
-</div>
-<div *ngIf="session">
-  <app-publisher [session]="session"></app-publisher>
-  <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
 </div>
