@@ -350,7 +350,7 @@ export class ChatWidgetComponent implements OnInit {
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
       if(this.chatElements[this.currentIndex - 1].opt !== "userinput") {
-        setTimeout(() => this.proceedNext(), 1000)
+        setTimeout(() => this.proceedNext(), 3000)
       }
     }
     this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
