@@ -7,10 +7,10 @@ enum APIEndPointUrls {
   getFbId = 'ic_get_fb_id',
   retrieveChatBot = 'ic_retrieve_chat_bot',
   getAgentProfile = 'ic_get_agent_profile',
-  getElementID = 'http://localhost:9090/v1/cronofy/getElementID',
-  getAvailableSlots = 'http://localhost:9090/v1/calendar/getAvailableSlots/',
+  getElementID = 'https://prod-node-api.herokuapp.com/v1/cronofy/getElementID',
+  getAvailableSlots = 'https://prod-node-api.herokuapp.com/v1/calendar/getAvailableSlots/',
   appointmentMeeting = 'ic_appointment_meeting',
-  bookSlot = 'http://localhost:9090/v1/calendar/bookSlot',
+  bookSlot = 'https://prod-node-api.herokuapp.com/v1/calendar/bookSlot',
 }
 @Injectable()
 export class AdminService {
