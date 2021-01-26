@@ -48,7 +48,7 @@
             </div>
 
             <div *ngIf="message.element.type === 'appointment-widget'" class="appoinment-container">
-              <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name"></app-cronofy>
+              <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId"></app-cronofy>
             </div>
             <div *ngIf="message.element.type === 'video'" class="appoinment-container">
               <div class="video-alignments">

@@ -7,6 +7,7 @@ import { FirebaseService } from 'app/services/firebase.service';
 import { UserService } from 'app/services/user.service';
 import { OpentokService } from 'app/services/opentok.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CryptoStorageService } from 'app/services/crypto-storage.service';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -37,8 +38,9 @@ export class ChatWidgetComponent implements OnInit {
   session: OT.Session;
   streams: Array<OT.Stream> = [];
   isPublished: boolean;
-  email: any = "sksithik@gmail.com";
-  name: any = 'Sithik';
+  email: any = this.cryptoService.getItem('email');
+  name: any = this.cryptoService.getItem('name');
+  leadId: any = this.cryptoService.getItem('lead.id');
   public get visible() {
     return this._visible
   }
@@ -69,7 +71,7 @@ export class ChatWidgetComponent implements OnInit {
 
   public messages = []
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     this.messages.unshift({
       from,
@@ -295,11 +297,15 @@ export class ChatWidgetComponent implements OnInit {
     var elementType = this.messages[0].element.type;
     if (elementType === 'name') {
       this.name = message;
+      this.cryptoService.setItem('name', this.name);
       this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
         username: message,
       });
+      if(this.leadId) this.createLead();
     } else if (elementType === 'email') {
       this.email = message;
+      this.cryptoService.setItem('email', this.email);
+      this.createLead();
       this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
         email: message,
       });
@@ -319,6 +325,19 @@ export class ChatWidgetComponent implements OnInit {
     this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
     this.addMessage(this.client, { clabel: message }, 'sent');
     setTimeout(() => this.proceedNext(), 1000)
+  }
+  public createLead() {
+    var requestData = {
+      "first_name": this.name,
+      "email": this.email,
+      "agent_id": this.instanceId,
+      "endorser_id": this.instanceId,
+      "fb_ref": this.firebaseId
+    }
+    this.adminService.newLead(requestData).subscribe(data => {
+      this.leadId = data['id'];
+      this.cryptoService.setItem('lead.id', this.leadId);
+    });
   }
   public proceedNext() {
     if (this.currentIndex !== 999) {
@@ -364,7 +383,7 @@ export class ChatWidgetComponent implements OnInit {
   }
   public initializeSession(clientFirebaseId) {
     this.angularFireDatabase.object(`users/${clientFirebaseId}`).valueChanges().subscribe(data => {
-      
+
       if (data && data['otSessionId'] && data['token']) {
         this.sessionId = data['otSessionId'];
         this.token = data['token'];

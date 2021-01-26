@@ -11,6 +11,7 @@ enum APIEndPointUrls {
   getAvailableSlots = 'https://prod-node-api.herokuapp.com/v1/calendar/getAvailableSlots/',
   appointmentMeeting = 'ic_appointment_meeting',
   bookSlot = 'https://prod-node-api.herokuapp.com/v1/calendar/bookSlot',
+  newLead = 'ic_new_lead_nomail'
 }
 @Injectable()
 export class AdminService {
@@ -63,5 +64,14 @@ export class AdminService {
       { 'Content-Type': 'application/json' }
     );
     return this.http.post(APIEndPointUrls.bookSlot, data, { headers: headers });
+  }
+  newLead(data) {
+    var headers = new HttpHeaders(
+      { 'Content-Type': 'application/x-www-form-urlencoded' }
+    );
+    let params = new HttpParams();
+    params = params.append('action', APIEndPointUrls.newLead);
+
+    return this.http.post(APIEndPointUrls.adminAjax, data, { headers: headers, params: params });
   }
 }

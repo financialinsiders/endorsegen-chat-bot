@@ -12,11 +12,12 @@ export class CronofyComponent implements OnInit {
   @Input() email: string;
   @Input() name: string;
   @Input() botId: number;
+  @Input() leadId: any;
   startDate: any;
   startTime: any;
   endTime: any;
   isBusy: boolean;
-  leadId: any;
+  
   meetingBooked: { startDate: any; endTime: any; startTime: any; };
   meetingID: string;
   showAppoinmentConfirmation: boolean = false;
