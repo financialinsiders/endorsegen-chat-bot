@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { OpentokService } from 'app/services/opentok.service';
 
 import { PublisherComponent } from './publisher.component';
-import { OpentokService } from '../opentok.service';
 
 describe('PublisherComponent', () => {
   let component: PublisherComponent;

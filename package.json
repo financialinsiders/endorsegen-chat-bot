@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4202",
+    "start": "ng serve",
     "build": "ng build --prod",
     "build:elements": "ng build elements --prod",
     "postbuild:elements": "node ./build-elements.js es2015",
@@ -24,18 +24,19 @@
     "@angular/platform-browser": "11.0.9",
     "@angular/platform-browser-dynamic": "11.0.9",
     "@angular/router": "11.0.9",
+    "@opentok/client": "^2.16.0",
     "@webcomponents/custom-elements": "^1.4.1",
     "bootstrap": "^4.6.0",
     "concat": "^1.0.3",
     "core-js": "^2.5.4",
+    "cronofy-elements": "^1.25.0",
     "crypto-js": "^4.0.0",
     "firebase": "^8.0.0",
     "fs-extra": "^5.0.0",
     "jquery": "^3.5.1",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2",
-    "@opentok/client": "^2.16.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.7",

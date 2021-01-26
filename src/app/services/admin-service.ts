@@ -7,6 +7,10 @@ enum APIEndPointUrls {
   getFbId = 'ic_get_fb_id',
   retrieveChatBot = 'ic_retrieve_chat_bot',
   getAgentProfile = 'ic_get_agent_profile',
+  getElementID = 'http://localhost:9090/v1/cronofy/getElementID',
+  getAvailableSlots = 'http://localhost:9090/v1/calendar/getAvailableSlots/',
+  appointmentMeeting = 'ic_appointment_meeting',
+  bookSlot = 'http://localhost:9090/v1/calendar/bookSlot',
 }
 @Injectable()
 export class AdminService {
@@ -31,5 +35,33 @@ export class AdminService {
     params = params.append('action', APIEndPointUrls.getAgentProfile);
     params = params.append('agent_id', userId);
     return this.http.get(APIEndPointUrls.adminAjax, { params: params });
+  }
+  getElementID(agentID) {
+    var headers = new HttpHeaders(
+      { 'Content-Type': 'application/json' }
+    );
+    var data = {
+      "agentID": agentID,
+      "origin": window.location.origin
+    };
+    return this.http.post(APIEndPointUrls.getElementID, data, { headers: headers });
+  }
+  getAvailableSlots(agentID) {
+    return this.http.get(APIEndPointUrls.getAvailableSlots + agentID);
+  }
+  createAppointmentMeeting(data) {
+   /*  var headers = new HttpHeaders(
+      { 'Content-Type': 'application/x-www-form-urlencoded' }
+    ); */
+    let params = new HttpParams();
+    params = params.append('action', APIEndPointUrls.appointmentMeeting);
+
+    return this.http.post(APIEndPointUrls.adminAjax, data, { /* headers: headers,  */params: params });
+  }
+  bookSlot(data) {
+    var headers = new HttpHeaders(
+      { 'Content-Type': 'application/json' }
+    );
+    return this.http.post(APIEndPointUrls.bookSlot, data, { headers: headers });
   }
 }

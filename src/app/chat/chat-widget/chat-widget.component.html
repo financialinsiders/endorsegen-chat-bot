@@ -42,6 +42,10 @@
 
               </ng-container>
             </div>
+            
+            <div *ngIf="message.element.type === 'appointment-widget'" class="multi-choice-container">
+              <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name"></app-cronofy>
+            </div>
           </div>
           <div class="chat-message-date">
             {{message.date | date: 'short'}}

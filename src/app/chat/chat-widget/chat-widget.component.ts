@@ -36,6 +36,8 @@ export class ChatWidgetComponent implements OnInit {
   session: OT.Session;
   streams: Array<OT.Stream> = [];
   isPublished: boolean;
+  email: any = "sksithik@gmail.com";
+  name: any = 'Sithik';
   public get visible() {
     return this._visible
   }
@@ -91,7 +93,7 @@ export class ChatWidgetComponent implements OnInit {
     this.existUserSession = this.userService.getUserSession();
     this.adminService.getAgentProfile(this.instanceId).subscribe(data => {
       this.operator.name = data['first_name'] + ' ' + data['last_name'];
-    })
+    });
     if (this.existUserSession && (this.existUserSession.botId === this.botId || this.existUserSession.botId !== this.botId && this.existUserSession.chatStatus)) {
       this.botId = this.existUserSession.botId;
       this.visible = this.existUserSession.chatStatus;
@@ -102,7 +104,7 @@ export class ChatWidgetComponent implements OnInit {
         type: 'lead-user',
         newNotification: true
       });
-      
+
 
       this.adminService.getFbId(this.instanceId).subscribe(data => {
         this.firebaseId = data['firebase_id'];
@@ -288,10 +290,12 @@ export class ChatWidgetComponent implements OnInit {
     }
     var elementType = this.messages[0].element.type;
     if (elementType === 'name') {
+      this.name = message;
       this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
         username: message,
       });
     } else if (elementType === 'email') {
+      this.email = message;
       this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
         email: message,
       });
@@ -356,9 +360,10 @@ export class ChatWidgetComponent implements OnInit {
   }
   public initializeSession(clientFirebaseId) {
     this.angularFireDatabase.object(`users/${clientFirebaseId}`).valueChanges().subscribe(data => {
-      this.sessionId = data['otSessionId'];
-      this.token = data['token'];
-      if (this.sessionId && this.token) {
+      
+      if (data && data['otSessionId'] && data['token']) {
+        this.sessionId = data['otSessionId'];
+        this.token = data['token'];
         this.opentokService.initSession(this.sessionId).then((session: OT.Session) => {
           this.session = session;
           this.session.on('streamCreated', (event) => {
@@ -373,14 +378,14 @@ export class ChatWidgetComponent implements OnInit {
             }
           });
         })
-        .then(() => this.opentokService.connect(this.token))
-        .catch((err) => {
-          console.error(err);
-          alert('Unable to connect. Make sure you have updated the config.ts file with your OpenTok details.');
-        });
+          .then(() => this.opentokService.connect(this.token))
+          .catch((err) => {
+            console.error(err);
+            alert('Unable to connect. Make sure you have updated the config.ts file with your OpenTok details.');
+          });
       }
     });
-    
+
   }
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {

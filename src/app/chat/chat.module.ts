@@ -9,10 +9,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserService } from 'app/services/user.service';
 import { SubscriberComponent } from './subscriber/subscriber.component';
 import { PublisherComponent } from './publisher/publisher.component';
+import { CronofyComponent } from './cronofy/cronofy.component';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule],
-  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent],
+  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
   providers: [AdminService, UserService]
