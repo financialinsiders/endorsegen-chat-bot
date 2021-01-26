@@ -41,6 +41,7 @@ export class ChatWidgetComponent implements OnInit {
   email: any = this.cryptoService.getItem('email');
   name: any = this.cryptoService.getItem('name');
   leadId: any = this.cryptoService.getItem('lead.id');
+  phone: any = this.cryptoService.getItem('phone');
   public get visible() {
     return this._visible
   }
@@ -310,6 +311,9 @@ export class ChatWidgetComponent implements OnInit {
         email: message,
       });
     } else if (elementType === 'phone') {
+      this.phone = message;
+      this.cryptoService.setItem('phone', this.phone);
+      this.createLead();
       this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
         phone: message,
       });
@@ -330,6 +334,7 @@ export class ChatWidgetComponent implements OnInit {
     var requestData = {
       "first_name": this.name,
       "email": this.email,
+      "phone": this.phone,
       "agent_id": this.instanceId,
       "endorser_id": this.instanceId,
       "fb_ref": this.firebaseId
