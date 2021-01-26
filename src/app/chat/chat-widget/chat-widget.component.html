@@ -8,8 +8,9 @@
             <span class="operator-status-online">●</span>
 
           </span>
-          <a (click)="historyChat()" *ngIf="existUserSession"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png"
-              class="history-icon ml-1" width="20px" height="20px" /></a>
+          <a (click)="historyChat()" *ngIf="existUserSession"><img
+              src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png" class="history-icon ml-1"
+              width="20px" height="20px" /></a>
           <button class="chat-button-header" (click)="toggleChat()">✕</button>
 
         </div>
@@ -28,10 +29,13 @@
       <div class="chat-message-bottom" #bottom></div>
       <ng-container *ngFor="let message of messages">
         <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
-          [class.chat-message-sent]="message.type === 'sent'" [class.appoinment-container]="message.element.type === 'appointment-widget'">
+          [class.chat-message-sent]="message.type === 'sent'"
+          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video'">
           <div>
-            <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar" *ngIf="message.element.type !== 'appointment-widget'"></chat-avatar>
-            <div class="chat-message-text" [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget'">
+            <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"
+              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video'"></chat-avatar>
+            <div class="chat-message-text"
+              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video'">
               {{this.removeHTML(message.element.clabel)}}
             </div>
             <div *ngIf="message.element.type === 'multichoice' && !message.hide" class="multi-choice-container">
@@ -42,9 +46,15 @@
 
               </ng-container>
             </div>
-            
+
             <div *ngIf="message.element.type === 'appointment-widget'" class="appoinment-container">
               <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name"></app-cronofy>
+            </div>
+            <div *ngIf="message.element.type === 'video'" class="appoinment-container">
+              <div class="video-alignments">
+                <iframe [src]="getSafeUrl(message.element.video)" frameborder="0" allowfullscreen width="100%"></iframe>
+              </div>
+
             </div>
           </div>
           <div class="chat-message-date">
@@ -70,7 +80,7 @@
   </div>
   <button class="chat-button" (click)="toggleChat()">
     <span [@fadeIn] *ngIf="visible">✕</span>
-    <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png" class="widget-start" width="45px"
-        height="50px" /></span>
+    <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png"
+        class="widget-start" width="45px" height="50px" /></span>
   </button>
 </div>

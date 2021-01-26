@@ -6,6 +6,7 @@ import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angula
 import { FirebaseService } from 'app/services/firebase.service';
 import { UserService } from 'app/services/user.service';
 import { OpentokService } from 'app/services/opentok.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -68,7 +69,7 @@ export class ChatWidgetComponent implements OnInit {
 
   public messages = []
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     this.messages.unshift({
       from,
@@ -283,6 +284,9 @@ export class ChatWidgetComponent implements OnInit {
   }
   public removeHTML(text) {
     return text.replace(/<\/?[^>]+(>|$)/g, "");
+  }
+  getSafeUrl(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
   public sendMessage({ message }) {
     if (message.trim() === '') {

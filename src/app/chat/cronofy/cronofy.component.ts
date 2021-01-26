@@ -60,7 +60,7 @@ export class CronofyComponent implements OnInit {
             }
             this.showAppoinmentConfirmation = true;
             this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data =>{
-              this.createApoinment(data['meeting_id'], notification, data['user_id']);
+              //this.createApoinment(data['meeting_id'], notification, data['user_id']);
             });
           }
         });

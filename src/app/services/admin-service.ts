@@ -50,13 +50,13 @@ export class AdminService {
     return this.http.get(APIEndPointUrls.getAvailableSlots + agentID);
   }
   createAppointmentMeeting(data) {
-   /*  var headers = new HttpHeaders(
+    var headers = new HttpHeaders(
       { 'Content-Type': 'application/x-www-form-urlencoded' }
-    ); */
+    );
     let params = new HttpParams();
     params = params.append('action', APIEndPointUrls.appointmentMeeting);
 
-    return this.http.post(APIEndPointUrls.adminAjax, data, { /* headers: headers,  */params: params });
+    return this.http.post(APIEndPointUrls.adminAjax, data, { headers: headers, params: params });
   }
   bookSlot(data) {
     var headers = new HttpHeaders(
