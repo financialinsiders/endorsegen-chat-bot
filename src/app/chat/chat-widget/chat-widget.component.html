@@ -28,10 +28,10 @@
       <div class="chat-message-bottom" #bottom></div>
       <ng-container *ngFor="let message of messages">
         <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
-          [class.chat-message-sent]="message.type === 'sent'">
+          [class.chat-message-sent]="message.type === 'sent'" [class.appoinment-container]="message.element.type === 'appointment-widget'">
           <div>
-            <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"></chat-avatar>
-            <div class="chat-message-text">
+            <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar" *ngIf="message.element.type !== 'appointment-widget'"></chat-avatar>
+            <div class="chat-message-text" [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget'">
               {{this.removeHTML(message.element.clabel)}}
             </div>
             <div *ngIf="message.element.type === 'multichoice' && !message.hide" class="multi-choice-container">
@@ -43,7 +43,7 @@
               </ng-container>
             </div>
             
-            <div *ngIf="message.element.type === 'appointment-widget'" class="multi-choice-container">
+            <div *ngIf="message.element.type === 'appointment-widget'" class="appoinment-container">
               <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name"></app-cronofy>
             </div>
           </div>

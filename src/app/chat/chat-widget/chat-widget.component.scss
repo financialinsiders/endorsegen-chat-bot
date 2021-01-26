@@ -162,7 +162,13 @@ Received message style
 .chat-message-received {
   margin-right: 50px;
 }
-
+.appoinment-container {
+  min-width: 98%;
+  margin-right: 0px;
+  .chat-message-text{
+    margin: 0px 20px !important;
+  }
+}
 .chat-message-received .chat-message-text {
   background: #B9D6F2;
   margin-left: 50px;
@@ -178,7 +184,9 @@ Received message style
   border-top: solid 10px transparent;
   z-index: 0;
 }
-
+.chat-message-text-no-corner::before {
+  border-right: none !important;
+}
 .chat-message-received .chat-message-date {
   margin-left: 50px;
 }
