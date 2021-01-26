@@ -1,2 +1,13 @@
-<div id="cronofy-slot-picker"></div>
-<div id="cronofy-agenda"></div>
+<div *ngIf="!showAppoinmentConfirmation">
+    <div id="cronofy-slot-picker"></div>
+    <div id="cronofy-agenda"></div>
+</div>
+<div *ngIf="showAppoinmentConfirmation">
+    <div class="appoinment-confirmation">
+        <p>Your appoinment has been confirmed. You will receive confirmation email shortly.</p>
+        <h6>Meeting Details</h6>
+        <h5>{{startDate | date:'mediumDate'}}</h5>
+        <h6>{{startTime}} - {{endTime}}</h6>
+    </div>
+    
+</div>

@@ -19,6 +19,7 @@ export class CronofyComponent implements OnInit {
   leadId: any;
   meetingBooked: { startDate: any; endTime: any; startTime: any; };
   meetingID: string;
+  showAppoinmentConfirmation: boolean = false;
   constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -57,7 +58,7 @@ export class CronofyComponent implements OnInit {
               email: this.email,
               bot_id: this.botId,
             }
-
+            this.showAppoinmentConfirmation = true;
             this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data =>{
               this.createApoinment(data['meeting_id'], notification, data['user_id']);
             });
