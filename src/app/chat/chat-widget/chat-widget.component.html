@@ -46,11 +46,15 @@
 
               </ng-container>
             </div>
+            <div *ngIf="message.element.type === 'videorecorder'">
+              <app-video-recorder (saved)="videoSaved($event)"></app-video-recorder>
+            </div>
 
             <div *ngIf="message.element.type === 'appointment-widget'" class="appoinment-container">
-              <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId"></app-cronofy>
+              <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId">
+              </app-cronofy>
             </div>
-            <div *ngIf="message.element.type === 'video'" class="appoinment-container">
+             <div *ngIf="message.element.type === 'video'" class="appoinment-container">
               <div class="video-alignments">
                 <iframe [src]="getSafeUrl(message.element.video)" frameborder="0" allowfullscreen width="100%"></iframe>
               </div>

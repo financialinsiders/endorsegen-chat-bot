@@ -10,10 +10,11 @@ import { UserService } from 'app/services/user.service';
 import { SubscriberComponent } from './subscriber/subscriber.component';
 import { PublisherComponent } from './publisher/publisher.component';
 import { CronofyComponent } from './cronofy/cronofy.component';
+import { VideoRecorderComponent } from './video-recorder/video-recorder.component';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule],
-  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent],
+  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
   providers: [AdminService, UserService]

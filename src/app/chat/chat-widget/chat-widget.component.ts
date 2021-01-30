@@ -273,6 +273,9 @@ export class ChatWidgetComponent implements OnInit {
 
 
   }
+  videoSaved(event) {
+    console.log(event);
+  }
   public toggleChat() {
     this.visible = !this.visible
     this.userService.setUserSession({

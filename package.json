@@ -36,9 +36,14 @@
     "jquery": "^3.5.1",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "videojs-record": "^4.1.0",
+    "aws-sdk": "^2.756.0",
+    "@types/video.js": "^7.3.11",
+    "@types/node": "^12.12.62"
   },
   "devDependencies": {
+    "@angular-devkit/architect": ">= 0.900 < 0.1200",
     "@angular-devkit/build-angular": "^0.1100.7",
     "@angular/cli": "11.0.7",
     "@angular/compiler-cli": "11.0.9",
@@ -46,8 +51,12 @@
     "@types/crypto-js": "^4.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^12.11.1",
+    "@types/node": "^12.19.15",
     "codelyzer": "^6.0.0",
+    "firebase-tools": "^8.0.0",
+    "fuzzy": "^0.1.3",
+    "inquirer": "^6.2.2",
+    "inquirer-autocomplete-prompt": "^1.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.1.1",
@@ -55,17 +64,12 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "open": "^7.0.3",
     "protractor": "~7.0.0",
     "schematics-scss-migrate": "^1.3.13",
     "ts-node": "~5.0.1",
     "tslint": "~6.1.0",
     "typescript": "~4.0.5",
-    "webpack-bundle-analyzer": "^4.3.0",
-    "@angular-devkit/architect": ">= 0.900 < 0.1200",
-    "firebase-tools": "^8.0.0",
-    "fuzzy": "^0.1.3",
-    "inquirer": "^6.2.2",
-    "inquirer-autocomplete-prompt": "^1.0.1",
-    "open": "^7.0.3"
+    "webpack-bundle-analyzer": "^4.3.0"
   }
 }

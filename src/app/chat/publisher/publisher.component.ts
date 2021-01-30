@@ -27,7 +27,6 @@ export class PublisherComponent implements AfterViewInit {
       //this.session.on('sessionConnected', () => this.publish());
       this.session.on("signal:USRVID", (event) => {
         console.info("Signal sent from connection " + event);
-        console.log(event['data']);
         if (event['data']) {
           if (event['data']['enableVideo'] && !this.publishing) {
             this.publish();

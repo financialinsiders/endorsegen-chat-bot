@@ -1,0 +1,34 @@
+<div class="video-container text-center">
+    <div class="position-relative">
+        <div class="video-wrapper">
+            <video id="intro-record" class="video-js vjs-default-skin" type="video/webm" width="100"></video>
+        </div>
+        <div *ngIf="showCounter">
+            <h3 [innerHTML]="startCount" class="position-absolute center-align-h1"></h3>
+        </div>
+        
+        <div *ngIf="showPlaybutton" (click)="playVideo()">
+            <img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/play-button.png" width="75px" height="75px"
+            class="position-absolute center-align-video cursor-pointer"> 
+        </div>
+        
+    </div>
+    <div *ngIf="videoUploaded" class="mb-2">
+        <img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/success.png" width="20px" height="20px">
+        Completed...
+    </div>
+    <div class="button-mobile-fixed-bottom" *ngIf="deviceReady || stopRecordButton || showSaveButton || showRecordAgainButton">
+        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="deviceReady" (click)="startcounter()">Start Record</button>
+        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="stopRecordButton" (click)="stopRecord()">Stop Record</button>        
+        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showSaveButton" (click)="saveVideo()">Save</button>
+        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showRecordAgainButton" (click)="startcounter()">Record Again</button>    
+    </div>
+    <div class="mt-4" *ngIf="showProgressBar">
+        <div class="progress-bar-container">
+          <div class="progress-bar stripes animated reverse slower">
+            <span class="progress-bar-inner"></span>
+          </div>
+          Please hold on. Video is being upload.
+        </div>
+    </div>
+</div>
