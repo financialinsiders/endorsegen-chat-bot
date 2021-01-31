@@ -23,7 +23,7 @@ export class SocialSharingComponent implements OnInit {
   public emailSelectOption: string;
   public emailPointValue: any;
   @Input() introSessionID: any;
-  @Input() endorserID: any;
+  @Input() endorserId: any;
   @Input() endorserData: any;
   @Input() inviteType: string;
   @Input() isVideoRecorded: boolean;
@@ -56,7 +56,7 @@ export class SocialSharingComponent implements OnInit {
   }
   socialShare(socialSite) {
     var createIntroductionRequestBody = {
-      "endorser_id": this.endorserID,
+      "endorser_id": this.endorserId,
       "extrapoint": "10",
       "bot_id": this.botId,
       "agent_id": this.instanceId,

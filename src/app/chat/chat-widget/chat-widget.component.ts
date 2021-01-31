@@ -23,7 +23,7 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public theme: 'blue' | 'grey' | 'red' = 'blue';
   @Input() public botId;
   @Input() public instanceId;
-  @Input() endorserID: any;
+  @Input() endorserId: any;
   public _visible = false
   public firebaseId: any
   public chatElements: any
@@ -107,7 +107,7 @@ export class ChatWidgetComponent implements OnInit {
       this.adminService.getEndorserProfileData('518').subscribe(userData=> {
         this.endorserData = userData['data'];
       })
-      this.introductionService.createIntroductionSession({ 'endorser_id': this.endorserID }).subscribe((response: any) => {
+      this.introductionService.createIntroductionSession({ 'endorser_id': this.endorserId }).subscribe((response: any) => {
         this.introSessionID = response.IntroSessionID;
       });
     }

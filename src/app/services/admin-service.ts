@@ -75,10 +75,10 @@ export class AdminService {
 
     return this.http.post(APIEndPointUrls.adminAjax, data, { headers: headers, params: params });
   }
-  getEndorserProfileData(endorserID) {
+  getEndorserProfileData(endorserId) {
     let params = new HttpParams();
     params = params.append('action', APIEndPointUrls.endorserProfile);
-    params = params.append('endorser_id', endorserID);
+    params = params.append('endorser_id', endorserId);
     return this.http.get(APIEndPointUrls.adminAjax, { params: params });
   }
 }
