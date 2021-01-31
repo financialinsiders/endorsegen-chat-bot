@@ -9,6 +9,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
   <script src='assets/library/gifshot.js'></script>
+  <script src="//api.cloudsponge.com/widget/ced9f758e6b91cc20f195411df875d6d3b8c055e.js"></script>
   <script>
     var global = global || window;
     var Buffer = Buffer || [];
@@ -16,6 +17,29 @@
       env: { DEBUG: undefined },
       version: []
     };
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script scr="//connect.facebook.net/en_US/sdk.js"></script>
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '1801608280082028',
+        cookie: true,
+        xfbml: true,
+        version: 'v3.1'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   </script>
 </head>
 <body>

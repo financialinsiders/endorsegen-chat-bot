@@ -7,11 +7,18 @@ import { createCustomElement } from '@angular/elements'
 import { ChatModule, ChatWidgetComponent, ChatConfigComponent } from './chat/'
 import { UserService } from './services/user.service';
 import { AngularFireModule } from '@angular/fire';
-import { environment } from 'environments/environment.prod'
+import { environment } from 'environments/environment.prod';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
+
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig),],
+  imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule],
   exports: [ChatModule],
-  providers: [AdminService, UserService]
+  providers: [AdminService, UserService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ElementModule {
   constructor(private injector: Injector) {

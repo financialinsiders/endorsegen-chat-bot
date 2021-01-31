@@ -1,0 +1,73 @@
+.horizontally-center-align {
+    display: block;
+    margin: 0 auto;
+}
+.mat-expansion-panel-body {
+    text-align: center;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.share-option-tray {
+    margin: 0px;
+}
+.contact-card-container {
+    display: flex;
+    justify-content: center;
+    .contact-card {
+        position: relative;
+        background-color: aliceblue;
+        .contact-card-entry {
+            padding: 20px;
+            word-break: break-word;
+        }
+    }
+}
+.point-number-aloignment {
+    font-size: 20px;
+    color: #16133e;
+}
+
+.session-message-block {
+    border: none;
+}
+.message-sent-font-size {
+    font-size: 10px;
+}
+.btn.session-message-block:hover,
+.btn.session-message-block:active,
+.btn.session-message-block:focus {
+    background-color: #16133e;
+}
+.border-bottom-gradient {
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(to right, green, lightgreen);
+    border-image-slice: 1;
+}
+.video-history {
+    width: 100%;
+    height: auto;
+}
+mat-horizontal-stepper .mat-horizontal-content-container {
+    padding: 0 !important;
+}
+.send-button-width{
+    width: 50%;
+    @media only screen and (max-width: 600px) {
+       width: 50% !important;
+       margin: 0 auto;
+       justify-content: center;
+       display: flex;
+    }
+}
+.manual-contact-block{
+    input {
+        margin-bottom: 10px;
+    }
+}
+.promotion-text-background {
+    background: #16133e;
+    color: white;
+    padding: 10px;
+    margin: 10px -25px -20px -25px;
+}

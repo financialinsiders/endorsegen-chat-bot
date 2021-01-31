@@ -8,6 +8,7 @@ import { UserService } from 'app/services/user.service';
 import { OpentokService } from 'app/services/opentok.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CryptoStorageService } from 'app/services/crypto-storage.service';
+import { IntroductionService } from 'app/services/introduction.service';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -22,6 +23,7 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public theme: 'blue' | 'grey' | 'red' = 'blue';
   @Input() public botId;
   @Input() public instanceId;
+  @Input() endorserID: any;
   public _visible = false
   public firebaseId: any
   public chatElements: any
@@ -42,6 +44,8 @@ export class ChatWidgetComponent implements OnInit {
   name: any = this.cryptoService.getItem('name');
   leadId: any = this.cryptoService.getItem('lead.id');
   phone: any = this.cryptoService.getItem('phone');
+  introSessionID: any;
+  endorserData: any;
   public get visible() {
     return this._visible
   }
@@ -72,7 +76,7 @@ export class ChatWidgetComponent implements OnInit {
 
   public messages = []
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     this.messages.unshift({
       from,
@@ -98,6 +102,15 @@ export class ChatWidgetComponent implements OnInit {
     this.adminService.getAgentProfile(this.instanceId).subscribe(data => {
       this.operator.name = data['first_name'] + ' ' + data['last_name'];
     });
+    //if endoser
+    if (true) {
+      this.adminService.getEndorserProfileData('518').subscribe(userData=> {
+        this.endorserData = userData['data'];
+      })
+      this.introductionService.createIntroductionSession({ 'endorser_id': this.endorserID }).subscribe((response: any) => {
+        this.introSessionID = response.IntroSessionID;
+      });
+    }
     if (this.existUserSession && (this.existUserSession.botId === this.botId || this.existUserSession.botId !== this.botId && this.existUserSession.chatStatus)) {
       this.botId = this.existUserSession.botId;
       this.visible = this.existUserSession.chatStatus;
@@ -305,7 +318,7 @@ export class ChatWidgetComponent implements OnInit {
       this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
         username: message,
       });
-      if(this.leadId) this.createLead();
+      if (this.leadId) this.createLead();
     } else if (elementType === 'email') {
       this.email = message;
       this.cryptoService.setItem('email', this.email);
@@ -352,7 +365,7 @@ export class ChatWidgetComponent implements OnInit {
       this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.currentIndex], this.chatElements[this.currentIndex].clabel, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
-      if(this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget") setTimeout(() => this.proceedNext(), 3000);
+      if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget") setTimeout(() => this.proceedNext(), 3000);
     }
     this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
 

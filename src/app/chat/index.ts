@@ -5,3 +5,4 @@ export { PublisherComponent } from './publisher/publisher.component'
 export { CronofyComponent } from './cronofy/cronofy.component';
 export { ChatModule } from './chat.module'
 export { VideoRecorderComponent } from './video-recorder/video-recorder.component';
+export { SocialSharingComponent } from './social-sharing/social-sharing.component';

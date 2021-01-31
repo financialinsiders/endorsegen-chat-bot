@@ -11,12 +11,19 @@ import { SubscriberComponent } from './subscriber/subscriber.component';
 import { PublisherComponent } from './publisher/publisher.component';
 import { CronofyComponent } from './cronofy/cronofy.component';
 import { VideoRecorderComponent } from './video-recorder/video-recorder.component';
+import { SocialSharingComponent } from './social-sharing/social-sharing.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule],
-  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent],
+  imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule],
+  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
-  providers: [AdminService, UserService]
+  providers: [AdminService, UserService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChatModule {}

@@ -54,10 +54,14 @@
               <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId">
               </app-cronofy>
             </div>
-             <div *ngIf="message.element.type === 'video'" class="appoinment-container">
+            <!-- <div *ngIf="message.element.type === 'video'" class="appoinment-container">
               <div class="video-alignments">
                 <iframe [src]="getSafeUrl(message.element.video)" frameborder="0" allowfullscreen width="100%"></iframe>
               </div>
+
+            </div> -->
+            <div class="social-sharing-accordion">
+              <app-social-sharing [endorserData]="endorserData" botId="19" instanceId="493" [endorserID]="endorserID" [introSessionID]="introSessionID"></app-social-sharing>
 
             </div>
           </div>

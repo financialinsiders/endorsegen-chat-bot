@@ -11,7 +11,8 @@ enum APIEndPointUrls {
   getAvailableSlots = 'https://prod-node-api.herokuapp.com/v1/calendar/getAvailableSlots/',
   appointmentMeeting = 'ic_appointment_meeting',
   bookSlot = 'https://prod-node-api.herokuapp.com/v1/calendar/bookSlot',
-  newLead = 'ic_new_lead_nomail'
+  newLead = 'ic_new_lead_nomail',
+  endorserProfile = 'ic_endorser_profile',
 }
 @Injectable()
 export class AdminService {
@@ -73,5 +74,11 @@ export class AdminService {
     params = params.append('action', APIEndPointUrls.newLead);
 
     return this.http.post(APIEndPointUrls.adminAjax, data, { headers: headers, params: params });
+  }
+  getEndorserProfileData(endorserID) {
+    let params = new HttpParams();
+    params = params.append('action', APIEndPointUrls.endorserProfile);
+    params = params.append('endorser_id', endorserID);
+    return this.http.get(APIEndPointUrls.adminAjax, { params: params });
   }
 }
