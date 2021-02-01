@@ -28,7 +28,7 @@
       <app-publisher [session]="session"></app-publisher>
       <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
     </div>
-    <div *ngIf="fullScreen" class="m-3" [ngStyle]="{'color': appearance.fullscreencolor}">
+    <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block" [ngStyle]="{'color': appearance.fullscreencolor}">
       <h2 [innerHTML]="appearance.fullscreenheading"></h2>
       <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
     </div>

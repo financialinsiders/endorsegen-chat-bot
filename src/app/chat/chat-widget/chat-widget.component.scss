@@ -329,29 +329,32 @@ Sent message style
   margin: 15px 5px;
 }
 .fullscreen {
-  .chat-box {
-    top: auto !important;
-    left: auto !important;
-    bottom: 0 !important;
-    right: 0 !important;
-    height: 100vh !important;
-    width: 100vw !important;
-    border-radius: 0 !important;
-    background-size: 100%;
+  @media only screen and (min-width: 600px) {
+    .chat-box {
+      top: auto !important;
+      left: auto !important;
+      bottom: 0 !important;
+      right: 0 !important;
+      height: 100vh !important;
+      width: 100vw !important;
+      border-radius: 0 !important;
+      background-size: 100%;
+    }
+    .chat-box-main {
+      width: 40% !important;
+      margin: 0 auto !important;
+      background: transparent;
+    }
+    .chat-box-footer {
+      width: 40% !important;
+      margin: 10px auto !important;
+      border: 1px solid;
+      border-radius: 10px;
+    }
+    .operator-name-avatar {
+      display: flex;
+      justify-content: center;
+    }
   }
-  .chat-box-main {
-    width: 40% !important;
-    margin: 0 auto !important;
-    background: transparent;
-  }
-  .chat-box-footer {
-    width: 40% !important;
-    margin: 10px auto !important;
-    border: 1px solid;
-    border-radius: 10px;
-  }
-  .operator-name-avatar {
-    display: flex;
-    justify-content: center;
-  }
+  
 }
