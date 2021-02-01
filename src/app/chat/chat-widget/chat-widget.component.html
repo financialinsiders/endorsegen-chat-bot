@@ -1,5 +1,6 @@
-<div class="wrapper {{theme}}">
-  <div class="chat-box" *ngIf="visible" [@fadeInOut]="visible">
+<div class="wrapper {{theme}}" [ngClass]="{'fullscreen': fullScreen}">
+  <div class="chat-box" *ngIf="visible" [@fadeInOut]="visible"
+    [ngStyle]="{'background-image': 'url(' + appearance.fullscreenbgimage + ')'}">
     <div class="chat-box-header">
       <div class="">
         <div class="operator-status">
@@ -14,16 +15,22 @@
           <button class="chat-button-header" (click)="toggleChat()">✕</button>
 
         </div>
+        <div class="operator-name-avatar">
+          <chat-avatar [image]="operator.avatar"></chat-avatar>
+          <p class="operator-name">
+            {{operator.name}}
+          </p>
+        </div>
 
-        <chat-avatar [image]="operator.avatar"></chat-avatar>
-        <p class="operator-name">
-          {{operator.name}}
-        </p>
       </div>
     </div>
     <div *ngIf="session">
       <app-publisher [session]="session"></app-publisher>
       <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
+    </div>
+    <div *ngIf="fullScreen" class="m-3" [ngStyle]="{'color': appearance.fullscreencolor}">
+      <h2 [innerHTML]="appearance.fullscreenheading"></h2>
+      <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
     </div>
     <div class="chat-box-main" *ngIf="!this.historyMode">
       <div class="chat-message-bottom" #bottom></div>
@@ -61,7 +68,8 @@
 
             </div>
             <div class="social-sharing-accordion" *ngIf="message.element.type === 'social-sharing'">
-              <app-social-sharing [endorserData]="endorserData" botId="botId" instanceId="instanceId" [endorserId]="endorserId" [introSessionID]="introSessionID"></app-social-sharing>
+              <app-social-sharing [endorserData]="endorserData" botId="botId" instanceId="instanceId"
+                [endorserId]="endorserId" [introSessionID]="introSessionID"></app-social-sharing>
 
             </div>
           </div>

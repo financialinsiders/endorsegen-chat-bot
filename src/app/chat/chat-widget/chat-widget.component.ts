@@ -24,6 +24,7 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public botId;
   @Input() public instanceId;
   @Input() endorserId: any;
+  public fullScreen: boolean;
   public _visible = false
   public firebaseId: any
   public chatElements: any
@@ -46,6 +47,9 @@ export class ChatWidgetComponent implements OnInit {
   phone: any = this.cryptoService.getItem('phone');
   introSessionID: any;
   endorserData: any;
+  appearance: any = {
+    fullscreenbgimage: ''
+  };
   public get visible() {
     return this._visible
   }
@@ -131,6 +135,7 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
+          this.setAppearance(data['data']['appearance']);
           this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}`).query.once("value").then(data => {
             var sessionMessage = data.val();
             var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
@@ -168,6 +173,7 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
+          this.setAppearance(data['data']['appearance']);
           this.clientFirebaseId = this.existUserSession.clientFirebaseId;
           this.initializeSession(this.clientFirebaseId);
           var sessionInfo = {
@@ -227,6 +233,7 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
+          this.setAppearance(data['data']['appearance']);
           var userInfo = {
             connectedAgentId: this.instanceId,
             username: 'New User'
@@ -384,8 +391,22 @@ export class ChatWidgetComponent implements OnInit {
     if (this.botId !== message['botId']) {
       this.adminService.retrieveChatBot(message['botId'], this.instanceId).subscribe(data => {
         this.chatElements = data['data']['elements'];
+        this.setAppearance(data['data']['appearance']);
       });
     }
+  }
+  public setAppearance(appearance) {
+    this.fullScreen = appearance['fullscreen'] === 'true';
+    if(this.fullScreen) {
+      this.appearance.fullscreenbgimage = appearance['fullscreen_bgimage'];
+      this.appearance.fullscreenheading = appearance['fullscreen_heading'];
+      this.appearance.fullscreensubheading = appearance['fullscreen_subheading'];
+      this.appearance.fullscreenbgcolor = appearance['fullscreen_bgcolor'];
+      this.appearance.fullscreencolor = appearance['fullscreen_color'];
+    }
+    this.appearance.welcomeMessage = appearance['welcome_msg'];
+    this.appearance.welcomeVideo = appearance['media'];
+
   }
   public multiChoiceSelect(choice) {
     var senderMessage = {
