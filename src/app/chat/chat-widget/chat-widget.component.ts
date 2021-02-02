@@ -106,8 +106,7 @@ export class ChatWidgetComponent implements OnInit {
     this.adminService.getAgentProfile(this.instanceId).subscribe(data => {
       this.operator.name = data['first_name'] + ' ' + data['last_name'];
     });
-    //if endoser
-    if (true) {
+    if (this.endorserId) {
       this.adminService.getEndorserProfileData('518').subscribe(userData=> {
         this.endorserData = userData['data'];
       })
@@ -135,6 +134,7 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
+          console.log(this.chatElements);
           this.setAppearance(data['data']['appearance']);
           this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}`).query.once("value").then(data => {
             var sessionMessage = data.val();
@@ -173,6 +173,7 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
+          console.log(this.chatElements);
           this.setAppearance(data['data']['appearance']);
           this.clientFirebaseId = this.existUserSession.clientFirebaseId;
           this.initializeSession(this.clientFirebaseId);
@@ -215,6 +216,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
+            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget") setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -284,6 +286,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
+            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget") setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -295,6 +298,8 @@ export class ChatWidgetComponent implements OnInit {
   }
   videoSaved(event) {
     console.log(event);
+    this.cryptoService.setItem('recordervideo.url', event);
+    setTimeout(() => this.proceedNext(), 1000)
   }
   public toggleChat() {
     this.visible = !this.visible

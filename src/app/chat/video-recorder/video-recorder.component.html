@@ -21,7 +21,8 @@
         <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="deviceReady" (click)="startcounter()">Start Record</button>
         <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="stopRecordButton" (click)="stopRecord()">Stop Record</button>        
         <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showSaveButton" (click)="saveVideo()">Save</button>
-        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showRecordAgainButton" (click)="startcounter()">Record Again</button>    
+        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showRecordAgainButton && !videoUploaded" (click)="startcounter()">Record Again</button>
+        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="videoUploaded" (click)="clickNext()">Next</button>    
     </div>
     <div class="mt-4" *ngIf="showProgressBar">
         <div class="progress-bar-container">

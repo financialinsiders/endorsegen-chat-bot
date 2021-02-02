@@ -96,11 +96,13 @@ export class VideoRecorderComponent implements OnInit, OnDestroy {
       this.videoUploaded = true;
     }
   }
+  clickNext() {
+    this.saved.emit("https://fiapps.s3.ca-central-1.amazonaws.com/Intros/"+this.player.recordedData.name);
+  }
   saveVideo() {
     this.showSaveButton = false;
     this.showRecordAgainButton = false;
     this.showProgressBar = true;
-    this.saved.emit(null);
     this.uploadAwsService.fileUpload(this.player.recordedData, this.player.recordedData.name, this.player.recordedData.type);
     this.videoThumbnailService.generateThumbnail(this.player.recordedData).then(thumbnailData => {
       var binary_string = window.atob(thumbnailData.replace(/^data:image\/\w+;base64,/, ""));

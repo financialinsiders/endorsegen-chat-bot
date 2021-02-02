@@ -37,12 +37,12 @@
       <ng-container *ngFor="let message of messages">
         <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
           [class.chat-message-sent]="message.type === 'sent'"
-          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video'">
+          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record'">
           <div>
             <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"
-              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video'"></chat-avatar>
+              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video' && message.element.type !== 'video-record'"></chat-avatar>
             <div class="chat-message-text"
-              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video'">
+              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record'">
               {{this.removeHTML(message.element.clabel)}}
             </div>
             <div *ngIf="message.element.type === 'multichoice' && !message.hide" class="multi-choice-container">
@@ -53,7 +53,7 @@
 
               </ng-container>
             </div>
-            <div *ngIf="message.element.type === 'videorecorder'">
+            <div *ngIf="message.element.type === 'video-record'">
               <app-video-recorder (saved)="videoSaved($event)"></app-video-recorder>
             </div>
 
