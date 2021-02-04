@@ -34,7 +34,7 @@
     </div>
     <div class="chat-box-main" *ngIf="!this.historyMode">
       <div class="chat-message-bottom" #bottom></div>
-      <ng-container *ngFor="let message of messages">
+      <ng-container *ngFor="let message of messages; index as i">
         <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
           [class.chat-message-sent]="message.type === 'sent'"
           [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record'">
@@ -47,7 +47,7 @@
             </div>
             <div *ngIf="message.element.type === 'multichoice' && !message.hide" class="multi-choice-container">
               <ng-container *ngFor="let choice of message.element.choice">
-                <div class="option-entry" (click)="multiChoiceSelect(choice)">
+                <div class="option-entry" (click)="multiChoiceSelect(choice, i)">
                   {{choice.option}}
                 </div>
 

@@ -50,6 +50,7 @@ export class ChatWidgetComponent implements OnInit {
   appearance: any = {
     fullscreenbgimage: ''
   };
+  customerVariables: Map<String, String> = new Map<String, String>();
   public get visible() {
     return this._visible
   }
@@ -82,6 +83,9 @@ export class ChatWidgetComponent implements OnInit {
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
+    for (let [key, value] of this.customerVariables) {
+      element.clabel = element.clabel.replace(key, value);
+    }
     this.messages.unshift({
       from,
       element,
@@ -107,7 +111,7 @@ export class ChatWidgetComponent implements OnInit {
       this.operator.name = data['first_name'] + ' ' + data['last_name'];
     });
     if (this.endorserId) {
-      this.adminService.getEndorserProfileData('518').subscribe(userData=> {
+      this.adminService.getEndorserProfileData('518').subscribe(userData => {
         this.endorserData = userData['data'];
       })
       this.introductionService.createIntroductionSession({ 'endorser_id': this.endorserId }).subscribe((response: any) => {
@@ -324,6 +328,11 @@ export class ChatWidgetComponent implements OnInit {
       return
     }
     var elementType = this.messages[0].element.type;
+    var customvariable = this.messages[0].element.data;
+    if (customvariable && customvariable.storevariable === '1') {
+      this.customerVariables.set(`@${customvariable.variablename}`, message);
+      this.cryptoService.setItem('customvariables', this.customerVariables);
+    };
     if (elementType === 'name') {
       this.name = message;
       this.cryptoService.setItem('name', this.name);
@@ -377,7 +386,7 @@ export class ChatWidgetComponent implements OnInit {
       this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.currentIndex], this.chatElements[this.currentIndex].clabel, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
-      if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "video-record") setTimeout(() => this.proceedNext(), 3000);
+      if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "video-record" && this.chatElements[this.currentIndex - 1].type !== "multichoice") setTimeout(() => this.proceedNext(), 3000);
     }
     this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
 
@@ -402,7 +411,7 @@ export class ChatWidgetComponent implements OnInit {
   }
   public setAppearance(appearance) {
     this.fullScreen = appearance['fullscreen'] === 'true';
-    if(this.fullScreen) {
+    if (this.fullScreen) {
       this.appearance.fullscreenbgimage = appearance['fullscreen_bgimage'];
       this.appearance.fullscreenheading = appearance['fullscreen_heading'];
       this.appearance.fullscreensubheading = appearance['fullscreen_subheading'];
@@ -413,7 +422,12 @@ export class ChatWidgetComponent implements OnInit {
     this.appearance.welcomeVideo = appearance['media'];
 
   }
-  public multiChoiceSelect(choice) {
+  public multiChoiceSelect(choice, index) {
+    var customvariable = this.messages[index].element.data;
+    if (customvariable && customvariable.storevariable === '1') {
+      this.customerVariables.set(`@${customvariable.variablename}`, choice.option);
+      this.cryptoService.setItem('customvariables', this.customerVariables);
+    };
     var senderMessage = {
       chatId: this.clientFirebaseId,
       message: choice.option,
