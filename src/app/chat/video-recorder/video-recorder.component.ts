@@ -94,6 +94,7 @@ export class VideoRecorderComponent implements OnInit, OnDestroy {
       this.showProgressBar = false;
       this.showRecordAgainButton = true;
       this.videoUploaded = true;
+      this.clickNext();
     }
   }
   clickNext() {

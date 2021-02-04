@@ -22,11 +22,10 @@
         <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="stopRecordButton" (click)="stopRecord()">Stop Record</button>        
         <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showSaveButton" (click)="saveVideo()">Save</button>
         <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="showRecordAgainButton && !videoUploaded" (click)="startcounter()">Record Again</button>
-        <button type="submit" class="btn btn-md btn-signin save-button" *ngIf="videoUploaded" (click)="clickNext()">Next</button>    
     </div>
     <div class="mt-4" *ngIf="showProgressBar">
         <div class="progress-bar-container">
-          <div class="progress-bar stripes animated reverse slower">
+          <div class="mw-100 progress-bar stripes animated reverse slower">
             <span class="progress-bar-inner"></span>
           </div>
           Please hold on. Video is being upload.

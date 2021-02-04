@@ -53,9 +53,7 @@
 
               </ng-container>
             </div>
-            <div *ngIf="message.element.type === 'video-record'">
-              <app-video-recorder (saved)="videoSaved($event)"></app-video-recorder>
-            </div>
+            
 
             <div *ngIf="message.element.type === 'appointment-widget'" class="appoinment-container">
               <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId">
@@ -72,6 +70,9 @@
                 [endorserId]="endorserId" [introSessionID]="introSessionID"></app-social-sharing>
 
             </div>
+          </div>
+          <div *ngIf="message.element.type === 'video-record'">
+            <app-video-recorder (saved)="videoSaved($event)"></app-video-recorder>
           </div>
           <div class="chat-message-date">
             {{message.date | date: 'short'}}

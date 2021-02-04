@@ -1,5 +1,15 @@
 $center-big-play-button: true;
 
+::ng-deep .vjs-hidden {
+  display: none;
+}
+::ng-deep .vjs-loading-spinner {
+  display: none;
+}
+::ng-deep .vjs-control-bar {
+  display: none;
+}
+
 .video-container {
   .intro-record-dimensions {
     display: block;
