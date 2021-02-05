@@ -220,7 +220,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
-            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget") setTimeout(() => this.proceedNext(), 3000);
+            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing") setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -290,7 +290,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
-            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget") setTimeout(() => this.proceedNext(), 3000);
+            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing") setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });

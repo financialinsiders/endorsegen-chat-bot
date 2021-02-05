@@ -37,12 +37,12 @@
       <ng-container *ngFor="let message of messages; index as i">
         <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
           [class.chat-message-sent]="message.type === 'sent'"
-          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record'">
+          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record' || message.element.type === 'social-sharing' || message.element.type === 'email-sharing'">
           <div>
             <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"
-              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video' && message.element.type !== 'video-record'"></chat-avatar>
+              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video' && message.element.type !== 'video-record' && message.element.type !== 'social-sharing' && message.element.type !== 'email-sharing'"></chat-avatar>
             <div class="chat-message-text"
-              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record'">
+              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record' || message.element.type === 'social-sharing' || message.element.type === 'email-sharing'">
               {{this.removeHTML(message.element.clabel)}}
             </div>
             <div *ngIf="message.element.type === 'multichoice' && !message.hide" class="multi-choice-container">
@@ -68,6 +68,11 @@
             <div class="social-sharing-accordion" *ngIf="message.element.type === 'social-sharing'">
               <app-social-sharing [endorserData]="endorserData" botId="botId" instanceId="instanceId"
                 [endorserId]="endorserId" [introSessionID]="introSessionID"></app-social-sharing>
+
+            </div>
+            <div class="social-sharing-accordion" *ngIf="message.element.type === 'email-sharing'">
+              <app-email-sharing [endorserData]="endorserData" botId="botId" instanceId="instanceId"
+                [endorserId]="endorserId" [introSessionID]="introSessionID"></app-email-sharing>
 
             </div>
           </div>

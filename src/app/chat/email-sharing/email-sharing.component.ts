@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
 declare var cloudsponge: any;
 
 @Component({
-  selector: 'app-social-sharing',
-  templateUrl: './social-sharing.component.html',
-  styleUrls: ['./social-sharing.component.scss']
+  selector: 'app-email-sharing',
+  templateUrl: './email-sharing.component.html',
+  styleUrls: ['./email-sharing.component.scss']
 })
-export class SocialSharingComponent implements OnInit {
+export class EmailSharingComponent implements OnInit {
   public invitationContactList: any[] = [];
   public showContactList: boolean = false;
   public usertypedMessage: string;
@@ -54,38 +54,38 @@ export class SocialSharingComponent implements OnInit {
   cloudSpongeTrigger(type) {
     cloudsponge.launch(type);
   }
-  socialShare(socialSite) {
+  socialShare() {
     var createIntroductionRequestBody = {
       "endorser_id": this.endorserId,
       "extrapoint": "10",
       "bot_id": this.botId,
       "agent_id": this.instanceId,
-      "type": socialSite,
+      "type": 'email',
       "session_id": this.introSessionID,
       "invite_type": this.inviteType,
       "attention_message": this.userTypedMessage,
     };
     if (this.videoFilename) createIntroductionRequestBody['video_url'] = "https://fiapps.s3.ca-central-1.amazonaws.com/Intros/" + this.videoFilename;
-    if (socialSite === 'facebook') {
-      this.createLink(createIntroductionRequestBody).subscribe((shareLink: any) => {
-        console.log(shareLink.data);
-        this.facebookApiService.shareStory(shareLink.data);
-      });
-    } else if (socialSite === 'twitter') {
-      this.createLink(createIntroductionRequestBody).subscribe((shareLink: any) => {
-        window.open('https://twitter.com/intent/tweet?text=' + this.usertypedMessage + '&url=' + encodeURIComponent(shareLink.data), 'sharer', 'toolbar=0,status=0,width=626,height=436');
-      });
-    } else if (socialSite === 'whatsapp') {
-      this.createLink(createIntroductionRequestBody).subscribe((shareLink: any) => {
-        window.open("https://wa.me/?text='" + shareLink.data + "'", '_blank');
-      });
-    } else if (socialSite === 'copyText') {
-      this.createLink(createIntroductionRequestBody).subscribe((shareLink: any) => {
-        navigator.clipboard.writeText(shareLink.data);
-      });
-    }
+    createIntroductionRequestBody['contacts'] = this.invitationContactList;
+    this.createLink(createIntroductionRequestBody).subscribe((shareLink: any) => {
+      console.log(shareLink.data[0]);
+    });
   }
   createLink(createIntroductionRequestBody) {
     return this.introductionService.createIntroduction(createIntroductionRequestBody);
+  }
+  addManualContact() {
+    if (this.invitationContactList.filter((element) => element.email === this.referralEmail).length > 0) {
+      this.emailAlreadyAdded = true;
+    } else if (this.firstName === undefined || this.lastName === undefined || this.referralEmail === undefined) {
+      this.emptyUserEmailFeild = true;
+    } else {
+      this.emailAlreadyAdded = false;
+      this.emptyUserEmailFeild = false;
+      this.invitationContactList.push({ 'first_name': this.firstName, 'last_name': this.lastName, 'email': this.referralEmail });
+    }
+    this.firstName = undefined;
+    this.lastName = undefined;
+    this.referralEmail = undefined;
   }
 }

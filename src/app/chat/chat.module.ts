@@ -12,6 +12,7 @@ import { PublisherComponent } from './publisher/publisher.component';
 import { CronofyComponent } from './cronofy/cronofy.component';
 import { VideoRecorderComponent } from './video-recorder/video-recorder.component';
 import { SocialSharingComponent } from './social-sharing/social-sharing.component';
+import { EmailSharingComponent } from './email-sharing/email-sharing.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -20,7 +21,7 @@ import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule],
-  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent],
+  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent, EmailSharingComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
   providers: [AdminService, UserService],
