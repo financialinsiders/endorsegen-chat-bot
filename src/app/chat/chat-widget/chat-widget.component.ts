@@ -220,7 +220,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
-            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing") setTimeout(() => this.proceedNext(), 3000);
+            if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && ( this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing")) setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -290,7 +290,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
-            if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing") setTimeout(() => this.proceedNext(), 3000);
+            if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && ( this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing")) setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -386,10 +386,15 @@ export class ChatWidgetComponent implements OnInit {
       this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.currentIndex], this.chatElements[this.currentIndex].clabel, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
-      if (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "video-record" && this.chatElements[this.currentIndex - 1].type !== "multichoice") setTimeout(() => this.proceedNext(), 3000);
+      if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && ( this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing")) setTimeout(() => this.proceedNext(), 3000);
     }
     this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
 
+  }
+  public nextCLicked(index) {
+    this.messages[index].element.data.pause = '0';
+    this.chatElements[this.currentIndex].data.pause = '0';
+    this.proceedNext();
   }
   public selectMessage(message) {
     this.cSessionId = message['key'];
