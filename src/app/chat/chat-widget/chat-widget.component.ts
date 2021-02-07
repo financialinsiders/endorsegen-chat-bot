@@ -9,6 +9,7 @@ import { OpentokService } from 'app/services/opentok.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CryptoStorageService } from 'app/services/crypto-storage.service';
 import { IntroductionService } from 'app/services/introduction.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -50,7 +51,44 @@ export class ChatWidgetComponent implements OnInit {
   appearance: any = {
     fullscreenbgimage: ''
   };
+  public editorconfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '200px',
+    maxHeight: 'auto',
+    toolbarHiddenButtons: [
+      ['strikeThrough',
+        'subscript',
+        'superscript',
+        'justifyLeft',
+        'justifyCenter',
+        'justifyRight',
+        'justifyFull',
+        'indent',
+        'outdent',
+        'insertUnorderedList',
+        'insertOrderedList',
+        'heading',
+        'fontName'
+      ],
+      [
+        'fontSize',
+        'customClasses',
+        'link',
+        'unlink',
+        'insertImage',
+        'insertVideo',
+        'insertHorizontalRule',
+        'removeFormat',
+        'toggleEditorMode',
+        'textColor',
+        'backgroundColor',
+      ]
+    ]
+  };
   customerVariables: Map<String, String> = new Map<String, String>();
+  editMode: boolean;
   public get visible() {
     return this._visible
   }
@@ -220,7 +258,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
-            if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && ( this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing")) setTimeout(() => this.proceedNext(), 3000);
+            if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing" && this.chatElements[this.currentIndex - 1].type !== "text-editor")) setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -239,6 +277,7 @@ export class ChatWidgetComponent implements OnInit {
         this.adminService.retrieveChatBot(this.botId, this.instanceId).subscribe(data => {
 
           this.chatElements = data['data']['elements'];
+          console.log(this.chatElements);
           this.setAppearance(data['data']['appearance']);
           var userInfo = {
             connectedAgentId: this.instanceId,
@@ -290,7 +329,7 @@ export class ChatWidgetComponent implements OnInit {
           setTimeout(() => {
             this.addMessage(this.operator, this.chatElements[0], 'received');
             this.currentIndex += 1;
-            if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && ( this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing")) setTimeout(() => this.proceedNext(), 3000);
+            if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing" && this.chatElements[this.currentIndex - 1].type !== "text-editor")) setTimeout(() => this.proceedNext(), 3000);
             this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
           }, 1500);
         });
@@ -386,15 +425,22 @@ export class ChatWidgetComponent implements OnInit {
       this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.currentIndex], this.chatElements[this.currentIndex].clabel, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.currentIndex], 'received');
       this.currentIndex += 1;
-      if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && ( this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing")) setTimeout(() => this.proceedNext(), 3000);
+      if (this.chatElements[this.currentIndex - 1].data.pause !== '1' && (this.chatElements[this.currentIndex - 1].opt !== "userinput" && this.chatElements[this.currentIndex - 1].type !== "appointment-widget" && this.chatElements[this.currentIndex - 1].type !== "social-sharing" && this.chatElements[this.currentIndex - 1].type !== "email-sharing" && this.chatElements[this.currentIndex - 1].type !== "text-editor")) setTimeout(() => this.proceedNext(), 3000);
     }
     this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? 999 : this.currentIndex, message: this.messages }));
 
   }
-  public nextCLicked(index) {
+  public nextClicked(index) {
     this.messages[index].element.data.pause = '0';
     this.chatElements[this.currentIndex].data.pause = '0';
     this.proceedNext();
+  }
+  public saveAndNextClicked() {
+    this.editMode = false;
+    this.proceedNext();
+  }
+  public editText() {
+    this.editMode = true;
   }
   public selectMessage(message) {
     this.cSessionId = message['key'];

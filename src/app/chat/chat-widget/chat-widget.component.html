@@ -28,7 +28,8 @@
       <app-publisher [session]="session"></app-publisher>
       <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
     </div>
-    <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block" [ngStyle]="{'color': appearance.fullscreencolor}">
+    <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block"
+      [ngStyle]="{'color': appearance.fullscreencolor}">
       <h2 [innerHTML]="appearance.fullscreenheading"></h2>
       <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
     </div>
@@ -37,12 +38,13 @@
       <ng-container *ngFor="let message of messages; index as i">
         <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
           [class.chat-message-sent]="message.type === 'sent'"
-          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record' || message.element.type === 'social-sharing' || message.element.type === 'email-sharing'">
+          [class.appoinment-container]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record' || message.element.type === 'social-sharing' || message.element.type === 'email-sharing' || message.element.type === 'text-editor'">
           <div>
             <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"
-              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video' && message.element.type !== 'video-record' && message.element.type !== 'social-sharing' && message.element.type !== 'email-sharing'"></chat-avatar>
+              *ngIf="message.element.type !== 'appointment-widget' && message.element.type !== 'video' && message.element.type !== 'video-record' && message.element.type !== 'social-sharing' && message.element.type !== 'email-sharing' && message.element.type !== 'text-editor'">
+            </chat-avatar>
             <div class="chat-message-text"
-              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record' || message.element.type === 'social-sharing' || message.element.type === 'email-sharing'">
+              [class.chat-message-text-no-corner]="message.element.type === 'appointment-widget' || message.element.type === 'video' || message.element.type === 'video-record' || message.element.type === 'social-sharing' || message.element.type === 'email-sharing' || message.element.type === 'text-editor'">
               {{this.removeHTML(message.element.clabel)}}
             </div>
             <div *ngIf="message.element.type === 'multichoice' && !message.hide" class="multi-choice-container">
@@ -53,7 +55,7 @@
 
               </ng-container>
             </div>
-            
+
 
             <div *ngIf="message.element.type === 'appointment-widget'" class="appoinment-container">
               <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId">
@@ -79,14 +81,31 @@
           <div *ngIf="message.element.type === 'video-record'">
             <app-video-recorder (saved)="videoSaved($event)"></app-video-recorder>
           </div>
+          <div *ngIf="message.element.type === 'text-editor'" class="mt-1">
+            <div class="chat-message-text chat-message-text-no-corner mt-1 mb-1" *ngIf="!editMode">
+              <span>{{this.removeHTML(message.element.data.default_message)}}</span>
+            </div>
+            <div *ngIf="editMode" class="editor-margin">
+              <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="message.element.data.default_message" [config]="editorconfig"></angular-editor>
+            </div>
+            <div class="mt-1 button-confirmation-left" *ngIf="!editMode">
+              <button class="btn btn-primary mr-1 mb-1" (click)="nextClicked(i)">Yes, Please</button>
+              <button class="btn btn-success mb-1" (click)="editText()">No, I need to edit</button>
+            </div>
+            <div class="mt-1 button-confirmation-left" *ngIf="editMode">
+              <button class="btn btn-primary mr-1 mb-1" (click)="saveAndNextClicked()">Save and proceed Next</button>
+            </div>
+          </div>
+
           <div class="chat-message-date">
             {{message.date | date: 'short'}}
           </div>
           <div class="text-center">
-            <button *ngIf="message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1" (click)="nextCLicked(i)">Next</button>
+            <button *ngIf="message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1"
+              (click)="nextCLicked(i)">Next</button>
           </div>
         </div>
-        
+
       </ng-container>
     </div>
     <div *ngIf="this.historyMode">

@@ -94,10 +94,12 @@
     cursor: pointer;
   }
 }
+
 .widget-start {
   filter: invert(100%);
   cursor: pointer;
 }
+
 .operator-status span {
   margin-left: 4px;
 }
@@ -126,8 +128,10 @@
   flex-direction: row;
   max-width: 80%;
   word-wrap: break-word;
+
   .multi-choice-container {
     margin-left: 50px;
+
     .option-entry {
       background: #ffa5006b;
       margin: 5px 0;
@@ -163,13 +167,16 @@ Received message style
 .chat-message-received {
   margin-right: 50px;
 }
+
 .appoinment-container {
   min-width: 98%;
   margin-right: 0px;
-  .chat-message-text{
+
+  .chat-message-text {
     margin: 0px 20px !important;
   }
 }
+
 .chat-message-received .chat-message-text {
   background: #B9D6F2;
   margin-left: 50px;
@@ -185,9 +192,11 @@ Received message style
   border-top: solid 10px transparent;
   z-index: 0;
 }
+
 .chat-message-text-no-corner::before {
   border-right: none !important;
 }
+
 .chat-message-received .chat-message-date {
   margin-left: 50px;
 }
@@ -322,11 +331,21 @@ Sent message style
   color: white;
   text-align: center;
 }
+
 .video-alignments {
   margin: 10px 20px;
 }
+
 .social-sharing-accordion {
   margin: 15px 5px;
+}
+
+.button-confirmation-left {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.editor-margin {
+  margin: 0 20px;
 }
 .fullscreen {
   @media only screen and (min-width: 600px) {
@@ -340,21 +359,24 @@ Sent message style
       border-radius: 0 !important;
       background-size: 100%;
     }
+
     .chat-box-main {
       width: 40% !important;
       margin: 0 auto !important;
       background: transparent;
     }
+
     .chat-box-footer {
       width: 40% !important;
       margin: 10px auto !important;
       border: 1px solid;
       border-radius: 10px;
     }
+
     .operator-name-avatar {
       display: flex;
       justify-content: center;
     }
   }
-  
+
 }

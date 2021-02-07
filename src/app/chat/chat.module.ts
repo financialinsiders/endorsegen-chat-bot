@@ -18,9 +18,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule],
+  imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule, AngularEditorModule],
   declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent, EmailSharingComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
