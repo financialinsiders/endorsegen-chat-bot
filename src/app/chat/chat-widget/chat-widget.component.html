@@ -101,7 +101,7 @@
             {{message.date | date: 'short'}}
           </div>
           <div class="text-center">
-            <button *ngIf="message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1"
+            <button *ngIf="message && message.element && message.element.data && message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1"
               (click)="nextCLicked(i)">Next</button>
           </div>
         </div>
