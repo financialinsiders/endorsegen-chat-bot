@@ -25,8 +25,9 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public botId;
   @Input() public instanceId;
   @Input() endorserId: any;
+  @Input() expand: boolean;
   public fullScreen: boolean;
-  public _visible = false
+  public _visible = false;
   public firebaseId: any
   public chatElements: any
   public currentIndex: number = 0;
@@ -144,6 +145,7 @@ export class ChatWidgetComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
     this.adminService.getAgentProfile(this.instanceId).subscribe(data => {
       this.operator.name = data['first_name'] + ' ' + data['last_name'];
