@@ -48,8 +48,8 @@
               {{this.removeHTML(message.element.data.label)}}
             </div>
             <div *ngIf="message.element.class === 'multiChoice' && !message.hide" class="multi-choice-container">
-              <ng-container *ngFor="let choice of message.element.data.choices">
-                <div class="option-entry" (click)="multiChoiceSelect(choice, i)">
+              <ng-container *ngFor="let choice of message.element.data.choices; index as ind; trackBy: trackByFn">
+                <div class="option-entry" (click)="multiChoiceSelect(choice, ind, message.element.data.choices.length)">
                   {{choice}}
                 </div>
 
