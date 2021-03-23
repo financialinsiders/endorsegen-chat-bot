@@ -96,6 +96,8 @@ export class ChatWidgetComponent implements OnInit {
   firstElement: any;
   nextNode: any;
   fallBackNode: any;
+  welcomeMessage: any;
+  welcomeVideoUrl: any;
   public get visible() {
     return this._visible
   }
@@ -154,6 +156,7 @@ export class ChatWidgetComponent implements OnInit {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
     if (!this.preview) {
+      alert('1');
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
@@ -183,6 +186,8 @@ export class ChatWidgetComponent implements OnInit {
               this.operator.status = data['onlineStatus'] ? 'online' : '';
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+            this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+            this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
             this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}`).query.once("value").then(data => {
@@ -222,6 +227,8 @@ export class ChatWidgetComponent implements OnInit {
               this.operator.status = data['onlineStatus'] ? 'online' : '';
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+            this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+            this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
             this.clientFirebaseId = this.existUserSession.clientFirebaseId;
@@ -283,6 +290,8 @@ export class ChatWidgetComponent implements OnInit {
               this.operator.status = data['onlineStatus'] ? 'online' : '';
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+            this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+            this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
             //this.setAppearance(data['data']['appearance']);
@@ -350,6 +359,8 @@ export class ChatWidgetComponent implements OnInit {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
         this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+        this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+        this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
         this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
         this.firstElement = this.transformBotData(this.chatElements);
         setTimeout(() => {
