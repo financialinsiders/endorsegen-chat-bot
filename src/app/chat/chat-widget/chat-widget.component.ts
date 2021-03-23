@@ -156,7 +156,6 @@ export class ChatWidgetComponent implements OnInit {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
     if (!this.preview) {
-      alert('1');
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
