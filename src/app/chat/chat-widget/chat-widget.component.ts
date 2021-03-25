@@ -577,11 +577,15 @@ export class ChatWidgetComponent implements OnInit {
     }
   }
   public initializeSession(clientFirebaseId) {
+    this.angularFireDatabase.object(`users/${clientFirebaseId}`).update({
+      status: true,
+    });
     this.angularFireDatabase.object(`users/${clientFirebaseId}`).valueChanges().subscribe(data => {
 
       if (data && data['otSessionId'] && data['token']) {
         this.sessionId = data['otSessionId'];
         this.token = data['token'];
+        console.log(this.sessionId, this.token);
         this.opentokService.initSession(this.sessionId).then((session: OT.Session) => {
           this.session = session;
           this.session.on('streamCreated', (event) => {
@@ -602,7 +606,11 @@ export class ChatWidgetComponent implements OnInit {
           });
       }
     });
-
+    this.angularFireDatabase.object(`users/${clientFirebaseId}`).query.ref.onDisconnect()
+      .update({
+        status: false,
+        lastSeen: new Date().getTime(),
+      });
   }
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
