@@ -98,6 +98,7 @@ export class ChatWidgetComponent implements OnInit {
   fallBackNode: any;
   welcomeMessage: any;
   welcomeVideoUrl: any;
+  connectingToAgent: boolean;
   public get visible() {
     return this._visible
   }
@@ -118,6 +119,7 @@ export class ChatWidgetComponent implements OnInit {
     name: 'Operator',
     status: 'online',
     avatar: `https://fiapps.s3.ca-central-1.amazonaws.com/assets/bot.png`,
+    statusMessage: '',
   }
 
   public client = {
@@ -182,7 +184,8 @@ export class ChatWidgetComponent implements OnInit {
           this.adminService.getFbId(this.instanceId).subscribe(data => {
             this.firebaseId = data['firebase_id'];
             this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
-              this.operator.status = data['onlineStatus'] ? 'online' : '';
+              this.operator.status = data['onlineStatus'];
+              this.operator.statusMessage = data['statusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
@@ -223,7 +226,8 @@ export class ChatWidgetComponent implements OnInit {
           this.adminService.getFbId(this.instanceId).subscribe(data => {
             this.firebaseId = data['firebase_id'];
             this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
-              this.operator.status = data['onlineStatus'] ? 'online' : '';
+              this.operator.status = data['onlineStatus'];
+              this.operator.statusMessage = data['statusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
@@ -286,7 +290,8 @@ export class ChatWidgetComponent implements OnInit {
           this.adminService.getFbId(this.instanceId).subscribe(data => {
             this.firebaseId = data['firebase_id'];
             this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
-              this.operator.status = data['onlineStatus'] ? 'online' : '';
+              this.operator.status = data['onlineStatus'];
+              this.operator.statusMessage = data['statusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
@@ -479,8 +484,34 @@ export class ChatWidgetComponent implements OnInit {
         this.nextNodeElement();
         setTimeout(() => this.proceedNext(), 3000)
       };
+    } else if (!this.nextNode) {
+      var connectToAgent = {
+        "name": "connectingToAgent",
+        "data": {
+          "skipQuestionText": "I'm not sure",
+          "label": "Please wait a while, We are connecting you to Human agent....",
+        },
+        "id": 5,
+        "class": "connectingToAgent"
+      }
+      this.firebaseService.sendMessage(this.clientFirebaseId, connectToAgent, connectToAgent.data.label, this.firebaseId, 'USER_CONNECTING', new Date().getTime(), 'BOT', this.cSessionId);
+      this.addMessage(this.operator, connectToAgent, 'received');
+      var statusMessage = {
+        "name": "agentResponse",
+        "data": {
+          "skipQuestionText": "I'm not sure",
+          "label": this.operator.statusMessage,
+        },
+        "id": 5,
+        "class": "connectingToAgent"
+      }
+      this.firebaseService.sendMessage(this.clientFirebaseId, statusMessage, statusMessage.data.label, this.firebaseId, 'USER_AWAITING', new Date().getTime(), 'BOT', this.cSessionId);
+      this.addMessage(this.operator, statusMessage, 'received');
+
     }
+    
     if (!this.preview) this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? '999' : this.currentNode, message: this.messages }));
+
 
   }
   public nextClicked(index) {
