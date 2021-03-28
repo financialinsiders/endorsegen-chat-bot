@@ -463,7 +463,8 @@ export class ChatWidgetComponent implements OnInit {
         lastMessage: message,
         lastMessageType: 'CONV_OPEN',
         isNewMsg: true,
-        isNewUser: false
+        isNewUser: false,
+        timestamp: new Date().getTime()
       });
     }
 
@@ -609,7 +610,8 @@ export class ChatWidgetComponent implements OnInit {
       lastMessage: choice,
       lastMessageType: 'CONV_OPEN',
       isNewMsg: true,
-      isNewUser: false
+      isNewUser: false,
+      timestamp: new Date().getTime()
     });
     this.addMessage(this.client, { data: { label: choice } }, 'sent');
     var outputConnection = this.chatElements[this.currentNode].outputs[`output_${index + 1}`].connections;

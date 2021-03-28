@@ -23,7 +23,8 @@ export class FirebaseService {
       lastMessage: message,
       lastMessageType: status,
       isNewMsg: true,
-      isNewUser: false
+      isNewUser: false,
+      timestamp: new Date().getTime()
     });
   }
 }
