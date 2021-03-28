@@ -119,7 +119,10 @@ export class ChatWidgetComponent implements OnInit {
     name: 'Operator',
     status: 'online',
     avatar: `https://fiapps.s3.ca-central-1.amazonaws.com/assets/bot.png`,
-    statusMessage: '',
+    onlineStatusMessage: '',
+    offlineStatusMessage: '',
+    busyStatusMessage: '',
+    onlineStatus: ''
   }
 
   public client = {
@@ -185,7 +188,10 @@ export class ChatWidgetComponent implements OnInit {
             this.firebaseId = data['firebase_id'];
             this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
               this.operator.status = data['onlineStatus'];
-              this.operator.statusMessage = data['statusMessage'];
+              this.operator.onlineStatus = data['onlineStatus'];
+              this.operator.onlineStatusMessage = data['onlineStatusMessage'];
+              this.operator.offlineStatusMessage = data['offlineStatusMessage'];
+              this.operator.busyStatusMessage = data['busyStatusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
@@ -227,7 +233,10 @@ export class ChatWidgetComponent implements OnInit {
             this.firebaseId = data['firebase_id'];
             this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
               this.operator.status = data['onlineStatus'];
-              this.operator.statusMessage = data['statusMessage'];
+              this.operator.onlineStatus = data['onlineStatus'];
+              this.operator.onlineStatusMessage = data['onlineStatusMessage'];
+              this.operator.offlineStatusMessage = data['offlineStatusMessage'];
+              this.operator.busyStatusMessage = data['busyStatusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
@@ -247,7 +256,8 @@ export class ChatWidgetComponent implements OnInit {
               status: 'OPEN',
               //meeting_id: $rootScope.fiApp.meetingId,
               bot_type: 'vm.botInfo.chat_type',
-              isNewMsg: true
+              isNewMsg: true,
+              isNewUser: true
             };
             this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
@@ -291,7 +301,10 @@ export class ChatWidgetComponent implements OnInit {
             this.firebaseId = data['firebase_id'];
             this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
               this.operator.status = data['onlineStatus'];
-              this.operator.statusMessage = data['statusMessage'];
+              this.operator.onlineStatus = data['onlineStatus'];
+              this.operator.onlineStatusMessage = data['onlineStatusMessage'];
+              this.operator.offlineStatusMessage = data['offlineStatusMessage'];
+              this.operator.busyStatusMessage = data['busyStatusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
@@ -317,7 +330,8 @@ export class ChatWidgetComponent implements OnInit {
                 status: 'OPEN',
                 //meeting_id: $rootScope.fiApp.meetingId,
                 bot_type: 'vm.botInfo.chat_type',
-                isNewMsg: true
+                isNewMsg: true,
+                isNewUser: true
               };
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
@@ -445,6 +459,12 @@ export class ChatWidgetComponent implements OnInit {
         timestamp: new Date().getTime()
       }
       this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
+      this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+        lastMessage: message,
+        lastMessageType: 'CONV_OPEN',
+        isNewMsg: true,
+        isNewUser: false
+      });
     }
 
     this.addMessage(this.client, { data: { label: message } }, 'sent');
@@ -496,11 +516,19 @@ export class ChatWidgetComponent implements OnInit {
       }
       this.firebaseService.sendMessage(this.clientFirebaseId, connectToAgent, connectToAgent.data.label, this.firebaseId, 'USER_CONNECTING', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, connectToAgent, 'received');
+      var customlabel;
+      if(this.operator.onlineStatus === 'online') {
+        customlabel = this.operator.onlineStatusMessage
+      } else if(this.operator.onlineStatus === 'offline') {
+        customlabel = this.operator.offlineStatusMessage
+      } else {
+        customlabel = this.operator.busyStatusMessage
+      }
       var statusMessage = {
         "name": "agentResponse",
         "data": {
           "skipQuestionText": "I'm not sure",
-          "label": this.operator.statusMessage,
+          "label": customlabel,
         },
         "id": 5,
         "class": "connectingToAgent"
@@ -509,7 +537,7 @@ export class ChatWidgetComponent implements OnInit {
       this.addMessage(this.operator, statusMessage, 'received');
 
     }
-    
+
     if (!this.preview) this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? '999' : this.currentNode, message: this.messages }));
 
 
@@ -577,6 +605,12 @@ export class ChatWidgetComponent implements OnInit {
     }
     this.messages[0].hide = true;
     if (!this.preview) this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
+    this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+      lastMessage: choice,
+      lastMessageType: 'CONV_OPEN',
+      isNewMsg: true,
+      isNewUser: false
+    });
     this.addMessage(this.client, { data: { label: choice } }, 'sent');
     var outputConnection = this.chatElements[this.currentNode].outputs[`output_${index + 1}`].connections;
     if (outputConnection && outputConnection.length > 0) {

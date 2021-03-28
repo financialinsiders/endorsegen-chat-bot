@@ -18,6 +18,12 @@ export class FirebaseService {
       timestamp: timestamp,
       type: type
     }
-    this.angularFireDatabase.database.ref('messages/' + firebaseId + '/' + cSessionId).push(messageEntity);
+    this.angularFireDatabase.database.ref(`messages/${firebaseId}/${cSessionId}`).push(messageEntity);
+    this.angularFireDatabase.database.ref(`sessions/${firebaseId}/${cSessionId}`).update({
+      lastMessage: message,
+      lastMessageType: status,
+      isNewMsg: true,
+      isNewUser: false
+    });
   }
 }
