@@ -314,7 +314,8 @@ export class ChatWidgetComponent implements OnInit {
             //this.setAppearance(data['data']['appearance']);
             var userInfo = {
               connectedAgentId: this.instanceId,
-              username: 'New User'
+              username: 'New User',
+              agentId: this.firebaseId
             }
             this.angularFireDatabase.database.ref('users/').push(userInfo).then((userData) => {
               this.clientFirebaseId = userData.key;
@@ -422,7 +423,7 @@ export class ChatWidgetComponent implements OnInit {
       return
     }
     if (!this.preview) {
-      var elementType = this.messages[0].element.type;
+      var elementType = this.messages[0].element.class;
       var customvariable = this.messages[0].element.data;
       if (customvariable && customvariable.storevariable === '1') {
         this.customerVariables.set(`@${customvariable.variablename}`, message);
@@ -434,6 +435,9 @@ export class ChatWidgetComponent implements OnInit {
         this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
           username: message,
         });
+        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+          username: message,
+        });
         if (this.leadId) this.createLead();
       } else if (elementType === 'email') {
         this.email = message;
@@ -441,6 +445,11 @@ export class ChatWidgetComponent implements OnInit {
         this.createLead();
         this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
           email: message,
+          leadUser: true,
+        });
+        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.clientFirebaseId}`).update({
+          username: message,
+          leadUser: true,
         });
       } else if (elementType === 'phone') {
         this.phone = message;
@@ -448,6 +457,11 @@ export class ChatWidgetComponent implements OnInit {
         this.createLead();
         this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
           phone: message,
+          leadUser: true,
+        });
+        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.clientFirebaseId}`).update({
+          username: message,
+          leadUser: true,
         });
       };
       var senderMessage = {
@@ -518,9 +532,9 @@ export class ChatWidgetComponent implements OnInit {
       this.firebaseService.sendMessage(this.clientFirebaseId, connectToAgent, connectToAgent.data.label, this.firebaseId, 'USER_CONNECTING', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, connectToAgent, 'received');
       var customlabel;
-      if(this.operator.onlineStatus === 'online') {
+      if (this.operator.onlineStatus === 'online') {
         customlabel = this.operator.onlineStatusMessage
-      } else if(this.operator.onlineStatus === 'offline') {
+      } else if (this.operator.onlineStatus === 'offline') {
         customlabel = this.operator.offlineStatusMessage
       } else {
         customlabel = this.operator.busyStatusMessage
