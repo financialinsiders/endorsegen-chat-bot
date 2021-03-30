@@ -11,6 +11,7 @@ import { CryptoStorageService } from 'app/services/crypto-storage.service';
 import { IntroductionService } from 'app/services/introduction.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { IpService } from 'app/services/ip.service';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -133,7 +134,7 @@ export class ChatWidgetComponent implements OnInit {
 
   public messages = []
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore, private ipService: IpService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     /* for (let [key, value] of this.customerVariables) {
       element.clabel = element.data.label.replace(key, value);
@@ -312,63 +313,81 @@ export class ChatWidgetComponent implements OnInit {
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
             //this.setAppearance(data['data']['appearance']);
-            var userInfo = {
-              connectedAgentId: this.instanceId,
-              username: 'New User',
-              agentId: this.firebaseId
-            }
-            this.angularFireDatabase.database.ref('users/').push(userInfo).then((userData) => {
-              this.clientFirebaseId = userData.key;
-              this.initializeSession(this.clientFirebaseId);
-              var sessionInfo = {
-                username: 'Anonymous',
-                user_attempt: false,
-                timestamp: new Date().getTime(),
-                bot_id: this.botId,
-                user_id: this.clientFirebaseId,
-                bot_title: 'vm.botInfo.title',
-                page_link: window.top.location.href,
-                status: 'OPEN',
-                //meeting_id: $rootScope.fiApp.meetingId,
-                bot_type: 'vm.botInfo.chat_type',
-                isNewMsg: true,
-                isNewUser: true
-              };
-              this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
-                this.cSessionId = data.key;
-                this.userService.setUserSession({
-                  clientFirebaseId: this.clientFirebaseId,
-                  cSessionId: this.cSessionId,
-                  botId: this.botId,
-                  chatStatus: false
-                });
-                this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
+            this.ipService.getIpDetails().subscribe(ipData => {
+              const toMatch = [
+                /Android/i,
+                /webOS/i,
+                /iPhone/i,
+                /iPad/i,
+                /iPod/i,
+                /BlackBerry/i,
+                /Windows Phone/i
+              ];
 
-                });
-                this.firebaseService.sendMessage(this.clientFirebaseId, this.firstElement, this.firstElement.data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
-                this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
-                  if (data) {
-                    var messageHistory = Object.values(data);
-                    var lastMessage = messageHistory[messageHistory.length - 1];
-                    if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
-                      this.agentLive = true;
-                      this.currentNode = '999';
-                      this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
+              var isMobile = toMatch.some((toMatchItem) => navigator.userAgent.match(toMatchItem));
+              var userInfo = {
+                connectedAgentId: this.instanceId,
+                username: 'New User',
+                agentId: this.firebaseId,
+                browserSession: ipData, 
+                device: isMobile ? 'Mobile' : 'Desktop',
+                sourceUrl: window.location.href
+              }
+              this.angularFireDatabase.database.ref('users/').push(userInfo).then((userData) => {
+                this.clientFirebaseId = userData.key;
+                this.initializeSession(this.clientFirebaseId);
+                var sessionInfo = {
+                  username: 'Anonymous',
+                  user_attempt: false,
+                  timestamp: new Date().getTime(),
+                  bot_id: this.botId,
+                  user_id: this.clientFirebaseId,
+                  bot_title: 'vm.botInfo.title',
+                  page_link: window.top.location.href,
+                  status: 'OPEN',
+                  //meeting_id: $rootScope.fiApp.meetingId,
+                  bot_type: 'vm.botInfo.chat_type',
+                  isNewMsg: true,
+                  isNewUser: true
+                };
+                this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
+
+                  this.cSessionId = data.key;
+                  this.userService.setUserSession({
+                    clientFirebaseId: this.clientFirebaseId,
+                    cSessionId: this.cSessionId,
+                    botId: this.botId,
+                    chatStatus: false
+                  });
+                  this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
+
+                  });
+                  this.firebaseService.sendMessage(this.clientFirebaseId, this.firstElement, this.firstElement.data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
+                  this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
+                    if (data) {
+                      var messageHistory = Object.values(data);
+                      var lastMessage = messageHistory[messageHistory.length - 1];
+                      if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
+                        this.agentLive = true;
+                        this.currentNode = '999';
+                        this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
+                      }
                     }
-                  }
 
+                  });
                 });
               });
+              setTimeout(() => {
+                this.addMessage(this.operator, this.firstElement, 'received');
+                if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
+                  this.nextNodeElement();
+                  setTimeout(() => this.proceedNext(), 3000)
+                };
+                this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? '999' : this.currentNode, message: this.messages }));
+              }, 1500);
             });
-            setTimeout(() => {
-              this.addMessage(this.operator, this.firstElement, 'received');
-              if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
-                this.nextNodeElement();
-                setTimeout(() => this.proceedNext(), 3000)
-              };
-              this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? '999' : this.currentNode, message: this.messages }));
-            }, 1500);
+
           });
         }
 
@@ -447,8 +466,8 @@ export class ChatWidgetComponent implements OnInit {
           email: message,
           leadUser: true,
         });
-        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.clientFirebaseId}`).update({
-          username: message,
+        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+          email: message,
           leadUser: true,
         });
       } else if (elementType === 'phone') {
@@ -459,8 +478,8 @@ export class ChatWidgetComponent implements OnInit {
           phone: message,
           leadUser: true,
         });
-        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.clientFirebaseId}`).update({
-          username: message,
+        this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+          phone: message,
           leadUser: true,
         });
       };
