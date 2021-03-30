@@ -100,6 +100,8 @@ export class ChatWidgetComponent implements OnInit {
   welcomeMessage: any;
   welcomeVideoUrl: any;
   connectingToAgent: boolean;
+  botAliseName: any;
+  liveAgentName: any;
   public get visible() {
     return this._visible
   }
@@ -164,7 +166,7 @@ export class ChatWidgetComponent implements OnInit {
     if (!this.preview) {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
-        this.operator.name = this.agentData['agentName'];
+        this.liveAgentName = this.agentData['agentName'];
         if (this.endorserId) {
           this.adminService.getEndorserProfileData('518').subscribe(userData => {
             this.endorserData = userData['data'];
@@ -195,6 +197,8 @@ export class ChatWidgetComponent implements OnInit {
               this.operator.busyStatusMessage = data['busyStatusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+            this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
+            this.operator.name = this.botAliseName;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
@@ -223,6 +227,7 @@ export class ChatWidgetComponent implements OnInit {
               var lastMessage = messageHistory[messageHistory.length - 1];
               if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                 this.agentLive = true;
+                this.operator.name = this.liveAgentName;
                 this.currentNode = '999';
                 this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
 
@@ -240,6 +245,8 @@ export class ChatWidgetComponent implements OnInit {
               this.operator.busyStatusMessage = data['busyStatusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+            this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
+            this.operator.name = this.botAliseName;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
@@ -258,7 +265,8 @@ export class ChatWidgetComponent implements OnInit {
               //meeting_id: $rootScope.fiApp.meetingId,
               bot_type: 'vm.botInfo.chat_type',
               isNewMsg: true,
-              isNewUser: true
+              isNewUser: true,
+              botAliseName: this.botAliseName
             };
             this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
@@ -278,6 +286,7 @@ export class ChatWidgetComponent implements OnInit {
                 var lastMessage = messageHistory[messageHistory.length - 1];
                 if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                   this.agentLive = true;
+                  this.operator.name = this.liveAgentName;
                   this.currentNode = '999';
                   this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
 
@@ -308,6 +317,8 @@ export class ChatWidgetComponent implements OnInit {
               this.operator.busyStatusMessage = data['busyStatusMessage'];
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+            this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
+            this.operator.name = this.botAliseName;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
@@ -349,7 +360,8 @@ export class ChatWidgetComponent implements OnInit {
                   //meeting_id: $rootScope.fiApp.meetingId,
                   bot_type: 'vm.botInfo.chat_type',
                   isNewMsg: true,
-                  isNewUser: true
+                  isNewUser: true,
+                  botAliseName: this.botAliseName
                 };
                 this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
@@ -370,6 +382,7 @@ export class ChatWidgetComponent implements OnInit {
                       var lastMessage = messageHistory[messageHistory.length - 1];
                       if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                         this.agentLive = true;
+                        this.operator.name = this.liveAgentName;
                         this.currentNode = '999';
                         this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
                       }
@@ -397,6 +410,7 @@ export class ChatWidgetComponent implements OnInit {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
         this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
+        this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
         this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
         this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
         this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
