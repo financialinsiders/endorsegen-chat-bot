@@ -13,11 +13,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { IpService } from './services/ip.service';
 
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule, AngularEditorModule],
+  imports: [BrowserModule, BrowserAnimationsModule, ChatModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule],
   exports: [ChatModule],
   providers: [AdminService, UserService, IpService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

@@ -14,10 +14,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { IpService } from './services/ip.service'
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, FormsModule, AngularEditorModule],
+  imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, FormsModule],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [AdminService, UserService, IpService],
