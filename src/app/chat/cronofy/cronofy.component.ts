@@ -1,7 +1,9 @@
 import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AdminService } from 'app/services/admin-service';
 import * as CronofyElements from "cronofy-elements";
+import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'app-cronofy',
   templateUrl: './cronofy.component.html',
@@ -13,15 +15,18 @@ export class CronofyComponent implements OnInit {
   @Input() name: string;
   @Input() botId: number;
   @Input() leadId: any;
+  @Input() cSessionId: any;
+  @Input() firebaseId: any;
   startDate: any;
   startTime: any;
   endTime: any;
   isBusy: boolean;
-  
+
   meetingBooked: { startDate: any; endTime: any; startTime: any; };
   meetingID: string;
   showAppoinmentConfirmation: boolean = false;
-  constructor(private adminService: AdminService) { }
+  public encryptSecretKey: string = 'secret_key';
+  constructor(private adminService: AdminService, private db: AngularFirestore) { }
 
   ngOnInit(): void {
     var urlParams = new URLSearchParams(window.location.search);
@@ -60,7 +65,7 @@ export class CronofyComponent implements OnInit {
               bot_id: this.botId,
             }
             this.showAppoinmentConfirmation = true;
-            this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data =>{
+            this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data => {
               this.createApoinment(data['meeting_id'], notification, data['user_id']);
             });
           }
@@ -87,20 +92,26 @@ export class CronofyComponent implements OnInit {
     return time.join('');
   }
   createApoinment(meetingId, notification, userID) {
-    var requestBosy = {
-      "agentID": this.instanceId,
-      "event_id": meetingId,
-      "start": notification.notification.slot.start,
-      "end": notification.notification.slot.end,
-      "participant_email": this.email,
-      "participant_name": this.name,
-      "meeting_url": 'https://financialinsiders.ca/terry-thomas/meeting/?id=' + userID
+    var updateMeetingEvent = {
+      "meetingId": meetingId,
+      'name': this.name,
+      "agentId": this.instanceId,
+      "leadId": this.leadId,
+      "meetingTime": notification.notification.slot.start,
+      "cSessionId": this.cSessionId,
+      "firebaseId": this.firebaseId
     }
-    this.adminService.bookSlot(requestBosy).subscribe(function (slotData) {
-      var updateMeetingEvent = {
+    this.db.collection('meetings').add(updateMeetingEvent).then(data => {
+      var requestBosy = {
+        "agentID": this.instanceId,
         "event_id": meetingId,
-        "id": meetingId
+        "start": notification.notification.slot.start,
+        "end": notification.notification.slot.end,
+        "participant_email": this.email,
+        "participant_name": this.name,
+        "meeting_url": 'http://localhost:4200/waiting-room/' + data.id
       }
+      this.adminService.bookSlot(requestBosy);
     });
     this.meetingBooked = { startDate: this.startDate, endTime: this.endTime, startTime: this.startTime };
     //updateAppointment(this.meetingBooked);
