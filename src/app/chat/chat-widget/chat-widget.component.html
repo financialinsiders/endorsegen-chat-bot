@@ -1,142 +1,132 @@
 <div class="wrapper {{theme}}" [ngClass]="{'fullscreen': fullScreen}">
-  <div class="chat-box" *ngIf="visible" [@fadeInOut]="visible"
-    [ngStyle]="{'background-image': 'url(' + appearance.fullscreenbgimage + ')'}">
-    <div class="chat-box-header">
-      <div class="">
-        <div class="operator-status">
-          <span *ngIf="operator.status === 'online'">
+    <div class="chat-box" *ngIf="visible" [@fadeInOut]="visible" [ngStyle]="{'background-image': 'url(' + appearance.fullscreenbgimage + ')'}">
+        <div class="chat-box-header">
+            <div class="">
+                <div class="operator-status">
+                    <span *ngIf="operator.status === 'online'">
             {{operator.status}}
             <span class="operator-status-online">●</span>
 
-          </span>
-          <a (click)="historyChat()" *ngIf="existUserSession"><img
-              src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png" class="history-icon ml-1"
-              width="20px" height="20px" /></a>
-          <button class="chat-button-header" (click)="toggleChat()">✕</button>
+                    </span>
+                    <a (click)="historyChat()" *ngIf="existUserSession"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png" class="history-icon ml-1" width="20px" height="20px" /></a>
+                    <button class="chat-button-header" (click)="toggleChat()">✕</button>
 
-        </div>
-        <div class="operator-name-avatar">
-          <chat-avatar [image]="operator.avatar"></chat-avatar>
-          <p class="operator-name">
-            {{operator.name}}
-          </p>
-        </div>
+                </div>
+                <div class="operator-name-avatar">
+                    <chat-avatar [image]="operator.avatar"></chat-avatar>
+                    <p class="operator-name">
+                        {{operator.name}}
 
-      </div>
-    </div>
-    <div *ngIf="session">
-      <app-publisher [session]="session"></app-publisher>
-      <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
-    </div>
-    <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block"
-      [ngStyle]="{'color': appearance.fullscreencolor}">
-      <h2 [innerHTML]="appearance.fullscreenheading"></h2>
-      <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
-    </div>
-    <div class="chat-box-main" *ngIf="!this.historyMode">
-      <div class="chat-message-bottom" #bottom></div>
-      <ng-container *ngFor="let message of messages; index as i">
-        <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn]
-          [class.chat-message-sent]="message.type === 'sent'"
-          [class.appoinment-container]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' || message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
-          <div>
-            <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar"
-              *ngIf="message.element.class !== 'appoinments' && message.element.class !== 'video' && message.element.class !== 'image' && message.element.class !== 'videoRecording' && message.element.class !== 'socialSharing' && message.element.class !== 'emailSharing' && message.element.class !== 'textEditor'">
-            </chat-avatar>
-            <div class="chat-message-text"
-              [class.chat-message-text-no-corner]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' ||message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
-              {{this.removeHTML(message.element.data.label)}}
-            </div>
-            <div *ngIf="message.element.class === 'multiChoice' && !message.hide" class="multi-choice-container">
-              <ng-container *ngFor="let choice of message.element.data.choices; index as ind; trackBy: trackByFn">
-                <div class="option-entry" (click)="multiChoiceSelect(choice, ind, message.element.data.choices.length)">
-                  {{choice}}
+                    </p><small class="d-block">{{operator.title}}</small>
                 </div>
 
-              </ng-container>
             </div>
+        </div>
+        <div *ngIf="session">
+            <app-publisher [session]="session"></app-publisher>
+            <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
+        </div>
+        <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block" [ngStyle]="{'color': appearance.fullscreencolor}">
+            <h2 [innerHTML]="appearance.fullscreenheading"></h2>
+            <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
+        </div>
+        <div class="chat-box-main" *ngIf="!this.historyMode">
+            <div class="chat-message-bottom" #bottom></div>
+            <ng-container *ngFor="let message of messages; index as i">
+                <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn] [class.chat-message-sent]="message.type === 'sent'" [class.appoinment-container]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' || message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
+                    <div>
+                        <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar" *ngIf="message.element.class !== 'appoinments' && message.element.class !== 'video' && message.element.class !== 'image' && message.element.class !== 'videoRecording' && message.element.class !== 'socialSharing' && message.element.class !== 'emailSharing' && message.element.class !== 'textEditor'">
+                        </chat-avatar>
+                        <div class="chat-message-text" [class.chat-message-text-no-corner]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' ||message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
+                            {{this.removeHTML(message.element.data.label)}}
+                        </div>
+                        <div *ngIf="message.element.class === 'multiChoice' && !message.hide" class="multi-choice-container">
+                            <ng-container *ngFor="let choice of message.element.data.choices; index as ind; trackBy: trackByFn">
+                                <div class="option-entry" (click)="multiChoiceSelect(choice, ind, message.element.data.choices.length)">
+                                    {{choice}}
+                                </div>
+
+                            </ng-container>
+                        </div>
 
 
-            <div *ngIf="message.element.class === 'appoinments'" class="appoinment-container">
-              <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId">
-              </app-cronofy>
-            </div>
-            <div *ngIf="message.element.class === 'video'" class="appoinment-container">
-              <div class="video-alignments">
-                <div *ngIf="message.element.data.videoType === 'record'">
-                  <video controls style="max-width: 100%;">
+                        <div *ngIf="message.element.class === 'appoinments'" class="appoinment-container">
+                            <app-cronofy [instanceId]="instanceId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId">
+                            </app-cronofy>
+                        </div>
+                        <div *ngIf="message.element.class === 'video'" class="appoinment-container">
+                            <div class="video-alignments">
+                                <div *ngIf="message.element.data.videoType === 'record'">
+                                    <video controls style="max-width: 100%;">
                     <source [src]="getSafeUrl(message.element.data.videoUrl)">
                   </video>
+                                </div>
+                                <div *ngIf="message.element.data.videoType === 'youtube'">
+                                    <iframe [src]="getSafeUrl(message.element.data.videoUrl)" frameborder="0" allowfullscreen width="100%"></iframe>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div *ngIf="message.element.class === 'image'" class="appoinment-container">
+                            <div class="video-alignments">
+                                <img [src]="getSafeUrl(message.element.data.imageUrl)" style="max-width: 100%">
+                            </div>
+
+                        </div>
+                        <div class="socialSharing-accordion" *ngIf="message.element.class === 'socialSharing'">
+                            <app-socialSharing [endorserData]="endorserData" botId="botId" instanceId="instanceId" [endorserId]="endorserId" [introSessionID]="introSessionID"></app-socialSharing>
+
+                        </div>
+                        <div class="socialSharing-accordion" *ngIf="message.element.class === 'emailSharing'">
+                            <app-emailSharing [endorserData]="endorserData" botId="botId" instanceId="instanceId" [endorserId]="endorserId" [introSessionID]="introSessionID"></app-emailSharing>
+
+                        </div>
+                    </div>
+                    <div *ngIf="message.element.class === 'videoRecording'">
+                        <app-videoRecordinger (saved)="videoSaved($event)"></app-videoRecordinger>
+                    </div>
+                    <div *ngIf="message.element.class === 'textEditor'" class="mt-1">
+                        <div class="chat-message-text chat-message-text-no-corner mt-1 mb-1" *ngIf="!editMode">
+                            <span>{{this.removeHTML(message.element.data.default_message)}}</span>
+                        </div>
+                        <div *ngIf="editMode" class="editor-margin">
+                            <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="message.element.data.default_message" [config]="editorconfig"></angular-editor>
+                        </div>
+                        <div class="mt-1 button-confirmation-left" *ngIf="!editMode">
+                            <button class="btn btn-primary mr-1 mb-1" (click)="nextClicked(i)">Yes, Please</button>
+                            <button class="btn btn-success mb-1" (click)="editText()">No, I need to edit</button>
+                        </div>
+                        <div class="mt-1 button-confirmation-left" *ngIf="editMode">
+                            <button class="btn btn-primary mr-1 mb-1" (click)="saveAndNextClicked()">Save and proceed Next</button>
+                        </div>
+                    </div>
+
+                    <div class="chat-message-date">
+                        {{message.date | date: 'short'}}
+                    </div>
+                    <div class="text-center">
+                        <button *ngIf="message && message.element && message.element.data && message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1" (click)="nextCLicked(i)">Next</button>
+                    </div>
                 </div>
-                <div *ngIf="message.element.data.videoType === 'youtube'">
-                  <iframe [src]="getSafeUrl(message.element.data.videoUrl)" frameborder="0" allowfullscreen width="100%"></iframe>
+
+            </ng-container>
+        </div>
+        <div *ngIf="this.historyMode">
+            <p class="previous-chat-text">Previous Chats</p>
+            <div *ngFor="let message of sessionHistoryChatList">
+                <div class="history-message" (click)="selectMessage(message)">
+                    <span>{{this.removeHTML(message.message[0].element.data.label)}}</span>
+                    <div class="chat-message-date">
+                        {{message.message[0].date | date: 'short'}}
+                    </div>
                 </div>
-              </div>
-
             </div>
-            <div *ngIf="message.element.class === 'image'" class="appoinment-container">
-              <div class="video-alignments">
-                <img [src]="getSafeUrl(message.element.data.imageUrl)" style="max-width: 100%">
-              </div>
-
-            </div>
-            <div class="socialSharing-accordion" *ngIf="message.element.class === 'socialSharing'">
-              <app-socialSharing [endorserData]="endorserData" botId="botId" instanceId="instanceId"
-                [endorserId]="endorserId" [introSessionID]="introSessionID"></app-socialSharing>
-
-            </div>
-            <div class="socialSharing-accordion" *ngIf="message.element.class === 'emailSharing'">
-              <app-emailSharing [endorserData]="endorserData" botId="botId" instanceId="instanceId"
-                [endorserId]="endorserId" [introSessionID]="introSessionID"></app-emailSharing>
-
-            </div>
-          </div>
-          <div *ngIf="message.element.class === 'videoRecording'">
-            <app-videoRecordinger (saved)="videoSaved($event)"></app-videoRecordinger>
-          </div>
-          <div *ngIf="message.element.class === 'textEditor'" class="mt-1">
-            <div class="chat-message-text chat-message-text-no-corner mt-1 mb-1" *ngIf="!editMode">
-              <span>{{this.removeHTML(message.element.data.default_message)}}</span>
-            </div>
-            <div *ngIf="editMode" class="editor-margin">
-              <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="message.element.data.default_message" [config]="editorconfig"></angular-editor>
-            </div>
-            <div class="mt-1 button-confirmation-left" *ngIf="!editMode">
-              <button class="btn btn-primary mr-1 mb-1" (click)="nextClicked(i)">Yes, Please</button>
-              <button class="btn btn-success mb-1" (click)="editText()">No, I need to edit</button>
-            </div>
-            <div class="mt-1 button-confirmation-left" *ngIf="editMode">
-              <button class="btn btn-primary mr-1 mb-1" (click)="saveAndNextClicked()">Save and proceed Next</button>
-            </div>
-          </div>
-
-          <div class="chat-message-date">
-            {{message.date | date: 'short'}}
-          </div>
-          <div class="text-center">
-            <button *ngIf="message && message.element && message.element.data && message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1"
-              (click)="nextCLicked(i)">Next</button>
-          </div>
         </div>
-
-      </ng-container>
-    </div>
-    <div *ngIf="this.historyMode">
-      <p class="previous-chat-text">Previous Chats</p>
-      <div *ngFor="let message of sessionHistoryChatList">
-        <div class="history-message" (click)="selectMessage(message)">
-          <span>{{this.removeHTML(message.message[0].element.data.label)}}</span>
-          <div class="chat-message-date">
-            {{message.message[0].date | date: 'short'}}
-          </div>
+        <div class="chat-box-footer" *ngIf="!this.historyMode">
+            <chat-input (send)="sendMessage($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
         </div>
-      </div>
     </div>
-    <div class="chat-box-footer" *ngIf="!this.historyMode">
-      <chat-input (send)="sendMessage($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
-    </div>
-  </div>
-  <button id="unique-chat-button-identifier" class="chat-button" (click)="toggleChat()">
+    <button id="unique-chat-button-identifier" class="chat-button" (click)="toggleChat()">
     <span [@fadeIn] *ngIf="visible">✕</span>
     <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png"
         class="widget-start" width="45px" height="50px" /></span>

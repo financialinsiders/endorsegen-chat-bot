@@ -101,6 +101,7 @@ export class ChatWidgetComponent implements OnInit {
   welcomeVideoUrl: any;
   connectingToAgent: boolean;
   botAliseName: any;
+  botTitle: string;
   liveAgentName: any;
   public get visible() {
     return this._visible
@@ -120,6 +121,7 @@ export class ChatWidgetComponent implements OnInit {
 
   public operator = {
     name: 'Operator',
+    title: 'Virtual assistant',
     status: 'online',
     avatar: `https://fiapps.s3.ca-central-1.amazonaws.com/assets/bot.png`,
     onlineStatusMessage: '',
@@ -198,7 +200,9 @@ export class ChatWidgetComponent implements OnInit {
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
+            this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
             this.operator.name = this.botAliseName;
+            this.operator.title = this.botTitle;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
@@ -246,7 +250,9 @@ export class ChatWidgetComponent implements OnInit {
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
+            this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
             this.operator.name = this.botAliseName;
+            this.operator.title = this.botTitle;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
@@ -318,7 +324,9 @@ export class ChatWidgetComponent implements OnInit {
             });
             this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
             this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
+            this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
             this.operator.name = this.botAliseName;
+            this.operator.title = this.botTitle;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
@@ -341,7 +349,7 @@ export class ChatWidgetComponent implements OnInit {
                 connectedAgentId: this.instanceId,
                 username: 'New User',
                 agentId: this.firebaseId,
-                browserSession: ipData, 
+                browserSession: ipData,
                 device: isMobile ? 'Mobile' : 'Desktop',
                 sourceUrl: window.location.href
               }
@@ -414,6 +422,9 @@ export class ChatWidgetComponent implements OnInit {
         this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
         this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
         this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
+        this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
+        this.operator.name = this.botAliseName;
+        this.operator.title = this.botTitle;
         this.firstElement = this.transformBotData(this.chatElements);
         setTimeout(() => {
           this.addMessage(this.operator, this.firstElement, 'received');
