@@ -17,6 +17,7 @@ export class CronofyComponent implements OnInit {
   @Input() leadId: any;
   @Input() cSessionId: any;
   @Input() firebaseId: any;
+  @Input() clientFirebaseId: any;
   startDate: any;
   startTime: any;
   endTime: any;
@@ -99,7 +100,8 @@ export class CronofyComponent implements OnInit {
       "leadId": this.leadId,
       "meetingTime": notification.notification.slot.start,
       "cSessionId": this.cSessionId,
-      "firebaseId": this.firebaseId
+      "firebaseId": this.firebaseId,
+      "clientFirebaseId": this.clientFirebaseId,
     }
     this.db.collection('meetings').add(updateMeetingEvent).then(data => {
       var requestBosy = {
