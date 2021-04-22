@@ -18,6 +18,7 @@ export class CronofyComponent implements OnInit {
   @Input() cSessionId: any;
   @Input() firebaseId: any;
   @Input() clientFirebaseId: any;
+  @Input() appoinmentData: any;
   startDate: any;
   startTime: any;
   endTime: any;
@@ -30,6 +31,7 @@ export class CronofyComponent implements OnInit {
   constructor(private adminService: AdminService, private db: AngularFirestore) { }
 
   ngOnInit(): void {
+    console.log(this.appoinmentData);
     var urlParams = new URLSearchParams(window.location.search);
     this.meetingID = urlParams.get('meetingID');
     this.adminService.getElementID(this.instanceId).subscribe(data => {
@@ -102,6 +104,8 @@ export class CronofyComponent implements OnInit {
       "cSessionId": this.cSessionId,
       "firebaseId": this.firebaseId,
       "clientFirebaseId": this.clientFirebaseId,
+      "videoType": this.appoinmentData['videoType'],
+      "videoUrl": this.appoinmentData['videoUrl'],
     }
     this.db.collection('meetings').add(updateMeetingEvent).then(data => {
       var requestBosy = {
