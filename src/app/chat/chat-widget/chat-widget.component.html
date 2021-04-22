@@ -51,7 +51,7 @@
 
 
                         <div *ngIf="message.element.class === 'appoinments'" class="appoinment-container">
-                            <app-cronofy [instanceId]="instanceId" [appoinmentData]="message.element.data" [clientFirebaseId]="clientFirebaseId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId" [cSessionId]="cSessionId" [firebaseId]="firebaseId">
+                            <app-cronofy [instanceId]="instanceId" [agentData]="agentData" [appoinmentData]="message.element.data" [clientFirebaseId]="clientFirebaseId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId" [cSessionId]="cSessionId" [firebaseId]="firebaseId">
                             </app-cronofy>
                         </div>
                         <div *ngIf="message.element.class === 'video'" class="appoinment-container">

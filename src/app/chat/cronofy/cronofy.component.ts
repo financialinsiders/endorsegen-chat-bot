@@ -19,6 +19,7 @@ export class CronofyComponent implements OnInit {
   @Input() firebaseId: any;
   @Input() clientFirebaseId: any;
   @Input() appoinmentData: any;
+  @Input() agentData: any;
   startDate: any;
   startTime: any;
   endTime: any;
@@ -104,8 +105,8 @@ export class CronofyComponent implements OnInit {
       "cSessionId": this.cSessionId,
       "firebaseId": this.firebaseId,
       "clientFirebaseId": this.clientFirebaseId,
-      "videoType": this.appoinmentData['videoType'],
-      "videoUrl": this.appoinmentData['videoUrl'],
+      "videoType": this.appoinmentData['videoType'] ? this.appoinmentData['videoType'] : this.agentData.calendarSettings.defaultWaitingRoomVideoType,
+      "videoUrl": this.appoinmentData['videoUrl'] ? this.appoinmentData['videoUrl'] : this.agentData.calendarSettings.defaultWaitingRoomVideo,
     }
     this.db.collection('meetings').add(updateMeetingEvent).then(data => {
       var requestBosy = {
