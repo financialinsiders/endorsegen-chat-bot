@@ -229,6 +229,9 @@ export class ChatWidgetComponent implements OnInit {
             this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
               var messageHistory = Object.values(data);
               var lastMessage = messageHistory[messageHistory.length - 1];
+              if (lastMessage.status === 'INSTANT_MEETING') {
+                window.open(lastMessage.clientRedirectUrl);
+              }
               if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                 this.agentLive = true;
                 this.operator.name = this.liveAgentName;
@@ -290,6 +293,9 @@ export class ChatWidgetComponent implements OnInit {
               this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
                 var messageHistory = Object.values(data);
                 var lastMessage = messageHistory[messageHistory.length - 1];
+                if (lastMessage.status === 'INSTANT_MEETING') {
+                  window.open(lastMessage.clientRedirectUrl);
+                }
                 if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                   this.agentLive = true;
                   this.operator.name = this.liveAgentName;
@@ -388,6 +394,9 @@ export class ChatWidgetComponent implements OnInit {
                     if (data) {
                       var messageHistory = Object.values(data);
                       var lastMessage = messageHistory[messageHistory.length - 1];
+                      if (lastMessage.status === 'INSTANT_MEETING') {
+                        window.open(lastMessage.clientRedirectUrl);
+                      }
                       if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                         this.agentLive = true;
                         this.operator.name = this.liveAgentName;
