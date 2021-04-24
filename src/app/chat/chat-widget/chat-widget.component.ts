@@ -103,6 +103,7 @@ export class ChatWidgetComponent implements OnInit {
   botAliseName: any;
   botTitle: string;
   liveAgentName: any;
+  isTyping: any;
   public get visible() {
     return this._visible
   }
@@ -161,7 +162,11 @@ export class ChatWidgetComponent implements OnInit {
   public focusMessage() {
     this.focus.next(true);
   }
-
+  public typing(flag) {
+    this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+      "userTyping": flag
+    });
+  }
   ngOnInit() {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
@@ -224,7 +229,7 @@ export class ChatWidgetComponent implements OnInit {
             });
 
             this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
-
+              this.isTyping = data['isAgentTyping'];
             });
             this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
               var messageHistory = Object.values(data);
@@ -287,7 +292,7 @@ export class ChatWidgetComponent implements OnInit {
                 chatStatus: false
               });
               this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
-
+                this.isTyping = data['isAgentTyping'];
               });
               this.firebaseService.sendMessage(this.clientFirebaseId, this.firstElement, this.firstElement.data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
               this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
@@ -387,7 +392,7 @@ export class ChatWidgetComponent implements OnInit {
                     chatStatus: false
                   });
                   this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
-
+                    this.isTyping = data['isAgentTyping'];
                   });
                   this.firebaseService.sendMessage(this.clientFirebaseId, this.firstElement, this.firstElement.data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
                   this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {

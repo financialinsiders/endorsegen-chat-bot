@@ -31,6 +31,9 @@
             <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
         </div>
         <div class="chat-box-main" *ngIf="!this.historyMode">
+            <div class="text-right pr-3 pb-3 text-muted" *ngIf="isTyping">
+                <small>{{operator.name}} typing <img src="assets/images/typing_indicator.gif" style="width: 25px;"></small>
+            </div>
             <div class="chat-message-bottom" #bottom></div>
             <ng-container *ngFor="let message of messages; index as i">
                 <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn] [class.chat-message-sent]="message.type === 'sent'" [class.appoinment-container]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' || message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
@@ -108,7 +111,6 @@
                         <button *ngIf="message && message.element && message.element.data && message.element.data.pause === '1'" class="btn btn-success pt-0 pl-3 pr-3 pb-1" (click)="nextCLicked(i)">Next</button>
                     </div>
                 </div>
-
             </ng-container>
         </div>
         <div *ngIf="this.historyMode">
@@ -123,7 +125,7 @@
             </div>
         </div>
         <div class="chat-box-footer" *ngIf="!this.historyMode">
-            <chat-input (send)="sendMessage($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
+            <chat-input (send)="sendMessage($event)" (type)="typing($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
         </div>
     </div>
     <button id="unique-chat-button-identifier" class="chat-button" (click)="toggleChat()">
