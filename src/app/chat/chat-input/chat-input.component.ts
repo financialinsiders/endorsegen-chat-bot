@@ -34,7 +34,7 @@ export class ChatInputComponent implements OnInit {
   public getMessage() {
     return this.message.nativeElement.value
   }
-  private onKeySearch(event: any) {
+  onKeySearch(event: any) {
     if (!this.isTyping) {
       this.type.emit(true);
       this.isTyping = true;
