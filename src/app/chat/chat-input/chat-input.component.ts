@@ -48,10 +48,12 @@ export class ChatInputComponent implements OnInit {
     }, 1000);
   }
   public clearMessage() {
+    this.type.emit(false);
     this.message.nativeElement.value = ''
   }
 
   onSubmit() {
+    this.type.emit(false);
     const message = this.getMessage()
     if (message.trim() === '') {
       return
