@@ -38,8 +38,12 @@
             </div>
             <div class="chat-message-bottom" #bottom></div>
             <ng-container *ngFor="let message of messages; index as i">
+                <div *ngIf="message.element.data.status === 'INSTANT_MEETING'" class="text-center mb-3">
+                    <button (click)="joinMeeting(message.element.data.clientRedirectUrl)" class="btn btn-warning">Join Meeting</button>
+                </div>
                 <div class="chat-message" [class.chat-message-received]="message.type === 'received'" [@fadeIn] [class.chat-message-sent]="message.type === 'sent'" [class.appoinment-container]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' || message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
                     <div>
+
                         <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar" *ngIf="message.element.class !== 'appoinments' && message.element.class !== 'video' && message.element.class !== 'image' && message.element.class !== 'videoRecording' && message.element.class !== 'socialSharing' && message.element.class !== 'emailSharing' && message.element.class !== 'textEditor'">
                         </chat-avatar>
                         <div class="chat-message-text" [class.chat-message-text-no-corner]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' ||message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">

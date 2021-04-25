@@ -242,7 +242,8 @@ export class ChatWidgetComponent implements OnInit {
               var messageHistory = Object.values(data);
               var lastMessage = messageHistory[messageHistory.length - 1];
               if (lastMessage.status === 'INSTANT_MEETING') {
-                window.open(lastMessage.clientRedirectUrl);
+                this.addMessage(this.operator, { data: { label: 'Please click below button to join the meeting.', status: 'INSTANT_MEETING', clientRedirectUrl: lastMessage.clientRedirectUrl }, live: true }, 'received');
+                this.joinMeeting(lastMessage.clientRedirectUrl);
               }
               if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                 this.agentLive = true;
@@ -307,7 +308,8 @@ export class ChatWidgetComponent implements OnInit {
                 var messageHistory = Object.values(data);
                 var lastMessage = messageHistory[messageHistory.length - 1];
                 if (lastMessage.status === 'INSTANT_MEETING') {
-                  window.open(lastMessage.clientRedirectUrl);
+                  this.addMessage(this.operator, { data: { label: 'Please click below button to join the meeting.', status: 'INSTANT_MEETING', clientRedirectUrl: lastMessage.clientRedirectUrl }, live: true }, 'received');
+                  this.joinMeeting(lastMessage.clientRedirectUrl);
                 }
                 if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                   this.agentLive = true;
@@ -409,13 +411,14 @@ export class ChatWidgetComponent implements OnInit {
                       var messageHistory = Object.values(data);
                       var lastMessage = messageHistory[messageHistory.length - 1];
                       if (lastMessage.status === 'INSTANT_MEETING') {
-                        window.open(lastMessage.clientRedirectUrl);
+                        this.addMessage(this.operator, { data: { label: 'Please click below button to join the meeting.', status: 'INSTANT_MEETING', clientRedirectUrl: lastMessage.clientRedirectUrl }, live: true }, 'received');
+                        this.joinMeeting(lastMessage.clientRedirectUrl);
                       }
                       if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                         this.agentLive = true;
                         this.operator.name = this.liveAgentName;
                         this.currentNode = '999';
-                        this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
+                        this.addMessage(this.operator, { data: { label: 'lastMessage.message' }, live: true }, 'received');
                       }
                     }
 
@@ -467,6 +470,9 @@ export class ChatWidgetComponent implements OnInit {
     this.cryptoService.setItem('recordervideo.url', event);
     this.nextNodeElement();
     setTimeout(() => this.proceedNext(), 1000)
+  }
+  joinMeeting(url) {
+    window.open(url);
   }
   public toggleChat() {
     this.visible = !this.visible
