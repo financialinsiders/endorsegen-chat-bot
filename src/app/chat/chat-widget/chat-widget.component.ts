@@ -709,6 +709,7 @@ export class ChatWidgetComponent implements OnInit {
       timestamp: new Date().getTime()
     });
     this.addMessage(this.client, { data: { label: choice } }, 'sent');
+    this.isBotLoading = true;
     var outputConnection = this.chatElements[this.currentNode].outputs[`output_${index + 1}`].connections;
     if (outputConnection && outputConnection.length > 0) {
       this.currentNode = this.nextNode;
