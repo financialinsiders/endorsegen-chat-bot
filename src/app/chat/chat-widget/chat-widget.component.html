@@ -31,8 +31,10 @@
             <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
         </div>
         <div class="chat-box-main" *ngIf="!this.historyMode">
-            <div class="text-right pr-3 pb-3 text-muted" *ngIf="isTyping">
-                <small>{{operator.name}} typing <img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/typing_indicator.gif" style="width: 25px;"></small>
+            <div class="text-left pl-2 pb-3 text-muted" *ngIf="isTyping">
+                <chat-avatar [image]="operator.avatar" class="chat-message-from-avatar">
+                </chat-avatar>
+                <small class="pl-1"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/typing_indicator.gif" style="width: 25px;"></small>
             </div>
             <div class="chat-message-bottom" #bottom></div>
             <ng-container *ngFor="let message of messages; index as i">

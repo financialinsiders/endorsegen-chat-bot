@@ -21,7 +21,8 @@
         cursor: pointer;
     }
     .welcome-message-box {
-        border: 1px solid;
+        border: 1px solid #80808070;
+        box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
         border-radius: 10px;
         display: inline-block;
         margin-right: 50px;

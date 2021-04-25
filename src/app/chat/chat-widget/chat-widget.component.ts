@@ -170,7 +170,6 @@ export class ChatWidgetComponent implements OnInit {
     });
   }
   public closeWelcomeBox() {
-    alert('1');
     this.showWelcomeMessageBox = false;
   }
   ngOnInit() {
