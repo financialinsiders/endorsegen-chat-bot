@@ -98,12 +98,14 @@ export class ChatWidgetComponent implements OnInit {
   nextNode: any;
   fallBackNode: any;
   welcomeMessage: any;
+  welcomeButtonText: any;
   welcomeVideoUrl: any;
   connectingToAgent: boolean;
   botAliseName: any;
   botTitle: string;
   liveAgentName: any;
   isTyping: any;
+  showWelcomeMessageBox: boolean = true;
   public get visible() {
     return this._visible
   }
@@ -167,6 +169,10 @@ export class ChatWidgetComponent implements OnInit {
       "userTyping": flag
     });
   }
+  public closeWelcomeBox() {
+    alert('1');
+    this.showWelcomeMessageBox = false;
+  }
   ngOnInit() {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
@@ -209,6 +215,7 @@ export class ChatWidgetComponent implements OnInit {
             this.operator.name = this.botAliseName;
             this.operator.title = this.botTitle;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+            this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
@@ -262,6 +269,7 @@ export class ChatWidgetComponent implements OnInit {
             this.operator.name = this.botAliseName;
             this.operator.title = this.botTitle;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+            this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
@@ -339,6 +347,7 @@ export class ChatWidgetComponent implements OnInit {
             this.operator.name = this.botAliseName;
             this.operator.title = this.botTitle;
             this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+            this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
             this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
             this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
             this.firstElement = this.transformBotData(this.chatElements);
@@ -434,6 +443,7 @@ export class ChatWidgetComponent implements OnInit {
         this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
         this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
         this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
+        this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
         this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
         this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
         this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
@@ -660,6 +670,7 @@ export class ChatWidgetComponent implements OnInit {
       this.appearance.fullscreencolor = appearance['fullscreen_color'];
     }
     this.appearance.welcomeMessage = appearance['welcome_msg'];
+    this.appearance.welcomeButtonText = appearance['welcomeButtonText'];
     this.appearance.welcomeVideo = appearance['media'];
 
   }

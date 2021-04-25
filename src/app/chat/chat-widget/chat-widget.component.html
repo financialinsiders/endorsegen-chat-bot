@@ -32,7 +32,7 @@
         </div>
         <div class="chat-box-main" *ngIf="!this.historyMode">
             <div class="text-right pr-3 pb-3 text-muted" *ngIf="isTyping">
-                <small>{{operator.name}} typing <img src="assets/images/typing_indicator.gif" style="width: 25px;"></small>
+                <small>{{operator.name}} typing <img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/typing_indicator.gif" style="width: 25px;"></small>
             </div>
             <div class="chat-message-bottom" #bottom></div>
             <ng-container *ngFor="let message of messages; index as i">
@@ -128,9 +128,22 @@
             <chat-input (send)="sendMessage($event)" (type)="typing($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
         </div>
     </div>
-    <button id="unique-chat-button-identifier" class="chat-button" (click)="toggleChat()">
-    <span [@fadeIn] *ngIf="visible">✕</span>
-    <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png"
-        class="widget-start" width="45px" height="50px" /></span>
-  </button>
+    <div class="welcome-box-contrainer">
+        <div class="welcome-message-box" *ngIf="showWelcomeMessageBox && !visible && (welcomeMessage || welcomeVideoUrl)">
+            <div (click)="closeWelcomeBox()" class="text-right">
+                <img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/close.png" class="close-button" width="20px" height="20px" />
+            </div>
+            <p class="welcome-message" [innerHTML]="welcomeMessage" *ngIf="welcomeMessage"></p>
+            <video controls style="max-width: 100%;" *ngIf="welcomeVideoUrl">
+                <source [src]="welcomeVideoUrl">
+            </video>
+            <button class="btn btn-primary" (click)="toggleChat()">{{welcomeButtonText}}</button>
+        </div>
+        <button id="unique-chat-button-identifier" class="chat-button" (click)="toggleChat()">
+            <span [@fadeIn] *ngIf="visible">✕</span>
+            <span [@fadeIn] *ngIf="!visible"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/widget-start.png"
+                class="widget-start" width="45px" height="50px" /></span>
+      </button>
+    </div>
+
 </div>
