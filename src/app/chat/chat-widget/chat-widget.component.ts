@@ -106,6 +106,7 @@ export class ChatWidgetComponent implements OnInit {
   liveAgentName: any;
   isTyping: any;
   showWelcomeMessageBox: boolean = true;
+  isBotLoading: boolean = false;
   public get visible() {
     return this._visible
   }
@@ -486,6 +487,7 @@ export class ChatWidgetComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
   public sendMessage({ message }) {
+    this.isBotLoading = true;
     if (message.trim() === '') {
       return
     }
@@ -572,8 +574,10 @@ export class ChatWidgetComponent implements OnInit {
       if (!this.preview) this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.nextNode], this.chatElements[this.nextNode].data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.nextNode], 'received');
       this.currentNode = this.nextNode;
+      this.isBotLoading = false;
       if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
         this.nextNodeElement();
+        this.isBotLoading = false;
         setTimeout(() => this.proceedNext(), 3000)
       };
     } else if (this.fallBackNode) {
@@ -582,8 +586,10 @@ export class ChatWidgetComponent implements OnInit {
       if (!this.preview) this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.nextNode], this.chatElements[this.nextNode].data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, this.chatElements[this.nextNode], 'received');
       this.currentNode = this.nextNode;
+      this.isBotLoading = false;
       if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
         this.nextNodeElement();
+        this.isBotLoading = true;
         setTimeout(() => this.proceedNext(), 3000)
       };
     } else if (!this.nextNode) {
@@ -598,6 +604,7 @@ export class ChatWidgetComponent implements OnInit {
       }
       this.firebaseService.sendMessage(this.clientFirebaseId, connectToAgent, connectToAgent.data.label, this.firebaseId, 'USER_CONNECTING', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, connectToAgent, 'received');
+      this.isBotLoading = false;
       var customlabel;
       if (this.operator.onlineStatus === 'online') {
         customlabel = this.operator.onlineStatusMessage

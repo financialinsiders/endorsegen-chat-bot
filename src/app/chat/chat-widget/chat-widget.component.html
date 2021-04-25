@@ -31,7 +31,7 @@
             <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
         </div>
         <div class="chat-box-main" *ngIf="!this.historyMode">
-            <div class="text-left pl-2 pb-3 text-muted" *ngIf="isTyping">
+            <div class="text-left pl-2 pb-3 text-muted" *ngIf="isTyping || isBotLoading">
                 <chat-avatar [image]="operator.avatar" class="chat-message-from-avatar">
                 </chat-avatar>
                 <small class="pl-1"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/typing_indicator.gif" style="width: 25px;"></small>
