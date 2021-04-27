@@ -107,6 +107,8 @@ export class ChatWidgetComponent implements OnInit {
   isTyping: any;
   showWelcomeMessageBox: boolean = true;
   isBotLoading: boolean = false;
+  lastLiveMessage: any;
+  agentProfileImage: any;
   public get visible() {
     return this._visible
   }
@@ -180,6 +182,7 @@ export class ChatWidgetComponent implements OnInit {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.liveAgentName = this.agentData['agentName'];
+        this.agentProfileImage = this.agentData['agentProfileImage'];
         if (this.endorserId) {
           this.adminService.getEndorserProfileData('518').subscribe(userData => {
             this.endorserData = userData['data'];
@@ -247,6 +250,7 @@ export class ChatWidgetComponent implements OnInit {
               }
               if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                 this.agentLive = true;
+                this.lastLiveMessage = lastMessage.message;
                 this.operator.name = this.liveAgentName;
                 this.currentNode = '999';
                 this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
@@ -313,6 +317,7 @@ export class ChatWidgetComponent implements OnInit {
                 }
                 if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                   this.agentLive = true;
+                  this.lastLiveMessage = lastMessage.message;
                   this.operator.name = this.liveAgentName;
                   this.currentNode = '999';
                   this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
@@ -416,6 +421,7 @@ export class ChatWidgetComponent implements OnInit {
                       }
                       if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                         this.agentLive = true;
+                        this.lastLiveMessage = lastMessage.message;
                         this.operator.name = this.liveAgentName;
                         this.currentNode = '999';
                         this.addMessage(this.operator, { data: { label: 'lastMessage.message' }, live: true }, 'received');

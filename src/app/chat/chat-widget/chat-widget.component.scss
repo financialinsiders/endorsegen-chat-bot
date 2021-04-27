@@ -21,18 +21,22 @@
         cursor: pointer;
     }
     .welcome-message-box {
-        border: 1px solid #80808070;
-        box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
-        border-radius: 10px;
+        .close-button {
+            position: absolute;
+            right: -10px;
+            top: -15px;
+        }
+        .welcome-message-container {
+            border: 1px solid #80808070;
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+            border-radius: 10px;
+        }
         display: inline-block;
         margin-right: 50px;
          ::ng-deep {
             p {
                 margin: 0;
             }
-        }
-        .welcome-message {
-            padding: 0 10px 10px;
         }
         button {
             padding: 0px 5px;
@@ -124,6 +128,10 @@
         filter: invert(100%);
         cursor: pointer;
     }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .operator-status span {
@@ -409,4 +417,56 @@ Sent message style
             justify-content: center;
         }
     }
+}
+
+.indicator {
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    .circle {
+        background: #1976d2;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        &::before {
+            background-color: #1976d2;
+            content: "";
+            display: table;
+            border-radius: 50%;
+            position: absolute;
+            @extend .pulse;
+        }
+    }
+}
+
+.pulse {
+    $dim: 7px;
+    $mult: 4;
+    @keyframes pulse {
+        0% {
+            opacity: 1;
+            width: $dim;
+            height: $dim;
+            left: 0;
+            top: 0;
+        }
+        95% {
+            opacity: 0.1;
+            left: -(($dim * $mult) - $dim)/2;
+            top: -(($dim * $mult) - $dim)/2;
+            width: $dim * $mult;
+            height: $dim * $mult;
+        }
+        100% {
+            opacity: 0;
+            width: $dim;
+            height: $dim;
+            left: 0;
+            top: 0;
+        }
+    }
+    animation-name: pulse;
+    animation-duration: .9s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
 }
