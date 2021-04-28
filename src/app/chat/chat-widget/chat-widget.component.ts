@@ -109,6 +109,7 @@ export class ChatWidgetComponent implements OnInit {
   isBotLoading: boolean = false;
   lastLiveMessage: any;
   agentProfileImage: any;
+  hideInputFeild: boolean;
   public get visible() {
     return this._visible
   }
@@ -149,6 +150,11 @@ export class ChatWidgetComponent implements OnInit {
     /* for (let [key, value] of this.customerVariables) {
       element.clabel = element.data.label.replace(key, value);
     } */
+    if(element.class === 'appoinments' || element.class === 'video' || element.class === 'image'  || element.class === 'videoRecording' || element.class === 'socialSharing' || element.class === 'emailSharing' || element.class === 'textEditor' || element.class === 'multiChoice') {
+      this.hideInputFeild = true;
+    } else {
+      this.hideInputFeild = false;
+    }
     this.messages.unshift({
       from,
       element,

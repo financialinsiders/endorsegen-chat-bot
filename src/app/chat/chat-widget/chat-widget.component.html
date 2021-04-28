@@ -130,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <div class="chat-box-footer" *ngIf="!this.historyMode">
+        <div class="chat-box-footer" *ngIf="!this.historyMode && !hideInputFeild">
             <chat-input (send)="sendMessage($event)" (type)="typing($event)" (dismiss)="toggleChat()" [focus]="focus"></chat-input>
         </div>
     </div>
