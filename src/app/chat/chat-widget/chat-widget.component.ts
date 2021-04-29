@@ -144,13 +144,13 @@ export class ChatWidgetComponent implements OnInit {
   }
 
   public messages = []
-
+  public suggestionList = [];
   constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore, private ipService: IpService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     /* for (let [key, value] of this.customerVariables) {
       element.clabel = element.data.label.replace(key, value);
     } */
-    if(element.class === 'appoinments' || element.class === 'video' || element.class === 'image'  || element.class === 'videoRecording' || element.class === 'socialSharing' || element.class === 'emailSharing' || element.class === 'textEditor' || element.class === 'multiChoice') {
+    if (element.class === 'appoinments' || element.class === 'suggestion' || element.class === 'video' || element.class === 'image' || element.class === 'videoRecording' || element.class === 'socialSharing' || element.class === 'emailSharing' || element.class === 'textEditor' || element.class === 'multiChoice') {
       this.hideInputFeild = true;
     } else {
       this.hideInputFeild = false;
@@ -180,6 +180,21 @@ export class ChatWidgetComponent implements OnInit {
   }
   public closeWelcomeBox() {
     this.showWelcomeMessageBox = false;
+  }
+  public suggestionSelect() {
+    this.messages[0].hide = true;
+    this.sendMessage({message: this.suggestionList.join(', ')});
+  }
+  public onSuggestionSelect(choice) {
+    if (this.suggestionList.length === 0 || this.suggestionList.indexOf(choice) === -1) {
+      this.suggestionList.push(choice)
+    } else {
+      const index = this.suggestionList.indexOf(choice);
+      if (index > -1) {
+        this.suggestionList.splice(index, 1);
+      }
+    }
+    console.log(this.suggestionList);
   }
   ngOnInit() {
     this.visible = this.expand;
@@ -333,7 +348,7 @@ export class ChatWidgetComponent implements OnInit {
             });
             setTimeout(() => {
               this.addMessage(this.operator, this.firstElement, 'received');
-              if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
+              if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "textQuestion" && this.chatElements[this.currentNode].class !== "suggestion" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
                 this.nextNodeElement();
                 setTimeout(() => this.proceedNext(), 3000)
               };
@@ -439,7 +454,7 @@ export class ChatWidgetComponent implements OnInit {
               });
               setTimeout(() => {
                 this.addMessage(this.operator, this.firstElement, 'received');
-                if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
+                if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "textQuestion" && this.chatElements[this.currentNode].class !== "suggestion" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
                   this.nextNodeElement();
                   setTimeout(() => this.proceedNext(), 3000)
                 };
@@ -467,7 +482,7 @@ export class ChatWidgetComponent implements OnInit {
         this.firstElement = this.transformBotData(this.chatElements);
         setTimeout(() => {
           this.addMessage(this.operator, this.firstElement, 'received');
-          if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
+          if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "textQuestion" && this.chatElements[this.currentNode].class !== "suggestion" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
             this.nextNodeElement();
             setTimeout(() => this.proceedNext(), 3000)
           };
@@ -593,7 +608,7 @@ export class ChatWidgetComponent implements OnInit {
       this.addMessage(this.operator, this.chatElements[this.nextNode], 'received');
       this.currentNode = this.nextNode;
       this.isBotLoading = false;
-      if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
+      if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "textQuestion" && this.chatElements[this.currentNode].class !== "suggestion" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
         this.nextNodeElement();
         this.isBotLoading = false;
         setTimeout(() => this.proceedNext(), 3000)
@@ -605,7 +620,7 @@ export class ChatWidgetComponent implements OnInit {
       this.addMessage(this.operator, this.chatElements[this.nextNode], 'received');
       this.currentNode = this.nextNode;
       this.isBotLoading = false;
-      if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
+      if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "textQuestion" && this.chatElements[this.currentNode].class !== "suggestion" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
         this.nextNodeElement();
         this.isBotLoading = true;
         setTimeout(() => this.proceedNext(), 3000)

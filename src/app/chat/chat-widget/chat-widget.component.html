@@ -58,7 +58,14 @@
                             </ng-container>
                         </div>
 
-
+                        <div *ngIf="message.element.class === 'suggestion' && !message.hide" class="multi-choice-container">
+                            <ng-container *ngFor="let choice of message.element.data.choices">
+                                <div class="d-block checkbox-suggestion">
+                                    <input type="checkbox" [checked]="choice.checked" (change)="onSuggestionSelect(choice)"> {{choice}}
+                                </div>
+                            </ng-container>
+                            <button class="btn btn-outline-success mt-1" (click)="suggestionSelect()">Continue</button>
+                        </div>
                         <div *ngIf="message.element.class === 'appoinments'" class="appoinment-container">
                             <app-cronofy [instanceId]="instanceId" [agentData]="agentData" [appoinmentData]="message.element.data" [clientFirebaseId]="clientFirebaseId" [email]="email" [botId]="botId" [name]="name" [leadId]="leadId" [cSessionId]="cSessionId" [firebaseId]="firebaseId">
                             </app-cronofy>
