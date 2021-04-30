@@ -110,6 +110,8 @@ export class ChatWidgetComponent implements OnInit {
   lastLiveMessage: any;
   agentProfileImage: any;
   hideInputFeild: boolean;
+  notificationSettings: any;
+  agentEmail: any;
   public get visible() {
     return this._visible
   }
@@ -183,7 +185,7 @@ export class ChatWidgetComponent implements OnInit {
   }
   public suggestionSelect() {
     this.messages[0].hide = true;
-    this.sendMessage({message: this.suggestionList.join(', ')});
+    this.sendMessage({ message: this.suggestionList.join(', ') });
   }
   public onSuggestionSelect(choice) {
     if (this.suggestionList.length === 0 || this.suggestionList.indexOf(choice) === -1) {
@@ -204,6 +206,8 @@ export class ChatWidgetComponent implements OnInit {
         this.agentData = data.data();
         this.liveAgentName = this.agentData['agentName'];
         this.agentProfileImage = this.agentData['agentProfileImage'];
+        this.notificationSettings = this.agentData['notificationSettings'];
+        this.agentEmail = this.agentData['email'];
         if (this.endorserId) {
           this.adminService.getEndorserProfileData('518').subscribe(userData => {
             this.endorserData = userData['data'];
@@ -222,7 +226,6 @@ export class ChatWidgetComponent implements OnInit {
             type: 'lead-user',
             newNotification: true
           });
-
 
           this.adminService.getFbId(this.instanceId).subscribe(data => {
             this.firebaseId = data['firebase_id'];
@@ -247,6 +250,30 @@ export class ChatWidgetComponent implements OnInit {
               var sessionMessage = data.val();
               var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
               this.messages = chatBackUp['message'];
+              if (this.notificationSettings.newLeadEmail) {
+                var historyView = '<div style="margin: 0 auto;width: 100%;"><div style="background: gainsboro;padding: 30px;border-radius: 10px;">';
+                this.messages.forEach(message => {
+                  if (message.type === "received") {
+                    historyView += '<div style="width: 50%;background: white;overflow: hidden;padding: 10px;border-radius: 10px;max-width: fit-content;margin: 10px;">' + message.element.data.label + '</div>'
+                  } else {
+                    historyView += '<div style="width: 100%;display: inline-block;"><div style="float:right;width:auto;background: #03a9f4;overflow: hidden;padding: 10px;border-radius: 10px;margin: 10px;color: white;">' + message.element.data.label + '</div></div>'
+                  }
+                });
+                historyView += '<a href="http://localhost:3000/#!/conversations?sessionId=' + this.cSessionId + '" type="button" style="margin: auto;display: block;padding: 10px;background: #ec4404f7;color: white;border-radius: 10px;border-color: transparent;width: 30%;text-align: center;text-decoration: none;">Replay to conversation</a></div></div>';
+                var requestParams = {
+                  "to": this.agentEmail,
+                  "subject": "You have got your leader visitor back to site",
+                  "template": "leadUser",
+                  "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
+                  "fromAddress": "notifications",
+                  "historyView": historyView,
+                  "bodyHeading": 'You have got your lead visitor back to the site!'
+                }
+
+                this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data=> {
+                  console.log(data);
+                });
+              }
               this.currentNode = chatBackUp['position'];
               var outputConnection = this.chatElements[this.currentNode].outputs.output_1.connections;
               if (this.chatElements[this.currentNode].class !== 'multiChoice' && outputConnection && outputConnection.length > 0) {
@@ -271,6 +298,7 @@ export class ChatWidgetComponent implements OnInit {
               }
               if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                 this.agentLive = true;
+                console.log(lastMessage);
                 this.lastLiveMessage = lastMessage.message;
                 this.operator.name = this.liveAgentName;
                 this.currentNode = '999';
@@ -422,6 +450,16 @@ export class ChatWidgetComponent implements OnInit {
                 this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
                   this.cSessionId = data.key;
+                  if (this.notificationSettings.anonymousLeadEmail) {
+                    var requestParams = {
+                      "to": this.agentEmail,
+                      "subject": "You have got a new client",
+                      "template": "newUser",
+                      "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
+                      "fromAddress": "notifications"
+                    }
+                    this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data=> {});
+                  }
                   this.userService.setUserSession({
                     clientFirebaseId: this.clientFirebaseId,
                     cSessionId: this.cSessionId,

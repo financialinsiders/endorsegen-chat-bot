@@ -8,6 +8,7 @@ enum APIEndPointUrls {
   retrieveChatBot = 'ic_retrieve_chat_bot',
   getAgentProfile = 'ic_get_agent_profile',
   getElementID = 'https://prod-node-api.herokuapp.com/v1/cronofy/getElementID',
+  emailSendTemplate = 'https://prod-node-api.herokuapp.com/v1/email/sendTemplate',
   getAvailableSlots = 'https://prod-node-api.herokuapp.com/v1/calendar/getAvailableSlots/',
   appointmentMeeting = 'ic_appointment_meeting',
   bookSlot = 'https://prod-node-api.herokuapp.com/v1/calendar/bookSlot',
@@ -81,4 +82,10 @@ export class AdminService {
     params = params.append('endorser_id', endorserId);
     return this.http.get(APIEndPointUrls.adminAjax, { params: params });
   }
+  sendEmailNotificationWithTemplate(data) {
+    var headers = new HttpHeaders(
+      { 'Content-Type': 'application/json' }
+    );
+    return this.http.post(APIEndPointUrls.emailSendTemplate, data, { headers: headers });
+}
 }
