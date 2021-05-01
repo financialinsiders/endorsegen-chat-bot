@@ -118,7 +118,7 @@ export class CronofyComponent implements OnInit {
         "participant_name": this.name,
         "meeting_url": 'http://localhost:4200/waiting-room/' + data.id
       }
-      this.adminService.bookSlot(requestBosy);
+      this.adminService.bookSlot(requestBosy).subscribe(data=>{});
     });
     this.meetingBooked = { startDate: this.startDate, endTime: this.endTime, startTime: this.startTime };
     //updateAppointment(this.meetingBooked);
