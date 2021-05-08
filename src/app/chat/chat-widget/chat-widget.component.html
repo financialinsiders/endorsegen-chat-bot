@@ -4,22 +4,23 @@
             <div class="">
                 <div class="operator-status">
                     <span *ngIf="operator.status === 'online'">
-            {{operator.status}}
-            <span class="operator-status-online">●</span>
-
+                        {{operator.status}}
+                        <span class="operator-status-online">●</span>
                     </span>
-                    <a (click)="historyChat()" *ngIf="existUserSession"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png" class="history-icon ml-1" width="20px" height="20px" /></a>
+                    <a (click)="historyChat()" *ngIf="existUserSession && !preview"><img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/history-icon.png" class="history-icon ml-1" width="20px" height="20px" /></a>
                     <button class="chat-button-header" (click)="toggleChat()">✕</button>
 
                 </div>
                 <div class="operator-name-avatar">
                     <chat-avatar [image]="operator.avatar"></chat-avatar>
-                    <p class="operator-name">
-                        {{operator.name}}
+                    <div class="">
+                        <p class="operator-name">
+                            {{operator.name}}
 
-                    </p><small class="d-block">{{operator.title}}</small>
+                        </p><small class="d-block">{{operator.title}}</small>
+                    </div>
+
                 </div>
-
             </div>
         </div>
         <div *ngIf="session">

@@ -324,9 +324,6 @@ Sent message style
     .chat-button {
         display: block;
     }
-    .chat-button-header {
-        display: none;
-    }
     .chat-box {
         top: auto;
         left: auto;
@@ -421,6 +418,11 @@ Sent message style
         .operator-name-avatar {
             display: flex;
             justify-content: center;
+             ::ng-deep {
+                img {
+                    margin-top: 7px;
+                }
+            }
         }
     }
 }
