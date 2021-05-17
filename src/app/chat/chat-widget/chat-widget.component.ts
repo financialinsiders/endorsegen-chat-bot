@@ -26,9 +26,10 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public theme: 'blue' | 'grey' | 'red' = 'blue';
   @Input() public botId;
   @Input() public instanceId;
-  @Input() endorserId: any;
+  @Input() endorserId: string;
   @Input() expand: boolean;
   @Input() preview: boolean;
+  @Input() public liveBot;
   public fullScreen: boolean;
   public _visible = false;
   public firebaseId: any
@@ -112,6 +113,7 @@ export class ChatWidgetComponent implements OnInit {
   hideInputFeild: boolean;
   notificationSettings: any;
   agentEmail: any;
+  messagesResponse: any;
   public get visible() {
     return this._visible
   }
@@ -176,9 +178,12 @@ export class ChatWidgetComponent implements OnInit {
     this.focus.next(true);
   }
   public typing(flag) {
-    this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
-      "userTyping": flag
-    });
+    if (!this.liveBot) {
+      this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+        "userTyping": flag
+      });
+    }
+
   }
   public closeWelcomeBox() {
     this.showWelcomeMessageBox = false;
@@ -196,12 +201,11 @@ export class ChatWidgetComponent implements OnInit {
         this.suggestionList.splice(index, 1);
       }
     }
-    console.log(this.suggestionList);
   }
   ngOnInit() {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
-    if (!this.preview) {
+    if (!this.preview && !this.liveBot) {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.liveAgentName = this.agentData['agentName'];
@@ -270,7 +274,7 @@ export class ChatWidgetComponent implements OnInit {
                   "bodyHeading": 'You have got your lead visitor back to the site!'
                 }
 
-                this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data=> {
+                this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data => {
                   console.log(data);
                 });
               }
@@ -298,7 +302,6 @@ export class ChatWidgetComponent implements OnInit {
               }
               if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
                 this.agentLive = true;
-                console.log(lastMessage);
                 this.lastLiveMessage = lastMessage.message;
                 this.operator.name = this.liveAgentName;
                 this.currentNode = '999';
@@ -458,7 +461,7 @@ export class ChatWidgetComponent implements OnInit {
                       "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
                       "fromAddress": "notifications"
                     }
-                    this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data=> {});
+                    this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data => { });
                   }
                   this.userService.setUserSession({
                     clientFirebaseId: this.clientFirebaseId,
@@ -504,7 +507,7 @@ export class ChatWidgetComponent implements OnInit {
         }
 
       });
-    } else {
+    } else if (this.preview && !this.liveBot) {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
@@ -525,6 +528,38 @@ export class ChatWidgetComponent implements OnInit {
             setTimeout(() => this.proceedNext(), 3000)
           };
         }, 1500);
+      });
+    } else {
+      this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
+        this.adminService.getFbId(this.instanceId).subscribe(agentdata => {
+          this.firebaseId = agentdata['firebase_id'];
+          this.agentData = data.data();
+          this.operator.title = this.agentData.credential;
+          this.operator.name = this.agentData.agentName;
+          this.angularFireDatabase.object(`endorser-messages/${this.firebaseId}/${this.endorserId}`).valueChanges().subscribe(data => {
+            if (data) {
+              this.messagesResponse = Object.values(data);
+              this.messagesResponse.forEach(message => {
+                this.addMessage(this.operator, { data: { label: message.message }, live: true }, this.firebaseId === message.senderId ? 'received' : 'sent');
+              });
+            }
+
+
+          });
+          setTimeout(() => {
+            this.addMessage(this.operator, { data: { label: 'Hi, How can I help you?' }, live: true }, 'received');
+            var senderMessage = {
+              chatId: this.firebaseId,
+              message: 'Hi, How can I help you?',
+              conversationId: this.endorserId,
+              senderId: this.firebaseId,
+              status: 'CONV_OPEN',
+              timestamp: new Date().getTime()
+            }
+            this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
+          }, 1500);
+        });
+
       });
     }
 
@@ -558,7 +593,9 @@ export class ChatWidgetComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
   public sendMessage({ message }) {
-    this.isBotLoading = true;
+    if (!this.liveBot) {
+      this.isBotLoading = true;
+    }
     if (message.trim() === '') {
       return
     }
@@ -621,10 +658,24 @@ export class ChatWidgetComponent implements OnInit {
         timestamp: new Date().getTime()
       });
     }
+    if (this.liveBot) {
+      var senderMessage = {
+        chatId: this.endorserId,
+        message: message,
+        conversationId: this.firebaseId,
+        senderId: this.endorserId,
+        status: 'CONV_OPEN',
+        timestamp: new Date().getTime()
+      }
+      this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
+      this.addMessage(this.client, { data: { label: message } }, 'sent');
 
-    this.addMessage(this.client, { data: { label: message } }, 'sent');
-    this.nextNodeElement();
-    setTimeout(() => this.proceedNext(), 1000)
+    } else {
+      this.addMessage(this.client, { data: { label: message } }, 'sent');
+      this.nextNodeElement();
+      setTimeout(() => this.proceedNext(), 1000)
+    }
+
   }
   public createLead() {
     var requestData = {
@@ -813,7 +864,6 @@ export class ChatWidgetComponent implements OnInit {
       if (data && data['otSessionId'] && data['token']) {
         this.sessionId = data['otSessionId'];
         this.token = data['token'];
-        console.log(this.sessionId, this.token);
         this.opentokService.initSession(this.sessionId).then((session: OT.Session) => {
           this.session = session;
           this.session.on('streamCreated', (event) => {
