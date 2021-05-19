@@ -547,16 +547,31 @@ export class ChatWidgetComponent implements OnInit {
 
           });
           setTimeout(() => {
-            this.addMessage(this.operator, { data: { label: 'Hi, How can I help you?' }, live: true }, 'received');
             var senderMessage = {
               chatId: this.firebaseId,
               message: 'Hi, How can I help you?',
               conversationId: this.endorserId,
               senderId: this.firebaseId,
               status: 'CONV_OPEN',
-              timestamp: new Date().getTime()
+              timestamp: new Date().getTime(),
+              type: 'BOT',
             }
+
             this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
+            this.db.collection('/endorsers').doc(this.endorserId.toString()).get().subscribe((data) => {
+              var endorserData = data.data();
+              var endorserSession = {
+                username: endorserData['name'],
+                email: endorserData['email'],
+                phone: endorserData['phone'],
+                address: endorserData['address'],
+                timestamp: new Date().getTime(),
+                lastMessage: 'Hi, How can I help you?',
+                endorserId: this.endorserId
+              }
+              this.angularFireDatabase.database.ref(`endorser-session/${this.firebaseId}/${this.endorserId}`).update(endorserSession);
+            })
+
           }, 1500);
         });
 
@@ -659,15 +674,21 @@ export class ChatWidgetComponent implements OnInit {
       });
     }
     if (this.liveBot) {
-      var senderMessage = {
+      var senderEndMessage = {
         chatId: this.endorserId,
         message: message,
         conversationId: this.firebaseId,
         senderId: this.endorserId,
         status: 'CONV_OPEN',
-        timestamp: new Date().getTime()
+        timestamp: new Date().getTime(),
+        type: 'USER',
       }
-      this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
+      this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderEndMessage);
+
+      this.angularFireDatabase.database.ref(`endorser-session/${this.firebaseId}/${this.endorserId}`).update({
+        timestamp: new Date().getTime(),
+        lastMessage: message,
+      });
       this.addMessage(this.client, { data: { label: message } }, 'sent');
 
     } else {
