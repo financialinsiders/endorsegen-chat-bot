@@ -1,5 +1,5 @@
 <div class="wrapper {{theme}}" [ngClass]="{'fullscreen': fullScreen}">
-    <div class="chat-box" *ngIf="visible" [@fadeInOut]="visible" [ngStyle]="{'background-image': 'url(' + appearance.fullscreenbgimage + ')'}">
+    <div class="chat-box" *ngIf="visible" [@fadeInOut]="visible" [ngStyle]="{'background-image': 'url(' + backgroundImage + ')'}">
         <div class="chat-box-header">
             <div class="">
                 <div class="operator-status">
@@ -27,9 +27,9 @@
             <app-publisher [session]="session"></app-publisher>
             <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
         </div>
-        <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block" [ngStyle]="{'color': appearance.fullscreencolor}">
-            <h2 [innerHTML]="appearance.fullscreenheading"></h2>
-            <h6 [innerHTML]="appearance.fullscreensubheading"></h6>
+        <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block" [ngStyle]="{'color': colorTheme}">
+            <h2 [innerHTML]="headline"></h2>
+            <h6 [innerHTML]="subHeadline"></h6>
         </div>
         <div class="chat-box-main" *ngIf="!this.historyMode">
             <div class="text-left pl-2 pb-3 text-muted" *ngIf="isTyping || isBotLoading">
