@@ -4,8 +4,6 @@ import { CryptoStorageService } from '../services/crypto-storage.service';
 
 enum APIEndPointUrls {
   adminAjax = 'https://financialinsiders.ca/wp-admin/admin-ajax.php',
-  getFbId = 'ic_get_fb_id',
-  retrieveChatBot = 'ic_retrieve_chat_bot',
   getAgentProfile = 'ic_get_agent_profile',
   getElementID = 'https://prod-node-api.herokuapp.com/v1/cronofy/getElementID',
   emailSendTemplate = 'https://prod-node-api.herokuapp.com/v1/email/sendTemplate',
@@ -17,28 +15,8 @@ enum APIEndPointUrls {
 }
 @Injectable()
 export class AdminService {
-  constructor(private http: HttpClient, private cryptoService: CryptoStorageService) { }
+  constructor(private http: HttpClient) { }
 
-  getFbId(userId) {
-    let params = new HttpParams();
-    params = params.append('action', APIEndPointUrls.getFbId);
-    params = params.append('user_id', userId);
-    return this.http.get(APIEndPointUrls.adminAjax, { params: params });
-  }
-
-  retrieveChatBot(chat, agentID) {
-    let params = new HttpParams();
-    params = params.append('action', APIEndPointUrls.retrieveChatBot);
-    params = params.append('chat', chat);
-    params = params.append('agentID', agentID);
-    return this.http.get(APIEndPointUrls.adminAjax, { params: params });
-  }
-  getAgentProfile(userId) {
-    let params = new HttpParams();
-    params = params.append('action', APIEndPointUrls.getAgentProfile);
-    params = params.append('agent_id', userId);
-    return this.http.get(APIEndPointUrls.adminAjax, { params: params });
-  }
   getElementID(agentID) {
     var headers = new HttpHeaders(
       { 'Content-Type': 'application/json' }
@@ -75,12 +53,6 @@ export class AdminService {
     params = params.append('action', APIEndPointUrls.newLead);
 
     return this.http.post(APIEndPointUrls.adminAjax, data, { headers: headers, params: params });
-  }
-  getEndorserProfileData(endorserId) {
-    let params = new HttpParams();
-    params = params.append('action', APIEndPointUrls.endorserProfile);
-    params = params.append('endorser_id', endorserId);
-    return this.http.get(APIEndPointUrls.adminAjax, { params: params });
   }
   sendEmailNotificationWithTemplate(data) {
     var headers = new HttpHeaders(

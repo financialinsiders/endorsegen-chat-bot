@@ -218,12 +218,7 @@ export class ChatWidgetComponent implements OnInit {
         this.notificationSettings = this.agentData['notificationSettings'];
         this.agentEmail = this.agentData['email'];
         if (this.endorserId) {
-          this.adminService.getEndorserProfileData('518').subscribe(userData => {
-            this.endorserData = userData['data'];
-          })
-          this.introductionService.createIntroductionSession({ 'endorser_id': this.endorserId }).subscribe((response: any) => {
-            this.introSessionID = response.IntroSessionID;
-          });
+          //endorser logic
         }
         if (this.existUserSession && (this.existUserSession.botId === this.botId || this.existUserSession.botId !== this.botId && this.existUserSession.chatStatus)) {
           this.botId = this.existUserSession.botId;
@@ -811,11 +806,6 @@ export class ChatWidgetComponent implements OnInit {
       botId: this.botId,
       chatStatus: true
     });
-    if (this.botId !== message['botId']) {
-      this.adminService.retrieveChatBot(message['botId'], this.instanceId).subscribe(data => {
-        this.chatElements = data['data']['elements'];
-      });
-    }
   }
   public multiChoiceSelect(choice, index, totalLength) {
     this.fallBackNode = this.chatElements[this.currentNode].outputs[`output_${totalLength + 1}`].connections;
