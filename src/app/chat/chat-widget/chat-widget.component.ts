@@ -118,6 +118,7 @@ export class ChatWidgetComponent implements OnInit {
   headline: any;
   subHeadline: any;
   colorTheme: any;
+  botData: any;
   public get visible() {
     return this._visible
   }
@@ -237,20 +238,8 @@ export class ChatWidgetComponent implements OnInit {
             this.operator.offlineStatusMessage = data['offlineStatusMessage'];
             this.operator.busyStatusMessage = data['busyStatusMessage'];
           });
-          this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
-          this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
-          this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
-          this.operator.name = this.botAliseName;
-          this.operator.title = this.botTitle;
-          this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
-          this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
-          this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
-          this.backgroundImage = this.agentData['bots'][this.botId]['backgroundImage'];
-          this.headline = this.agentData['bots'][this.botId]['headline'];
-          this.subHeadline = this.agentData['bots'][this.botId]['subHeadline'];
-          this.colorTheme = this.agentData['bots'][this.botId]['colorTheme'];
-          this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
-          this.firstElement = this.transformBotData(this.chatElements);
+          this.getBotData();
+
           this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}`).query.once("value").then(data => {
             var sessionMessage = data.val();
             var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
@@ -318,20 +307,8 @@ export class ChatWidgetComponent implements OnInit {
             this.operator.offlineStatusMessage = data['offlineStatusMessage'];
             this.operator.busyStatusMessage = data['busyStatusMessage'];
           });
-          this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
-          this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
-          this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
-          this.operator.name = this.botAliseName;
-          this.operator.title = this.botTitle;
-          this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
-          this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
-          this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
-          this.backgroundImage = this.agentData['bots'][this.botId]['backgroundImage'];
-          this.headline = this.agentData['bots'][this.botId]['headline'];
-          this.subHeadline = this.agentData['bots'][this.botId]['subHeadline'];
-          this.colorTheme = this.agentData['bots'][this.botId]['colorTheme'];
-          this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
-          this.firstElement = this.transformBotData(this.chatElements);
+          this.getBotData();
+
           this.clientFirebaseId = this.existUserSession.clientFirebaseId;
           this.initializeSession(this.clientFirebaseId);
           var sessionInfo = {
@@ -399,20 +376,8 @@ export class ChatWidgetComponent implements OnInit {
             this.operator.offlineStatusMessage = data['offlineStatusMessage'];
             this.operator.busyStatusMessage = data['busyStatusMessage'];
           });
-          this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
-          this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
-          this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
-          this.operator.name = this.botAliseName;
-          this.operator.title = this.botTitle;
-          this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
-          this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
-          this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
-          this.backgroundImage = this.agentData['bots'][this.botId]['backgroundImage'];
-          this.headline = this.agentData['bots'][this.botId]['headline'];
-          this.subHeadline = this.agentData['bots'][this.botId]['subHeadline'];
-          this.colorTheme = this.agentData['bots'][this.botId]['colorTheme'];
-          this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
-          this.firstElement = this.transformBotData(this.chatElements);
+          this.getBotData();
+
           //this.setAppearance(data['data']['appearance']);
 
           this.ipService.getIpDetails().subscribe(ipData => {
@@ -512,17 +477,17 @@ export class ChatWidgetComponent implements OnInit {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
-        this.fullScreen = this.agentData['bots'][this.botId]['isFullScreenBot'];
-        this.botAliseName = this.agentData['bots'][this.botId]['botAliseName'];
-        this.welcomeMessage = this.agentData['bots'][this.botId]['welcomeMessage'];
-        this.welcomeButtonText = this.agentData['bots'][this.botId]['welcomeButtonText'];
-        this.welcomeVideoUrl = this.agentData['bots'][this.botId]['welcomeVideoUrl'];
-        this.chatElements = this.agentData['bots'][this.botId]['botData']['drawflow']['Home']['data'];
-        this.botTitle = this.agentData['bots'][this.botId]['botTitle'];
-        this.backgroundImage = this.agentData['bots'][this.botId]['backgroundImage'];
-        this.headline = this.agentData['bots'][this.botId]['headline'];
-        this.subHeadline = this.agentData['bots'][this.botId]['subHeadline'];
-        this.colorTheme = this.agentData['bots'][this.botId]['colorTheme'];
+        this.fullScreen = this.botData['isFullScreenBot'];
+        this.botAliseName = this.botData['botAliseName'];
+        this.welcomeMessage = this.botData['welcomeMessage'];
+        this.welcomeButtonText = this.botData['welcomeButtonText'];
+        this.welcomeVideoUrl = this.botData['welcomeVideoUrl'];
+        this.chatElements = this.botData['botData']['drawflow']['Home']['data'];
+        this.botTitle = this.botData['botTitle'];
+        this.backgroundImage = this.botData['backgroundImage'];
+        this.headline = this.botData['headline'];
+        this.subHeadline = this.botData['subHeadline'];
+        this.colorTheme = this.botData['colorTheme'];
         this.operator.name = this.botAliseName;
         this.operator.title = this.botTitle;
         this.firstElement = this.transformBotData(this.chatElements);
@@ -599,6 +564,25 @@ export class ChatWidgetComponent implements OnInit {
       cSessionId: this.cSessionId,
       botId: this.botId,
       chatStatus: this.visible
+    });
+  }
+  getBotData() {
+    this.db.collection('/bots').doc(this.botId.toString()).get().subscribe((data) => {
+      this.botData = data.data();
+      this.fullScreen = this.botData['isFullScreenBot'];
+      this.botAliseName = this.botData['botAliseName'];
+      this.botTitle = this.botData['botTitle'];
+      this.operator.name = this.botAliseName;
+      this.operator.title = this.botTitle;
+      this.welcomeMessage = this.botData['welcomeMessage'];
+      this.welcomeButtonText = this.botData['welcomeButtonText'];
+      this.welcomeVideoUrl = this.botData['welcomeVideoUrl'];
+      this.backgroundImage = this.botData['backgroundImage'];
+      this.headline = this.botData['headline'];
+      this.subHeadline = this.botData['subHeadline'];
+      this.colorTheme = this.botData['colorTheme'];
+      this.chatElements = this.botData['botData']['drawflow']['Home']['data'];
+      this.firstElement = this.transformBotData(this.chatElements);
     });
   }
   public historyChat() {
