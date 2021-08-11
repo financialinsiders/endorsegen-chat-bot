@@ -454,7 +454,7 @@ export class ChatWidgetComponent implements OnInit {
                       this.lastLiveMessage = lastMessage.message;
                       this.operator.name = this.liveAgentName;
                       this.currentNode = '999';
-                      this.addMessage(this.operator, { data: { label: 'lastMessage.message' }, live: true }, 'received');
+                      this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
                     }
                   }
 
