@@ -104,6 +104,7 @@ export class ChatWidgetComponent implements OnInit {
   connectingToAgent: boolean;
   botAliseName: any;
   botTitle: string;
+  botIcon: string;
   liveAgentName: any;
   isTyping: any;
   showWelcomeMessageBox: boolean = true;
@@ -324,7 +325,8 @@ export class ChatWidgetComponent implements OnInit {
             bot_type: 'vm.botInfo.chat_type',
             isNewMsg: true,
             isNewUser: true,
-            botAliseName: this.botAliseName
+            botAliseName: this.botAliseName,
+            botIcon: this.botIcon
           };
           this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
@@ -416,7 +418,8 @@ export class ChatWidgetComponent implements OnInit {
                 bot_type: 'vm.botInfo.chat_type',
                 isNewMsg: true,
                 isNewUser: true,
-                botAliseName: this.botAliseName
+                botAliseName: this.botAliseName,
+                botIcon: this.botIcon
               };
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
@@ -479,6 +482,7 @@ export class ChatWidgetComponent implements OnInit {
         this.operator.name = this.agentData['agentName'];
         this.fullScreen = this.botData['isFullScreenBot'];
         this.botAliseName = this.botData['botAliseName'];
+        this.botIcon = this.botData['botIcon'];
         this.welcomeMessage = this.botData['welcomeMessage'];
         this.welcomeButtonText = this.botData['welcomeButtonText'];
         this.welcomeVideoUrl = this.botData['welcomeVideoUrl'];
@@ -488,8 +492,9 @@ export class ChatWidgetComponent implements OnInit {
         this.headline = this.botData['headline'];
         this.subHeadline = this.botData['subHeadline'];
         this.colorTheme = this.botData['colorTheme'];
-        this.operator.name = this.botAliseName;
+        if(this.botAliseName) this.operator.name = this.botAliseName;
         this.operator.title = this.botTitle;
+        this.operator.avatar = this.botIcon;
         this.firstElement = this.transformBotData(this.chatElements);
         setTimeout(() => {
           this.addMessage(this.operator, this.firstElement, 'received');
@@ -571,6 +576,7 @@ export class ChatWidgetComponent implements OnInit {
       this.botData = data.data();
       this.fullScreen = this.botData['isFullScreenBot'];
       this.botAliseName = this.botData['botAliseName'];
+      this.botIcon = this.botData['botIcon'];
       this.botTitle = this.botData['botTitle'];
       this.operator.name = this.botAliseName;
       this.operator.title = this.botTitle;
@@ -582,6 +588,7 @@ export class ChatWidgetComponent implements OnInit {
       this.subHeadline = this.botData['subHeadline'];
       this.colorTheme = this.botData['colorTheme'];
       this.chatElements = this.botData['botData']['drawflow']['Home']['data'];
+      this.operator.avatar = this.botIcon;
       this.firstElement = this.transformBotData(this.chatElements);
     });
   }
