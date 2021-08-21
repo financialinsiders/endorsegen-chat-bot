@@ -216,6 +216,7 @@ export class ChatWidgetComponent implements OnInit {
         this.agentData = data.data();
         this.firebaseId = this.agentData['firebaseId'];
         this.liveAgentName = this.agentData['agentName'];
+        this.liveAgentCredential = this.agentData['credential'];
         this.agentProfileImage = this.agentData['agentProfileImage'];
         this.notificationSettings = this.agentData['notificationSettings'];
         this.agentEmail = this.agentData['email'];
@@ -295,6 +296,7 @@ export class ChatWidgetComponent implements OnInit {
               this.agentLive = true;
               this.lastLiveMessage = lastMessage.message;
               this.operator.name = this.liveAgentName;
+              this.operator.title = this.liveAgentCredential;
               this.currentNode = '999';
               this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
 
@@ -352,6 +354,7 @@ export class ChatWidgetComponent implements OnInit {
                 this.agentLive = true;
                 this.lastLiveMessage = lastMessage.message;
                 this.operator.name = this.liveAgentName;
+                this.operator.title = this.liveAgentCredential;
                 this.currentNode = '999';
                 this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
 
@@ -456,6 +459,7 @@ export class ChatWidgetComponent implements OnInit {
                       this.agentLive = true;
                       this.lastLiveMessage = lastMessage.message;
                       this.operator.name = this.liveAgentName;
+                      this.operator.title = this.liveAgentCredential;
                       this.currentNode = '999';
                       this.addMessage(this.operator, { data: { label: lastMessage.message }, live: true }, 'received');
                     }
