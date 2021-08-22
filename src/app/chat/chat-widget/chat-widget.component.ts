@@ -53,6 +53,7 @@ export class ChatWidgetComponent implements OnInit {
   phone: any = this.cryptoService.getItem('phone');
   introSessionID: any;
   endorserData: any;
+  liveAgentCredential: string;
   appearance: any = {
     fullscreenbgimage: ''
   };
@@ -484,22 +485,8 @@ export class ChatWidgetComponent implements OnInit {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
-        this.fullScreen = this.botData['isFullScreenBot'];
-        this.botAliseName = this.botData['botAliseName'];
-        this.botIcon = this.botData['botIcon'];
-        this.welcomeMessage = this.botData['welcomeMessage'];
-        this.welcomeButtonText = this.botData['welcomeButtonText'];
-        this.welcomeVideoUrl = this.botData['welcomeVideoUrl'];
-        this.chatElements = this.botData['botData']['drawflow']['Home']['data'];
-        this.botTitle = this.botData['botTitle'];
-        this.backgroundImage = this.botData['backgroundImage'];
-        this.headline = this.botData['headline'];
-        this.subHeadline = this.botData['subHeadline'];
-        this.colorTheme = this.botData['colorTheme'];
         if(this.botAliseName) this.operator.name = this.botAliseName;
-        this.operator.title = this.botTitle;
-        this.operator.avatar = this.botIcon;
-        this.firstElement = this.transformBotData(this.chatElements);
+        this.getBotData();
         setTimeout(() => {
           this.addMessage(this.operator, this.firstElement, 'received');
           if (!this.chatElements[this.currentNode].data.skipQuestion && (this.chatElements[this.currentNode].class !== "name" && this.chatElements[this.currentNode].class !== "textQuestion" && this.chatElements[this.currentNode].class !== "suggestion" && this.chatElements[this.currentNode].class !== "email" && this.chatElements[this.currentNode].class !== "phone" && this.chatElements[this.currentNode].class !== "videoRecording" && this.chatElements[this.currentNode].class !== "socialSharing" && this.chatElements[this.currentNode].class !== "emailSharing" && this.chatElements[this.currentNode].class !== "appoinments" && this.chatElements[this.currentNode].class !== "multiChoice")) {
