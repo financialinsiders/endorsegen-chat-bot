@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, 
 import { AdminService } from '../../services/admin-service'
 import { Subject } from 'rxjs'
 import { fadeIn, fadeInOut } from '../animations'
-import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { FirebaseService } from 'app/services/firebase.service';
 import { UserService } from 'app/services/user.service';
 import { OpentokService } from 'app/services/opentok.service';
@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { CryptoStorageService } from 'app/services/crypto-storage.service';
 import { IntroductionService } from 'app/services/introduction.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { IpService } from 'app/services/ip.service';
 
 const rand = max => Math.floor(Math.random() * max)
