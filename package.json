@@ -27,7 +27,7 @@
     "@angular/platform-browser-dynamic": "11.0.9",
     "@angular/router": "11.0.9",
     "@kolkov/angular-editor": "^1.1.4",
-    "@opentok/client": "^2.16.0",
+    "@opentok/client": "^2.20.3",
     "@types/node": "^12.12.62",
     "@types/video.js": "^7.3.11",
     "@webcomponents/custom-elements": "^1.4.1",
