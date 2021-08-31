@@ -221,9 +221,6 @@ export class ChatWidgetComponent implements OnInit {
         this.agentProfileImage = this.agentData['agentProfileImage'];
         this.notificationSettings = this.agentData['notificationSettings'];
         this.agentEmail = this.agentData['email'];
-        if (this.endorserId) {
-          //endorser logic
-        }
         if (this.existUserSession && (this.existUserSession.botId === this.botId || this.existUserSession.botId !== this.botId && this.existUserSession.chatStatus)) {
           this.botId = this.existUserSession.botId;
           this.visible = this.existUserSession.chatStatus;
@@ -423,7 +420,8 @@ export class ChatWidgetComponent implements OnInit {
                 isNewMsg: true,
                 isNewUser: true,
                 botAliseName: this.botAliseName,
-                botIcon: this.botIcon
+                botIcon: this.botIcon,
+                endorserId: this.endorserId
               };
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
