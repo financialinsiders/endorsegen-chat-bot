@@ -185,10 +185,14 @@ export class ChatWidgetComponent implements OnInit {
     this.focus.next(true);
   }
   public typing(flag) {
+    
     if (!this.liveBot) {
-      this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+    
+    this.isBotLoading = false; 
+    this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
         "userTyping": flag
       });
+    
     }
 
   }
@@ -216,6 +220,7 @@ export class ChatWidgetComponent implements OnInit {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.firebaseId = this.agentData['firebaseId'];
+        console.log("agent firebase id: " + this.firebaseId);
         this.liveAgentName = this.agentData['agentName'];
         this.liveAgentCredential = this.agentData['credential'];
         this.agentProfileImage = this.agentData['agentProfileImage'];
@@ -282,6 +287,7 @@ export class ChatWidgetComponent implements OnInit {
 
           this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
             this.isTyping = data['isAgentTyping'];
+           
           });
           this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
             var messageHistory = Object.values(data);
@@ -328,6 +334,7 @@ export class ChatWidgetComponent implements OnInit {
             botAliseName: this.botAliseName,
             botIcon: this.botIcon
           };
+          console.log(sessionInfo);
           this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
 
             this.cSessionId = data.key;
@@ -591,7 +598,10 @@ export class ChatWidgetComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
   public sendMessage({ message }) {
+   // console.log("send Message");
+  
     if (!this.liveBot) {
+     
       this.isBotLoading = true;
     }
     if (message.trim() === '') {
