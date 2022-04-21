@@ -329,7 +329,7 @@ export class ChatWidgetComponent implements OnInit {
             botIcon: this.botIcon
           };
           this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
-
+            console.log(data);
             this.cSessionId = data.key;
             this.userService.setUserSession({
               clientFirebaseId: this.clientFirebaseId,
@@ -420,11 +420,11 @@ export class ChatWidgetComponent implements OnInit {
                 isNewMsg: true,
                 isNewUser: true,
                 botAliseName: this.botAliseName,
-                botIcon: this.botIcon,
-                endorserId: this.endorserId
+                botIcon: this.botIcon
               };
+              if (this.endorserId) sessionInfo['endorserId'] = this.endorserId;
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
-
+                console.log(data);
                 this.cSessionId = data.key;
                 if (this.notificationSettings.anonymousLeadEmail) {
                   var requestParams = {
@@ -483,7 +483,7 @@ export class ChatWidgetComponent implements OnInit {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
-        if(this.botAliseName) this.operator.name = this.botAliseName;
+        if (this.botAliseName) this.operator.name = this.botAliseName;
         this.getBotData();
         setTimeout(() => {
           this.addMessage(this.operator, this.firstElement, 'received');
