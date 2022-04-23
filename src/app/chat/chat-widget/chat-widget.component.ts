@@ -12,6 +12,7 @@ import { IntroductionService } from 'app/services/introduction.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { IpService } from 'app/services/ip.service';
+import firebase from 'firebase';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -26,7 +27,8 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public theme: 'blue' | 'grey' | 'red' = 'blue';
   @Input() public botId;
   @Input() public instanceId;
-  @Input() endorserId: string;
+  @Input() public endorserId: string;
+  @Input() public endorserBot: string;
   @Input() expand: boolean;
   @Input() preview: boolean;
   @Input() public liveBot;
@@ -185,14 +187,14 @@ export class ChatWidgetComponent implements OnInit {
     this.focus.next(true);
   }
   public typing(flag) {
-    
+
     if (!this.liveBot) {
-    
-    this.isBotLoading = false; 
-    this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+
+      this.isBotLoading = false;
+      this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
         "userTyping": flag
       });
-    
+
     }
 
   }
@@ -212,6 +214,14 @@ export class ChatWidgetComponent implements OnInit {
         this.suggestionList.splice(index, 1);
       }
     }
+  }
+  async getEndorsersAync(endorserId) {
+    const snapshot = await firebase.firestore().collection('endorsers').doc(endorserId).get();
+    return snapshot.data();
+  }
+  async getEndoserData(endorserId) {
+    var endorsers = await this.getEndorsersAync(endorserId);
+    return endorsers;
   }
   ngOnInit() {
     this.visible = this.expand;
@@ -287,7 +297,7 @@ export class ChatWidgetComponent implements OnInit {
 
           this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
             this.isTyping = data['isAgentTyping'];
-           
+
           });
           this.angularFireDatabase.object(`messages/${this.firebaseId}/${this.cSessionId}`).valueChanges().subscribe(data => {
             var messageHistory = Object.values(data);
@@ -410,7 +420,7 @@ export class ChatWidgetComponent implements OnInit {
               device: isMobile ? 'Mobile' : 'Desktop',
               sourceUrl: window.location.href
             }
-            this.angularFireDatabase.database.ref('users/').push(userInfo).then((userData) => {
+            this.angularFireDatabase.database.ref('users/').push(userInfo).then(async (userData) => {
               this.clientFirebaseId = userData.key;
               this.initializeSession(this.clientFirebaseId);
               var sessionInfo = {
@@ -430,8 +440,19 @@ export class ChatWidgetComponent implements OnInit {
                 botIcon: this.botIcon
               };
               if (this.endorserId) sessionInfo['endorserId'] = this.endorserId;
+              if (this.endorserBot) {
+                sessionInfo['endorserBot'] = this.endorserBot;
+                var endorsers = await this.getEndoserData(this.endorserId);
+                sessionInfo['username'] = endorsers['name'];
+                sessionInfo['email'] = endorsers['email'];
+                sessionInfo['phone'] = endorsers['phone'];
+                this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
+                  username: endorsers['name'],
+                  email: endorsers['email'],
+                  phone: endorsers['phone'],
+                });
+              }
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
-                console.log(data);
                 this.cSessionId = data.key;
                 if (this.notificationSettings.anonymousLeadEmail) {
                   var requestParams = {
@@ -490,6 +511,7 @@ export class ChatWidgetComponent implements OnInit {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
         this.operator.name = this.agentData['agentName'];
+        this.firebaseId = this.agentData['firebaseId'];
         if (this.botAliseName) this.operator.name = this.botAliseName;
         this.getBotData();
         setTimeout(() => {
@@ -598,10 +620,10 @@ export class ChatWidgetComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
   public sendMessage({ message }) {
-   // console.log("send Message");
-  
+    // console.log("send Message");
+
     if (!this.liveBot) {
-     
+
       this.isBotLoading = true;
     }
     if (message.trim() === '') {
