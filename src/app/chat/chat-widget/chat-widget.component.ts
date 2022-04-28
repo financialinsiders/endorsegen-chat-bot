@@ -29,6 +29,7 @@ export class ChatWidgetComponent implements OnInit {
   @Input() public instanceId;
   @Input() public endorserId: string;
   @Input() public endorserBot: string;
+  @Input() public testID: string;
   @Input() expand: boolean;
   @Input() preview: boolean;
   @Input() public liveBot;
@@ -216,6 +217,7 @@ export class ChatWidgetComponent implements OnInit {
     }
   }
   async getEndorsersAync(endorserId) {
+    console.log("Called: "  + endorserId);
     const snapshot = await firebase.firestore().collection('endorsers').doc(endorserId).get();
     return snapshot.data();
   }
@@ -226,6 +228,8 @@ export class ChatWidgetComponent implements OnInit {
   ngOnInit() {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
+   
+    console.log("test ID : " + this.testID);
     if (!this.preview && !this.liveBot) {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
         this.agentData = data.data();
@@ -421,6 +425,7 @@ export class ChatWidgetComponent implements OnInit {
               sourceUrl: window.location.href
             }
             this.angularFireDatabase.database.ref('users/').push(userInfo).then(async (userData) => {
+              console.log("Data pushed");
               this.clientFirebaseId = userData.key;
               this.initializeSession(this.clientFirebaseId);
               var sessionInfo = {
@@ -439,7 +444,10 @@ export class ChatWidgetComponent implements OnInit {
                 botAliseName: this.botAliseName,
                 botIcon: this.botIcon
               };
-              if (this.endorserId) sessionInfo['endorserId'] = this.endorserId;
+              if (this.endorserId) { 
+                console.log("session is endorser");
+                sessionInfo['endorserId'] = this.endorserId;
+              };
               if (this.endorserBot) {
                 sessionInfo['endorserBot'] = this.endorserBot;
                 var endorsers = await this.getEndoserData(this.endorserId);
