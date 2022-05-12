@@ -558,7 +558,7 @@ export class ChatWidgetComponent implements OnInit {
           }
 
           this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
-          this.db.collection('/endorsers').doc(this.endorserId.toString()).get().subscribe((data) => {
+          this.db.collection('/endorsers').doc(this.endorserId).get().subscribe((data) => {
             var endorserData = data.data();
             var endorserSession = {
               username: endorserData['name'],
@@ -637,7 +637,7 @@ export class ChatWidgetComponent implements OnInit {
     if (message.trim() === '') {
       return
     }
-    if (!this.preview) {
+    if (!(this.preview || this.liveBot)) {
       var elementType = this.messages[0].element.class;
       var customvariable = this.messages[0].element.data;
       if (customvariable && customvariable.storevariable === '1') {
