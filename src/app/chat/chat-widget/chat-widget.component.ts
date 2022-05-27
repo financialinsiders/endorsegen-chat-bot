@@ -746,7 +746,7 @@ export class ChatWidgetComponent implements OnInit {
         this.isBotLoading = false;
         setTimeout(() => this.proceedNext(), 3000)
       };
-    } else if (this.fallBackNode) {
+    } else if (this.fallBackNode && this.fallBackNode.length > 0) {
       this.nextNode = this.fallBackNode;
       this.fallBackNode = undefined;
       if (!this.preview) this.firebaseService.sendMessage(this.clientFirebaseId, this.chatElements[this.nextNode], this.chatElements[this.nextNode].data.label, this.firebaseId, 'CONV_OPEN', new Date().getTime(), 'BOT', this.cSessionId);
@@ -758,7 +758,7 @@ export class ChatWidgetComponent implements OnInit {
         this.isBotLoading = true;
         setTimeout(() => this.proceedNext(), 3000)
       };
-    } else if (!this.nextNode) {
+    } else if (!this.nextNode && !this.chatElements[this.currentNode].data.endQuestion) {
       var connectToAgent = {
         "name": "connectingToAgent",
         "data": {
@@ -791,6 +791,8 @@ export class ChatWidgetComponent implements OnInit {
       this.firebaseService.sendMessage(this.clientFirebaseId, statusMessage, statusMessage.data.label, this.firebaseId, 'USER_AWAITING', new Date().getTime(), 'BOT', this.cSessionId);
       this.addMessage(this.operator, statusMessage, 'received');
 
+    } else if (this.chatElements[this.currentNode].data.endQuestion) {
+      this.visible = !this.visible;
     }
 
     if (!this.preview) this.angularFireDatabase.database.ref(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}/${this.cSessionId}`).set(JSON.stringify({ botId: this.botId, position: this.agentLive ? '999' : this.currentNode, message: this.messages }));
