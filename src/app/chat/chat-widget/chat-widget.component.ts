@@ -217,7 +217,7 @@ export class ChatWidgetComponent implements OnInit {
     }
   }
   async getEndorsersAync(endorserId) {
-    console.log("Called: "  + endorserId);
+    console.log("Called: " + endorserId);
     const snapshot = await firebase.firestore().collection('endorsers').doc(endorserId).get();
     return snapshot.data();
   }
@@ -228,7 +228,7 @@ export class ChatWidgetComponent implements OnInit {
   ngOnInit() {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
-   
+
     console.log("test ID : " + this.testID);
     if (!this.preview && !this.liveBot) {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
@@ -344,10 +344,10 @@ export class ChatWidgetComponent implements OnInit {
             //meeting_id: $rootScope.fiApp.meetingId,
             bot_type: 'vm.botInfo.chat_type',
             isNewMsg: true,
-            isNewUser: true,
-            botAliseName: this.botAliseName,
-            botIcon: this.botIcon
+            isNewUser: true
           };
+          if (this.botAliseName) sessionInfo['botAliseName'] = this.botAliseName;
+          if (this.botIcon) sessionInfo['botIcon'] = this.botIcon;
           console.log(sessionInfo);
           this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
             console.log(data);
@@ -444,7 +444,7 @@ export class ChatWidgetComponent implements OnInit {
                 botAliseName: this.botAliseName,
                 botIcon: this.botIcon
               };
-              if (this.endorserId) { 
+              if (this.endorserId) {
                 console.log("session is endorser");
                 sessionInfo['endorserId'] = this.endorserId;
               };
