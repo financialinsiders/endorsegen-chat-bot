@@ -134,6 +134,7 @@
 
 .operator-status {
     float: right;
+    z-index: 999999;
     .history-icon {
         filter: invert(100%);
         cursor: pointer;
