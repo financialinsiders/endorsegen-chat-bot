@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { AdminService } from '../../services/admin-service'
 import { Subject } from 'rxjs'
 import { fadeIn, fadeInOut } from '../animations'
@@ -22,7 +22,7 @@ const rand = max => Math.floor(Math.random() * max)
   styleUrls: ['./chat-widget.component.scss'],
   animations: [fadeInOut, fadeIn],
 })
-export class ChatWidgetComponent implements OnInit {
+export class ChatWidgetComponent implements OnInit, OnDestroy {
   @ViewChild('bottom') bottom: ElementRef
   @Input() public theme: 'blue' | 'grey' | 'red' = 'blue';
   @Input() public botId;
@@ -224,6 +224,11 @@ export class ChatWidgetComponent implements OnInit {
   async getEndoserData(endorserId) {
     var endorsers = await this.getEndorsersAync(endorserId);
     return endorsers;
+  }
+  ngOnDestroy() {
+    this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
+      "userTyping": false
+    });
   }
   ngOnInit() {
     this.visible = this.expand;
@@ -915,6 +920,10 @@ export class ChatWidgetComponent implements OnInit {
       .update({
         status: false,
         lastSeen: new Date().getTime(),
+      });
+    this.angularFireDatabase.object(`sessions/${this.firebaseId}/${this.cSessionId}`).query.ref.onDisconnect()
+      .update({
+        userTyping: false
       });
   }
   @HostListener('document:keypress', ['$event'])
