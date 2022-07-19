@@ -236,7 +236,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
     console.log("test ID : " + this.testID);
     if (!this.preview && !this.liveBot) {
-      this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe((data) => {
+      this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe(async (data) => {
         this.agentData = data.data();
         this.firebaseId = this.agentData['firebaseId'];
         console.log("agent firebase id: " + this.firebaseId);
@@ -263,7 +263,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             this.operator.busyStatusMessage = data['busyStatusMessage'];
           });
           this.getBotData();
-
+          if (this.endorserId) {
+            this.endorserData = await this.getEndoserData(this.endorserId);
+          };
           this.angularFireDatabase.list(`SessionBackup/${this.firebaseId}/${this.clientFirebaseId}`).query.once("value").then(data => {
             var sessionMessage = data.val();
             var chatBackUp = JSON.parse(sessionMessage[this.cSessionId]);
@@ -353,7 +355,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
           };
           if (this.botAliseName) sessionInfo['botAliseName'] = this.botAliseName;
           if (this.botIcon) sessionInfo['botIcon'] = this.botIcon;
-          console.log(sessionInfo);
+          if (this.endorserId) {
+            this.endorserData = await this.getEndoserData(this.endorserId);
+          };
           this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
             console.log(data);
             this.cSessionId = data.key;
@@ -452,17 +456,18 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
               if (this.endorserId) {
                 console.log("session is endorser");
                 sessionInfo['endorserId'] = this.endorserId;
+                this.endorserData = await this.getEndoserData(this.endorserId);
               };
               if (this.endorserBot) {
                 sessionInfo['endorserBot'] = this.endorserBot;
-                var endorsers = await this.getEndoserData(this.endorserId);
-                sessionInfo['username'] = endorsers['name'];
-                sessionInfo['email'] = endorsers['email'];
-                sessionInfo['phone'] = endorsers['phone'];
+                this.endorserData = await this.getEndoserData(this.endorserId);
+                sessionInfo['username'] = this.endorserData['name'];
+                sessionInfo['email'] = this.endorserData['email'];
+                sessionInfo['phone'] = this.endorserData['phone'];
                 this.angularFireDatabase.object(`users/${this.clientFirebaseId}`).update({
-                  username: endorsers['name'],
-                  email: endorsers['email'],
-                  phone: endorsers['phone'],
+                  username: this.endorserData['name'],
+                  email: this.endorserData['email'],
+                  phone: this.endorserData['phone'],
                 });
               }
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
@@ -564,12 +569,12 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
           this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
           this.db.collection('/endorsers').doc(this.endorserId).get().subscribe((data) => {
-            var endorserData = data.data();
+            this.endorserData = data.data();
             var endorserSession = {
-              username: endorserData['name'],
-              email: endorserData['email'],
-              phone: endorserData['phone'],
-              address: endorserData['address'],
+              username: this.endorserData['name'],
+              email: this.endorserData['email'],
+              phone: this.endorserData['phone'],
+              address: this.endorserData['address'],
               timestamp: new Date().getTime(),
               lastMessage: 'Hi, How can I help you?',
               endorserId: this.endorserId
@@ -627,7 +632,19 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     this.historyMode = !this.historyMode;
   }
   public removeHTML(text) {
-    return text.replace(/<\/?[^>]+(>|$)/g, "");
+    var formatedText = text;
+    if (text && (text.includes('@agent') || text.includes('@endorser'))) {
+      formatedText = formatedText.replace('@agent_first_name', this.agentData.agentName.split(' ')[0]);
+      formatedText = formatedText.replace('@agent_last_name', this.agentData.agentName.split(' ')[1]);
+      formatedText = formatedText.replace('@agent_email', this.agentData.email);
+      if (this.endorserId) {
+        formatedText = formatedText.replace('@endorser_first_name', this.endorserData.name.split(' ')[0]);
+        formatedText = formatedText.replace('@endorser_last_name', this.endorserData.name.split(' ')[1]);
+        formatedText = formatedText.replace('@endorser_email', this.endorserData.email);
+      }
+    }
+    formatedText = formatedText.replace(/<\/?[^>]+(>|$)/g, "");
+    return formatedText;
   }
   getSafeUrl(url) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
