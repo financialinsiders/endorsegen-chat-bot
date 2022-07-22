@@ -633,10 +633,14 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   }
   public removeHTML(text) {
     var formatedText = text;
-    if (text && (text.includes('@agent') || text.includes('@endorser'))) {
+    if (text && (text.includes('@agent') || text.includes('@endorser') || text.includes('@user'))) {
       formatedText = formatedText.replace('@agent_first_name', this.agentData.agentName.split(' ')[0]);
       formatedText = formatedText.replace('@agent_last_name', this.agentData.agentName.split(' ')[1]);
       formatedText = formatedText.replace('@agent_email', this.agentData.email);
+      var userName = this.cryptoService.getItem('name');
+      if (userName) {
+        formatedText = formatedText.replace('@user_name', userName);
+      }
       if (this.endorserId) {
         formatedText = formatedText.replace('@endorser_first_name', this.endorserData.name.split(' ')[0]);
         formatedText = formatedText.replace('@endorser_last_name', this.endorserData.name.split(' ')[1]);
