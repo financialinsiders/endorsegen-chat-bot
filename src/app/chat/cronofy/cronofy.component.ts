@@ -58,20 +58,22 @@ export class CronofyComponent implements OnInit {
           },
           callback: notification => {
             this.isBusy = true;
-            this.formatDateTime(notification.notification.slot);
-            var meetingRequest = {
-              agent_id: this.instanceId,
-              lead_id: this.leadId,
-              endorser_id: this.instanceId,
-              meeting_date_time: notification.notification.slot.start,
-              meeting_end_datetime: notification.notification.slot.end,
-              email: this.email,
-              bot_id: this.botId,
+            if (notification.notification.type !== "no_slots_found" && notification.notification.type !== "error") {
+              this.formatDateTime(notification.notification.slot);
+              var meetingRequest = {
+                agent_id: this.instanceId,
+                lead_id: this.leadId,
+                endorser_id: this.instanceId,
+                meeting_date_time: notification.notification.slot.start,
+                meeting_end_datetime: notification.notification.slot.end,
+                email: this.email,
+                bot_id: this.botId,
+              }
+              this.showAppoinmentConfirmation = true;
+              this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data => {
+                this.createApoinment(data['meeting_id'], notification, data['user_id']);
+              });
             }
-            this.showAppoinmentConfirmation = true;
-            this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data => {
-              this.createApoinment(data['meeting_id'], notification, data['user_id']);
-            });
           }
         });
       });
@@ -118,7 +120,7 @@ export class CronofyComponent implements OnInit {
         "participant_name": this.name,
         "meeting_url": 'http://localhost:4200/waiting-room/' + data.id
       }
-      this.adminService.bookSlot(requestBosy).subscribe(data=>{});
+      this.adminService.bookSlot(requestBosy).subscribe(data => { });
     });
     this.meetingBooked = { startDate: this.startDate, endTime: this.endTime, startTime: this.startTime };
     //updateAppointment(this.meetingBooked);

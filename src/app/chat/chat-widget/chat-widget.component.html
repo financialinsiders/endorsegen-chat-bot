@@ -78,7 +78,7 @@
                     <source [src]="getSafeUrl(message.element.data.videoUrl)">
                   </video>
                                 </div>
-                                <div *ngIf="message.element.data.videoType === 'youtube'">
+                                <div *ngIf="message.element.data.videoType === 'youtube'" class="video-youtube-container">
                                     <iframe [src]="getSafeUrl(message.element.data.videoUrl)" frameborder="0" allowfullscreen width="100%"></iframe>
                                 </div>
                             </div>

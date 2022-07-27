@@ -5,3 +5,8 @@
     text-align: center;
     border-radius: 10px;
 }
+::ng-deep {
+    .custom-name__slots-list custom-name__slots-list--days{
+        color: red;
+    }
+}
