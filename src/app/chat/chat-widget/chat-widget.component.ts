@@ -285,7 +285,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
                 "subject": "You have got your leader visitor back to site",
                 "template": "leadUser",
                 "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
-                "fromAddress": "notifications",
+                "fromAddress": "notifications@financialinsiders.io",
+                "fromName": 'Notifications via Financial Insiders',
+                "replyToName": this.cryptoService.getItem('name'),
+                "replyToEmail": this.cryptoService.getItem('email'),
                 "historyView": historyView,
                 "bodyHeading": 'You have got your lead visitor back to the site!'
               }
@@ -478,7 +481,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
                     "subject": "You have got a new client",
                     "template": "newUser",
                     "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
-                    "fromAddress": "notifications"
+                    "fromAddress": "notifications@financialinsiders.io",
+                    "fromName": 'Notifications via Financial Insiders',
+                    "replyToName": 'New User',
+                    "replyToEmail": 'abc@gmail.com',
                   }
                   this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data => { });
                 }
