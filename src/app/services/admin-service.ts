@@ -5,14 +5,15 @@ import { CryptoStorageService } from '../services/crypto-storage.service';
 enum APIEndPointUrls {
   adminAjax = 'https://financialinsiders.ca/wp-admin/admin-ajax.php',
   getAgentProfile = 'ic_get_agent_profile',
-  getElementID = 'https://prod-node-api.herokuapp.com/v1/cronofy/getElementID',
-  emailSendTemplate = 'https://prod-node-api.herokuapp.com/v1/email/sendTemplate',
-  getAvailableSlots = 'https://prod-node-api.herokuapp.com/v1/calendar/getAvailableSlots/',
+  getElementID = 'http://localhost:9090/v1/cronofy/getElementID',
+  emailSendTemplate = 'http://localhost:9090/v1/email/sendTemplate',
+  getAvailableSlots = 'http://localhost:9090/v1/calendar/getAvailableSlots/',
   appointmentMeeting = 'ic_appointment_meeting',
-  bookSlot = 'https://prod-node-api.herokuapp.com/v1/calendar/bookSlot',
+  bookSlot = 'http://localhost:9090/v1/calendar/bookSlot',
   newLead = 'ic_new_lead_nomail',
   endorserProfile = 'ic_endorser_profile',
 }
+// locahost should be update with api.agentonline.io
 @Injectable()
 export class AdminService {
   constructor(private http: HttpClient) { }
