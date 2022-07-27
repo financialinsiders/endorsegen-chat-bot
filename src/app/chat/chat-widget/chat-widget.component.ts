@@ -286,9 +286,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
                 "template": "leadUser",
                 "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
                 "fromAddress": "notifications@financialinsiders.io",
-                "fromName": 'Notifications via Financial Insiders',
-                "replyToName": this.cryptoService.getItem('name'),
-                "replyToEmail": this.cryptoService.getItem('email'),
+                "fromName": 'Financial Insiders',
+                "replyToName": 'Financial Insiders',
+                "replyToEmail": 'notifications@financialinsiders.io',
                 "historyView": historyView,
                 "bodyHeading": 'You have got your lead visitor back to the site!'
               }
@@ -482,9 +482,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
                     "template": "newUser",
                     "meetingURL": `http://localhost:4200/apps/chat?selectedMessage=${this.cSessionId}`,
                     "fromAddress": "notifications@financialinsiders.io",
-                    "fromName": 'Notifications via Financial Insiders',
-                    "replyToName": 'New User',
-                    "replyToEmail": 'abc@gmail.com',
+                    "fromName": 'Financial Insiders',
+                    "replyToName": 'Financial Insiders',
+                    "replyToEmail": 'notifications@financialinsiders.io',
                   }
                   this.adminService.sendEmailNotificationWithTemplate(requestParams).subscribe(data => { });
                 }
