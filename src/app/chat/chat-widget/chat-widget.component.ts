@@ -13,6 +13,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { IpService } from 'app/services/ip.service';
 import firebase from 'firebase';
+import { PointsService } from 'app/services/points.service';
 
 const rand = max => Math.floor(Math.random() * max)
 
@@ -27,6 +28,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   @Input() public theme: 'blue' | 'grey' | 'red' = 'blue';
   @Input() public botId;
   @Input() public instanceId;
+  @Input() public invitationID: string;
   @Input() public endorserId: string;
   @Input() public endorserBot: string;
   @Input() public testID: string;
@@ -159,11 +161,17 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
   public messages = []
   public suggestionList = [];
-  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore, private ipService: IpService) { }
+  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private pointsService: PointsService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore, private ipService: IpService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     /* for (let [key, value] of this.customerVariables) {
       element.clabel = element.data.label.replace(key, value);
     } */
+    if(type === 'received' && element?.data?.pointsValue) {
+      var activityObject = { invitationID: this.invitationID, title: `${element.class} - has been presented` }
+      this.pointsService.logEndorserInviteActivity(parseInt(element.data.pointsValue, 10), activityObject, this.endorserId).subscribe(data => {
+      });
+    }
+   
     if (element.class === 'appoinments' || element.class === 'suggestion' || element.class === 'video' || element.class === 'image' || element.class === 'videoRecording' || element.class === 'socialSharing' || element.class === 'emailSharing' || element.class === 'textEditor' || element.class === 'multiChoice') {
       this.hideInputFeild = true;
     } else {
