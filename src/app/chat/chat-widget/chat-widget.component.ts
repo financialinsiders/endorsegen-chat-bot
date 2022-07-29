@@ -360,9 +360,10 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             page_link: window.top.location.href,
             status: 'OPEN',
             //meeting_id: $rootScope.fiApp.meetingId,
-            bot_type: 'vm.botInfo.chat_type',
+            bot_type: 'vm.botInfo.chat_tßype',
             isNewMsg: true,
-            isNewUser: true
+            isNewUser: true,
+            showNotification: true
           };
           if (this.botAliseName) sessionInfo['botAliseName'] = this.botAliseName;
           if (this.botIcon) sessionInfo['botIcon'] = this.botIcon;
@@ -462,7 +463,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
                 isNewMsg: true,
                 isNewUser: true,
                 botAliseName: this.botAliseName,
-                botIcon: this.botIcon
+                botIcon: this.botIcon,
+                showNotification: true,
               };
               if (this.endorserId) {
                 console.log("session is endorser");
