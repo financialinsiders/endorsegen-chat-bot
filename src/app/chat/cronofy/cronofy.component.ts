@@ -32,7 +32,6 @@ export class CronofyComponent implements OnInit {
   constructor(private adminService: AdminService, private db: AngularFirestore) { }
 
   ngOnInit(): void {
-    console.log(this.appoinmentData);
     var urlParams = new URLSearchParams(window.location.search);
     this.meetingID = urlParams.get('meetingID');
     this.adminService.getElementID(this.instanceId).subscribe(data => {
@@ -60,19 +59,8 @@ export class CronofyComponent implements OnInit {
             this.isBusy = true;
             if (notification.notification.type !== "no_slots_found" && notification.notification.type !== "error") {
               this.formatDateTime(notification.notification.slot);
-              var meetingRequest = {
-                agent_id: this.instanceId,
-                lead_id: this.leadId,
-                endorser_id: this.instanceId,
-                meeting_date_time: notification.notification.slot.start,
-                meeting_end_datetime: notification.notification.slot.end,
-                email: this.email,
-                bot_id: this.botId,
-              }
               this.showAppoinmentConfirmation = true;
-              this.adminService.createAppointmentMeeting(meetingRequest).subscribe(data => {
-                this.createApoinment(data['meeting_id'], notification, data['user_id']);
-              });
+              this.createApoinment(Math.floor(Math.random() * 8723687123), notification);
             }
           }
         });
@@ -97,12 +85,11 @@ export class CronofyComponent implements OnInit {
     }
     return time.join('');
   }
-  createApoinment(meetingId, notification, userID) {
+  createApoinment(meetingId, notification) {
     var updateMeetingEvent = {
       "meetingId": meetingId,
       'name': this.name,
       "agentId": this.instanceId,
-      "leadId": this.leadId,
       "meetingTime": notification.notification.slot.start,
       "cSessionId": this.cSessionId,
       "firebaseId": this.firebaseId,
