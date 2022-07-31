@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { AdminService } from '../../services/admin-service'
 import { Subject } from 'rxjs'
 import { fadeIn, fadeInOut } from '../animations'
@@ -166,12 +166,12 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     /* for (let [key, value] of this.customerVariables) {
       element.clabel = element.data.label.replace(key, value);
     } */
-    if(type === 'received' && element?.data?.pointsValue) {
+    if (type === 'received' && element?.data?.pointsValue) {
       var activityObject = { invitationID: this.invitationID, title: `${element.class} - has been presented` }
       this.pointsService.logEndorserInviteActivity(parseInt(element.data.pointsValue, 10), activityObject, this.endorserId).subscribe(data => {
       });
     }
-   
+
     if (element.class === 'appoinments' || element.class === 'suggestion' || element.class === 'video' || element.class === 'image' || element.class === 'videoRecording' || element.class === 'socialSharing' || element.class === 'emailSharing' || element.class === 'textEditor' || element.class === 'multiChoice') {
       this.hideInputFeild = true;
     } else {
@@ -241,7 +241,6 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.visible = this.expand;
     this.existUserSession = this.userService.getUserSession();
-
     console.log("test ID : " + this.testID);
     if (!this.preview && !this.liveBot) {
       this.db.collection('/advisers').doc(this.instanceId.toString()).get().subscribe(async (data) => {
@@ -928,31 +927,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     this.angularFireDatabase.object(`users/${clientFirebaseId}`).update({
       status: true,
     });
-    this.angularFireDatabase.object(`users/${clientFirebaseId}`).valueChanges().subscribe(data => {
-
-      if (data && data['otSessionId'] && data['token']) {
-        this.sessionId = data['otSessionId'];
-        this.token = data['token'];
-        this.opentokService.initSession(this.sessionId).then((session: OT.Session) => {
-          this.session = session;
-          this.session.on('streamCreated', (event) => {
-            this.streams.push(event.stream);
-            this.changeDetectorRef.detectChanges();
-          });
-          this.session.on('streamDestroyed', (event) => {
-            const idx = this.streams.indexOf(event.stream);
-            if (idx > -1) {
-              this.streams.splice(idx, 1);
-              this.changeDetectorRef.detectChanges();
-            }
-          });
-        })
-          .then(() => this.opentokService.connect(this.token))
-          .catch((err) => {
-            alert('Unable to connect. Make sure you have updated the config.ts file with your OpenTok details.');
-          });
-      }
-    });
+    var evt = new CustomEvent("videoStartedEventEmitter", { detail: clientFirebaseId });
+    window.dispatchEvent(evt);
     this.angularFireDatabase.object(`users/${clientFirebaseId}`).query.ref.onDisconnect()
       .update({
         status: false,

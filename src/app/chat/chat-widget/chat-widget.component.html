@@ -23,10 +23,6 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="session">
-            <app-publisher [session]="session"></app-publisher>
-            <app-subscriber *ngFor="let stream of streams" [stream]="stream" [session]="session"></app-subscriber>
-        </div>
         <div *ngIf="fullScreen" class="m-4 position-absolute d-none d-sm-block" [ngStyle]="{'color': colorTheme}">
             <h2 [innerHTML]="headline"></h2>
             <h6 [innerHTML]="subHeadline"></h6>
