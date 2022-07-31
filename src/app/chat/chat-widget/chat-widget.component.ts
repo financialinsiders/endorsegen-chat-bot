@@ -1,11 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { AdminService } from '../../services/admin-service'
 import { Subject } from 'rxjs'
 import { fadeIn, fadeInOut } from '../animations'
 import { AngularFireDatabase } from '@angular/fire/database';
 import { FirebaseService } from 'app/services/firebase.service';
 import { UserService } from 'app/services/user.service';
-import { OpentokService } from 'app/services/opentok.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CryptoStorageService } from 'app/services/crypto-storage.service';
 import { IntroductionService } from 'app/services/introduction.service';
@@ -49,8 +48,6 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
   sessionHistoryChatList: any = [];
   sessionId: any;
   token: any;
-  session: OT.Session;
-  streams: Array<OT.Stream> = [];
   isPublished: boolean;
   email: any = this.cryptoService.getItem('email');
   name: any = this.cryptoService.getItem('name');
@@ -161,7 +158,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
 
   public messages = []
   public suggestionList = [];
-  constructor(private changeDetectorRef: ChangeDetectorRef, private adminService: AdminService, private pointsService: PointsService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private opentokService: OpentokService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore, private ipService: IpService) { }
+  constructor(private adminService: AdminService, private pointsService: PointsService, private angularFireDatabase: AngularFireDatabase, private firebaseService: FirebaseService, private userService: UserService, private sanitizer: DomSanitizer, private cryptoService: CryptoStorageService, private introductionService: IntroductionService, private db: AngularFirestore, private ipService: IpService) { }
   public addMessage(from, element, type: 'received' | 'sent') {
     /* for (let [key, value] of this.customerVariables) {
       element.clabel = element.data.label.replace(key, value);

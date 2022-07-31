@@ -7,8 +7,6 @@ import { ChatConfigComponent } from './chat-config/chat-config.component'
 import { AdminService } from 'app/services/admin-service'
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from 'app/services/user.service';
-import { SubscriberComponent } from './subscriber/subscriber.component';
-import { PublisherComponent } from './publisher/publisher.component';
 import { CronofyComponent } from './cronofy/cronofy.component';
 import { VideoRecorderComponent } from './video-recorder/video-recorder.component';
 import { SocialSharingComponent } from './social-sharing/social-sharing.component';
@@ -23,7 +21,7 @@ import { IpService } from 'app/services/ip.service'
 
 @NgModule({
   imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule, AngularEditorModule],
-  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, SubscriberComponent, PublisherComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent, EmailSharingComponent],
+  declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent, EmailSharingComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
   providers: [AdminService, UserService, IpService],
