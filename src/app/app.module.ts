@@ -15,8 +15,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { IpService } from './services/ip.service'
+import { NgxEmojiPickerModule } from 'ngx-emoji-picker'
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, FormsModule],
+  imports: [BrowserModule, BrowserAnimationsModule, ElementModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), MatStepperModule, MatExpansionModule, FormsModule, FormsModule, NgxEmojiPickerModule.forRoot()],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [AdminService, UserService, IpService],

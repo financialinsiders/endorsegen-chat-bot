@@ -18,9 +18,10 @@ import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { IpService } from 'app/services/ip.service'
+import { NgxEmojiPickerModule } from 'ngx-emoji-picker'
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule, AngularEditorModule],
+  imports: [CommonModule, HttpClientModule, MatStepperModule, MatExpansionModule, FormsModule, MatRadioModule, AngularEditorModule, NgxEmojiPickerModule.forRoot()],
   declarations: [ChatAvatarComponent, ChatWidgetComponent, ChatInputComponent, ChatConfigComponent, CronofyComponent, VideoRecorderComponent, SocialSharingComponent, EmailSharingComponent],
   exports: [ChatWidgetComponent, ChatConfigComponent],
   entryComponents: [ChatWidgetComponent, ChatConfigComponent],
