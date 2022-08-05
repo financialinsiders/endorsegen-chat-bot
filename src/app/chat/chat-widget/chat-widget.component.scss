@@ -415,7 +415,6 @@ Sent message style
         .chat-box-main {
             width: 30% !important;
             margin: 0 auto !important;
-            background: transparent;
         }
         .chat-box-footer {
             width: 40% !important;
@@ -432,6 +431,9 @@ Sent message style
                 }
             }
         }
+    }
+    .chat-box-main {
+        background: transparent;
     }
 }
 
