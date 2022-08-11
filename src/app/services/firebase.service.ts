@@ -16,7 +16,8 @@ export class FirebaseService {
       senderId: firebaseId,
       status: status,
       timestamp: timestamp,
-      type: type
+      type: type,
+      sessionId: cSessionId
     }
     this.angularFireDatabase.database.ref(`messages/${firebaseId}/${cSessionId}`).push(messageEntity);
     this.angularFireDatabase.database.ref(`sessions/${firebaseId}/${cSessionId}`).update({

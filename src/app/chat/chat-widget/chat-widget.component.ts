@@ -577,6 +577,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             status: 'CONV_OPEN',
             timestamp: new Date().getTime(),
             type: 'BOT',
+            sessionId: this.endorserId
           }
 
           this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderMessage);
@@ -723,7 +724,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         conversationId: this.firebaseId,
         senderId: this.clientFirebaseId,
         status: 'CONV_OPEN',
-        timestamp: new Date().getTime()
+        timestamp: new Date().getTime(),
+        sessionId: this.cSessionId
       }
       this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
       this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
@@ -743,6 +745,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         status: 'CONV_OPEN',
         timestamp: new Date().getTime(),
         type: 'USER',
+        sessionId: this.endorserId
       }
       this.angularFireDatabase.database.ref(`endorser-messages/${this.firebaseId}/${this.endorserId}`).push(senderEndMessage);
 
@@ -878,7 +881,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       conversationId: this.firebaseId,
       senderId: this.clientFirebaseId,
       status: 'CONV_OPEN',
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      sessionId: this.cSessionId
     }
     this.messages[0].hide = true;
     if (!this.preview) this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
