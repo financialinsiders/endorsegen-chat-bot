@@ -1,29 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core'
-import { AngularFireDatabase } from '@angular/fire/database'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 
 @Component({
   selector: 'chat-input',
-  template: `
-    <textarea type="text" (keyup)="onKeySearch($event)" class="chat-input-text" placeholder="Type message..."
-              #message (keydown.enter)="onSubmit()" (keyup.enter)="message.value = ''" (keyup.escape)="dismiss.emit()"></textarea>
-              <button
-  ion-button
-  clear
-  icon-only
-  (click)="toggled = !toggled"
-  [(emojiPickerIf)]="toggled"
-  [emojiPickerDirection]="'top'"
-  (emojiPickerSelect)="handleSelection($event)"
-  class="chat-input-emoji"
->
-<img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/smile.png" alt="Submit" style="width:25px">
-  <ion-icon name="md-happy"></ion-icon>
-</button>
-    <button type="submit" class="chat-input-submit" (click)="onSubmit()">
-      {{buttonText}}
-    </button>
-  `,
-  encapsulation: ViewEncapsulation.None,
+  templateUrl: './chat-input.component.html',
   styleUrls: ['./chat-input.component.scss'],
 })
 export class ChatInputComponent implements OnInit {
@@ -35,13 +14,18 @@ export class ChatInputComponent implements OnInit {
   @ViewChild('message', { static: true }) message: ElementRef
   timeout: any = null;
   isTyping: boolean;
-  toggled: boolean = false;
+  showEmoji: boolean;
+  toggled: boolean;
   constructor() { }
   ngOnInit() {
-    this.focus.subscribe(() => this.focusMessage())
+    this.focus.subscribe(() => this.focusMessage());
+    setTimeout(() => {
+      this.showEmoji = true;
+    }, 1000);
   }
   handleSelection(event) {
     this.message.nativeElement.value += event.char;
+    this.toggled = false;
   }
   public focusMessage() {
     this.message.nativeElement.focus()
@@ -67,7 +51,7 @@ export class ChatInputComponent implements OnInit {
     this.type.emit(false);
     this.message.nativeElement.value = ''
   }
-
+  
   onSubmit() {
     this.type.emit(false);
     const message = this.getMessage()

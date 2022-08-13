@@ -1,0 +1,12 @@
+<div>
+    <textarea id="emoji-text-feild" type="text" (keyup)="onKeySearch($event)" class="chat-input-text"
+        placeholder="Type message..." #message (keydown.enter)="onSubmit()" (keyup.enter)="message.value = ''"
+        (keyup.escape)="dismiss.emit()"></textarea>
+    <button *ngIf="showEmoji" ion-button clear icon-only (click)="toggled = !toggled" [(emojiPickerIf)]="toggled"
+        [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)" class="chat-input-emoji">
+        <img src="https://fiapps.s3.ca-central-1.amazonaws.com/assets/smile.png" alt="Submit" style="width:25px">
+    </button>
+    <button type="submit" class="chat-input-submit" (click)="onSubmit()">
+        {{buttonText}}
+    </button>
+</div>
