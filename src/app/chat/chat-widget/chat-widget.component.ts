@@ -661,6 +661,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       }
     }
     formatedText = formatedText.replace(/<\/?[^>]+(>|$)/g, "");
+    formatedText = formatedText.replace('@endorser_registration_link', `<a href="http://localhost:5200/registration?agentId=${this.agentData.agentId}" target="_blank">Click to register</a>`);
     return formatedText;
   }
   getSafeUrl(url) {

@@ -44,7 +44,7 @@
                         <chat-avatar [image]="message.from.avatar" class="chat-message-from-avatar" *ngIf="message.element.class !== 'appoinments' && message.element.class !== 'video' && message.element.class !== 'image' && message.element.class !== 'videoRecording' && message.element.class !== 'socialSharing' && message.element.class !== 'emailSharing' && message.element.class !== 'textEditor'">
                         </chat-avatar>
                         <div class="chat-message-text" [class.chat-message-text-no-corner]="message.element.class === 'appoinments' || message.element.class === 'video' || message.element.class === 'image' ||message.element.class === 'videoRecording' || message.element.class === 'socialSharing' || message.element.class === 'emailSharing' || message.element.class === 'textEditor'">
-                            {{this.removeHTML(message.element.data.label)}}
+                            <div [innerHTML]="removeHTML(message.element.data.label)"></div>
                         </div>
                         <div *ngIf="message.element.class === 'multiChoice' && !message.hide" class="multi-choice-container">
                             <ng-container *ngFor="let choice of message.element.data.choices; index as ind; trackBy: trackByFn">

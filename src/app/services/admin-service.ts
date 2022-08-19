@@ -50,5 +50,5 @@ export class AdminService {
       { 'Content-Type': 'application/json' }
     );
     return this.http.post(APIEndPointUrls.emailSendTemplate, data, { headers: headers });
-}
+  }
 }
