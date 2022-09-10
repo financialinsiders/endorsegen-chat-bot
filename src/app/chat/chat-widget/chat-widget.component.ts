@@ -180,6 +180,13 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       type,
       date: new Date().getTime(),
     })
+    if (element.class === 'name' && this.name) {
+      this.sendMessage(this.name)
+    } else  if (element.class === 'email' && this.email) {
+      this.sendMessage(this.email)
+    } else  if (element.class === 'phone' && this.phone) {
+      this.sendMessage(this.phone)
+    }
     this.scrollToBottom()
   }
 
