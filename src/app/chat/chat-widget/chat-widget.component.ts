@@ -328,7 +328,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             var messageHistory = Object.values(data);
             var lastMessage = messageHistory[messageHistory.length - 1];
             if (lastMessage.status === 'INSTANT_MEETING') {
-              this.addMessage(this.operator, { data: { label: 'Please click below button to join the meeting.', status: 'INSTANT_MEETING', clientRedirectUrl: lastMessage.clientRedirectUrl }, live: true }, 'received');
+              this.addMessage(this.operator, { data: { label: `Please click below button to join the meeting. Meeting URL: ${lastMessage.clientRedirectUrl}`, status: 'INSTANT_MEETING', clientRedirectUrl: lastMessage.clientRedirectUrl }, live: true }, 'received');
               this.joinMeeting(lastMessage.clientRedirectUrl);
             }
             if ((this.agentLive || lastMessage.status === 'AGENT_LIVE') && lastMessage.senderId === this.firebaseId) {
