@@ -10,7 +10,7 @@ import * as CryptoJS from 'crypto-js';
   styleUrls: ['./cronofy.component.scss']
 })
 export class CronofyComponent implements OnInit {
-  @Input() instanceId: number;
+  @Input() instanceId: any;
   @Input() email: string;
   @Input() name: string;
   @Input() botId: number;
