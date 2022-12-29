@@ -182,9 +182,9 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
     })
     if (element.class === 'name' && this.name) {
       this.sendMessage(this.name)
-    } else  if (element.class === 'email' && this.email) {
+    } else if (element.class === 'email' && this.email) {
       this.sendMessage(this.email)
-    } else  if (element.class === 'phone' && this.phone) {
+    } else if (element.class === 'phone' && this.phone) {
       this.sendMessage(this.phone)
     }
     this.scrollToBottom()
@@ -267,11 +267,13 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             newNotification: true
           });
           this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
-            this.operator.status = data['onlineStatus'];
-            this.operator.onlineStatus = data['onlineStatus'];
-            this.operator.onlineStatusMessage = data['onlineStatusMessage'];
-            this.operator.offlineStatusMessage = data['offlineStatusMessage'];
-            this.operator.busyStatusMessage = data['busyStatusMessage'];
+            if (data) {
+              this.operator.status = data['onlineStatus'];
+              this.operator.onlineStatus = data['onlineStatus'];
+              this.operator.onlineStatusMessage = data['onlineStatusMessage'];
+              this.operator.offlineStatusMessage = data['offlineStatusMessage'];
+              this.operator.busyStatusMessage = data['busyStatusMessage'];
+            }
           });
           this.getBotData();
           if (this.endorserId) {
@@ -343,11 +345,14 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
           });
         } else if (this.existUserSession && this.existUserSession.botId !== this.botId && !this.existUserSession.chatStatus) {
           this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
-            this.operator.status = data['onlineStatus'];
-            this.operator.onlineStatus = data['onlineStatus'];
-            this.operator.onlineStatusMessage = data['onlineStatusMessage'];
-            this.operator.offlineStatusMessage = data['offlineStatusMessage'];
-            this.operator.busyStatusMessage = data['busyStatusMessage'];
+            if (data) {
+              this.operator.status = data['onlineStatus'];
+              this.operator.onlineStatus = data['onlineStatus'];
+              this.operator.onlineStatusMessage = data['onlineStatusMessage'];
+              this.operator.offlineStatusMessage = data['offlineStatusMessage'];
+              this.operator.busyStatusMessage = data['busyStatusMessage'];
+            }
+
           });
           this.getBotData();
 
@@ -418,11 +423,14 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
             newNotification: true
           });
           this.angularFireDatabase.object(`users/${this.firebaseId}`).valueChanges().subscribe(data => {
-            this.operator.status = data['onlineStatus'];
-            this.operator.onlineStatus = data['onlineStatus'];
-            this.operator.onlineStatusMessage = data['onlineStatusMessage'];
-            this.operator.offlineStatusMessage = data['offlineStatusMessage'];
-            this.operator.busyStatusMessage = data['busyStatusMessage'];
+            if (data) {
+              this.operator.status = data['onlineStatus'];
+              this.operator.onlineStatus = data['onlineStatus'];
+              this.operator.onlineStatusMessage = data['onlineStatusMessage'];
+              this.operator.offlineStatusMessage = data['offlineStatusMessage'];
+              this.operator.busyStatusMessage = data['busyStatusMessage'];
+            }
+
           });
           this.getBotData();
 
@@ -488,7 +496,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
               }
               this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}`).push(sessionInfo).then((data) => {
                 this.cSessionId = data.key;
-                if (this.notificationSettings.anonymousLeadEmail) {
+                if (this.notificationSettings?.anonymousLeadEmail) {
                   var requestParams = {
                     "to": this.agentEmail,
                     "subject": "You have got a new client",
@@ -893,6 +901,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
       sessionId: this.cSessionId
     }
     this.messages[0].hide = true;
+    console.log(`messages/${this.firebaseId}/${this.cSessionId}`);
     if (!this.preview) this.angularFireDatabase.database.ref(`messages/${this.firebaseId}/${this.cSessionId}`).push(senderMessage);
     this.angularFireDatabase.database.ref(`sessions/${this.firebaseId}/${this.cSessionId}`).update({
       lastMessage: choice,
