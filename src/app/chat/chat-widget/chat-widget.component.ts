@@ -816,7 +816,8 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         setTimeout(() => this.proceedNext(), 3000)
       };
     } else if (!this.nextNode && !this.chatElements[this.currentNode].data.endQuestion) {
-      var connectToAgent = {
+      //live chatbot code commented
+      /* var connectToAgent = {
         "name": "connectingToAgent",
         "data": {
           "skipQuestionText": "I'm not sure",
@@ -846,7 +847,7 @@ export class ChatWidgetComponent implements OnInit, OnDestroy {
         "class": "connectingToAgent"
       }
       this.firebaseService.sendMessage(this.clientFirebaseId, statusMessage, statusMessage.data.label, this.firebaseId, 'USER_AWAITING', new Date().getTime(), 'BOT', this.cSessionId);
-      this.addMessage(this.operator, statusMessage, 'received');
+      this.addMessage(this.operator, statusMessage, 'received'); */
 
     } else if (this.chatElements[this.currentNode].data.endQuestion) {
       this.visible = !this.visible;
